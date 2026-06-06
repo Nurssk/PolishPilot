@@ -10,6 +10,7 @@ import {
   formatPixels,
   isPolishPilotMessage
 } from "../shared/messages";
+import { API_BASE_URL, apiUrl } from "../shared/apiConfig";
 import { PatternCard } from "../components/PatternCard";
 import { buildHumanizedPreviewHtml } from "../patterns/buildHumanizedPreviewHtml";
 import {
@@ -37,11 +38,9 @@ import type {
   RectangleCapture
 } from "../shared/types";
 
-const ANALYZE_URL = "http://localhost:3000/api/analyze-area";
-const AI_PREVIEW_URL = "http://localhost:3000/api/generate-ai-preview";
-const HEALTH_URL = "http://localhost:3000/api/health";
-const SIMPLE_BACKEND_ERROR =
-  "Gemini backend is not running. Start it with: cd web && npm run dev";
+const ANALYZE_URL = apiUrl("/api/analyze-area");
+const AI_PREVIEW_URL = apiUrl("/api/generate-ai-preview");
+const HEALTH_URL = apiUrl("/api/health");
 
 type AIStatus = "idle" | "loading" | "success" | "error";
 type BackendHealthStatus = "checking" | "online" | "offline";
@@ -351,7 +350,7 @@ export function SidePanel() {
       setBackendHealthStatus("offline");
       setBackendHealthError(
         isFetchFailure(error)
-          ? SIMPLE_BACKEND_ERROR
+          ? formatBackendUnavailableMessage(HEALTH_URL)
           : error instanceof Error
             ? error.message
             : String(error)
@@ -442,7 +441,7 @@ export function SidePanel() {
       const fallbackError: GeminiApiError = {
         code: isFetchFailure(error) ? "BACKEND_UNREACHABLE" : "EXTENSION_ANALYZE_FAILED",
         message: isFetchFailure(error)
-          ? "Cannot reach backend. Make sure `cd web && npm run dev` is running."
+          ? formatBackendUnavailableMessage(ANALYZE_URL)
           : error instanceof Error
             ? error.message
             : String(error),
@@ -725,7 +724,7 @@ export function SidePanel() {
       });
     } catch (error) {
       const message = isFetchFailure(error)
-        ? "AI visual preview failed. Make sure `cd web && npm run dev` is running. You can still use local layout preview or copy the implementation prompt."
+        ? formatBackendUnavailableMessage(AI_PREVIEW_URL)
         : error instanceof Error
           ? error.message
           : "AI visual preview failed. You can still use local layout preview or copy the implementation prompt.";
@@ -814,7 +813,10 @@ export function SidePanel() {
 
   async function copyDebugInfo() {
     const safeDebugInfo = {
+      apiBaseUrl: API_BASE_URL,
       backendUrl: ANALYZE_URL,
+      healthUrl: HEALTH_URL,
+      aiPreviewUrl: AI_PREVIEW_URL,
       requestId: geminiDebug.requestId,
       model: geminiDebug.model,
       status: aiStatus,
@@ -1117,6 +1119,7 @@ export function SidePanel() {
           copied={debugCopied}
           debug={geminiDebug}
           logs={geminiLogs}
+          onCheckBackend={() => void checkBackendHealth()}
           onCopyDebugInfo={() => void copyDebugInfo()}
           onClearPreviewDebugLogs={() => void clearPreviewDebugLogs()}
           onCopyPreviewDebugLogs={() => void copyPreviewDebugLogs()}
@@ -1269,6 +1272,7 @@ function GeminiDebugPanel({
   copied,
   debug,
   logs,
+  onCheckBackend,
   onCopyDebugInfo,
   onClearPreviewDebugLogs,
   onCopyPreviewDebugLogs,
@@ -1283,6 +1287,7 @@ function GeminiDebugPanel({
   copied: boolean;
   debug: GeminiDebugState;
   logs: GeminiLogEntry[];
+  onCheckBackend: () => void;
   onCopyDebugInfo: () => void;
   onClearPreviewDebugLogs: () => void;
   onCopyPreviewDebugLogs: () => void;
@@ -1302,7 +1307,9 @@ function GeminiDebugPanel({
         </summary>
 
         <div className="mt-3 grid grid-cols-2 gap-2">
-          <Metric label="Backend URL" value={ANALYZE_URL} />
+          <Metric label="API base URL" value={API_BASE_URL} />
+          <Metric label="Health URL" value={HEALTH_URL} />
+          <Metric label="Analyze URL" value={ANALYZE_URL} />
           <Metric label="Health" value={backendHealthStatus} />
           <Metric label="Request ID" value={debug.requestId ?? "none"} />
           <Metric label="Model" value={debug.model ?? "unknown"} />
@@ -1401,6 +1408,14 @@ function GeminiDebugPanel({
         ) : null}
 
         <div className="mt-3 grid grid-cols-2 gap-2">
+          <button
+            className="rounded-lg border border-cyan-300/30 bg-cyan-300/10 px-3 py-2 text-xs font-bold text-cyan-50 transition hover:bg-cyan-300/16 disabled:cursor-not-allowed disabled:border-slate-800 disabled:bg-slate-900 disabled:text-slate-500"
+            disabled={backendHealthStatus === "checking"}
+            onClick={onCheckBackend}
+            type="button"
+          >
+            {backendHealthStatus === "checking" ? "Checking..." : "Check backend"}
+          </button>
           <button
             className="rounded-lg border border-cyan-300/30 bg-cyan-300/10 px-3 py-2 text-xs font-bold text-cyan-50 transition hover:bg-cyan-300/16 disabled:cursor-not-allowed disabled:border-slate-800 disabled:bg-slate-900 disabled:text-slate-500"
             disabled={aiStatus === "loading"}
@@ -1850,8 +1865,16 @@ function isWrappedErrorResponse(value: unknown): value is AnalyzeAreaErrorRespon
 
 function simpleGeminiErrorMessage(error: GeminiApiError) {
   return error.code === "BACKEND_UNREACHABLE"
-    ? SIMPLE_BACKEND_ERROR
+    ? error.message
     : "Gemini analysis failed. Try again or switch to Developer Mode for details.";
+}
+
+function formatBackendUnavailableMessage(url: string) {
+  return [
+    `Backend URL used: ${url}`,
+    "Could not reach backend.",
+    "Check VITE_API_BASE_URL and whether the Vercel backend is deployed."
+  ].join("\n");
 }
 
 function formatAIPreviewErrorMessage(error: GenerateAIPreviewErrorResponse["error"]) {
