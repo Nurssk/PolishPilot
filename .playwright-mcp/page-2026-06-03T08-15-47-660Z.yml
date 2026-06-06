@@ -1,0 +1,81 @@
+- main [ref=e3]:
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - heading "PolishPilot" [level=1] [ref=e7]
+      - paragraph [ref=e8]: Layout patterns for AI-built UI
+    - button "Copy prompt" [ref=e9] [cursor=pointer]
+  - generic [ref=e10]:
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - heading "Current layout preview" [level=2] [ref=e13]
+        - paragraph [ref=e14]: 3 equal cards
+      - generic [ref=e15]: mock
+    - generic [ref=e31]:
+      - paragraph [ref=e32]: Problem summary
+      - paragraph [ref=e33]: This section uses three equal cards with the same visual weight. It is clean but looks generic and flat.
+  - generic [ref=e34]:
+    - generic [ref=e35]:
+      - generic [ref=e36]:
+        - heading "Suggested patterns" [level=2] [ref=e37]
+        - paragraph [ref=e38]: Select one to update the prompt.
+      - generic [ref=e39]: 6 options
+    - generic [ref=e40]:
+      - article [ref=e41]:
+        - generic [ref=e57]:
+          - generic [ref=e58]:
+            - heading "Featured side stack" [level=3] [ref=e59]
+            - paragraph [ref=e60]: Feature sections where one benefit should lead the story.
+          - generic [ref=e61]: Selected
+        - paragraph [ref=e62]: Makes one card the anchor and stacks the supporting cards beside it for stronger hierarchy.
+        - generic [ref=e63]:
+          - button "Use this pattern" [ref=e64] [cursor=pointer]
+          - button "Copy prompt for Featured side stack" [ref=e65] [cursor=pointer]: Copy Cursor Prompt
+      - article [ref=e66]:
+        - generic [ref=e82]:
+          - heading "Bento grid" [level=3] [ref=e83]
+          - paragraph [ref=e84]: SaaS feature groups that need a more editorial, product-led rhythm.
+        - paragraph [ref=e85]: Uses mixed card spans and calmer surfaces so repeated content feels curated instead of templated.
+        - generic [ref=e86]:
+          - button "Use this pattern" [ref=e87] [cursor=pointer]
+          - button "Copy prompt for Bento grid" [ref=e88] [cursor=pointer]: Copy Cursor Prompt
+      - article [ref=e89]:
+        - generic [ref=e91]:
+          - generic [ref=e94]: "1"
+          - generic [ref=e101]: "2"
+          - generic [ref=e107]: "3"
+        - generic [ref=e113]:
+          - heading "Step flow" [level=3] [ref=e114]
+          - paragraph [ref=e115]: How-it-works sections, onboarding explanations, and process cards.
+        - paragraph [ref=e116]: Adds sequence, directional rhythm, and progress cues so the section reads as a guided path.
+        - generic [ref=e117]:
+          - button "Use this pattern" [ref=e118] [cursor=pointer]
+          - button "Copy prompt for Step flow" [ref=e119] [cursor=pointer]: Copy Cursor Prompt
+      - article [ref=e120]:
+        - generic [ref=e136]:
+          - heading "Center highlight" [level=3] [ref=e137]
+          - paragraph [ref=e138]: Three-card rows where the middle choice or core feature should stand out.
+        - paragraph [ref=e139]: Elevates the center card with scale, contrast, and stronger CTA treatment while keeping the row compact.
+        - generic [ref=e140]:
+          - button "Use this pattern" [ref=e141] [cursor=pointer]
+          - button "Copy prompt for Center highlight" [ref=e142] [cursor=pointer]: Copy Cursor Prompt
+      - article [ref=e143]:
+        - generic [ref=e160]:
+          - heading "Pricing emphasis" [level=3] [ref=e161]
+          - paragraph [ref=e162]: Pricing tiers, plan comparisons, and conversion-oriented card rows.
+        - paragraph [ref=e163]: Turns flat plan cards into a clearer buying decision with one recommended option and stronger actions.
+        - generic [ref=e164]:
+          - button "Use this pattern" [ref=e165] [cursor=pointer]
+          - button "Copy prompt for Pricing emphasis" [ref=e166] [cursor=pointer]: Copy Cursor Prompt
+      - article [ref=e167]:
+        - generic [ref=e183]:
+          - heading "Equal grid" [level=3] [ref=e184]
+          - paragraph [ref=e185]: Simple informational sections where all items truly have equal priority.
+        - paragraph [ref=e186]: Keeps the current structure but improves spacing, surface depth, and interaction polish.
+        - generic [ref=e187]:
+          - button "Use this pattern" [ref=e188] [cursor=pointer]
+          - button "Copy prompt for Equal grid" [ref=e189] [cursor=pointer]: Copy Cursor Prompt
+  - generic [ref=e190]:
+    - generic [ref=e191]:
+      - heading "Generated prompt" [level=2] [ref=e192]
+      - generic [ref=e193]: Featured side stack
+    - generic [ref=e194]: "You are working in a React + Next.js + Tailwind CSS project. Refactor the selected section from a basic equal-card layout into the selected layout pattern: Featured side stack. Current issue: This section uses three equal cards with the same visual weight. It is clean but looks generic and flat. Instructions: 1. Keep the existing content, props, data mapping, links and business logic. 2. Do not remove any existing card content. 3. Preserve the component API. 4. Use responsive Tailwind CSS. 5. Improve visual hierarchy, spacing and card emphasis. 6. Keep mobile layout as a clean single column. 7. Add subtle hover states and accessible focus-visible states. 8. Do not add unnecessary dependencies. 9. Return the updated component code only. Pattern direction: Make the strongest card a larger featured panel on the left and stack the remaining cards vertically on the right. Keep all content, but create a clear primary/secondary rhythm. Tailwind hint: Use a responsive grid with md:grid-cols-[1.25fr_0.75fr], a larger featured card, and a stacked gap-4 support column."

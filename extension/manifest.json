@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "PolishPilot",
+  "description": "Drag over a UI section to capture a screenshot crop and understand its layout.",
+  "version": "0.1.0",
+  "action": {
+    "default_title": "PolishPilot",
+    "default_popup": "index.html"
+  },
+  "background": {
+    "service_worker": "assets/serviceWorker.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["assets/contentScript.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": ["activeTab", "sidePanel", "scripting", "storage", "tabs"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  }
+}
