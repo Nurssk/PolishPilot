@@ -6,11 +6,13 @@
   "scripts": {
     "scrape:21st": "tsx scripts/scrape-21st-dev.ts",
     "scrape:reactbits": "tsx scripts/scrape-reactbits.ts",
-    "check:template-links": "tsx scripts/check-template-links.ts"
+    "check:template-links": "tsx scripts/check-template-links.ts",
+    "export:panel-mockup": "tsx mockups/extension-panel/export-panel-mockup.ts"
   },
   "devDependencies": {
     "@types/node": "^25.9.1",
     "cheerio": "^1.1.2",
+    "playwright": "^1.60.0",
     "tsx": "^4.20.6",
     "typescript": "^6.0.3"
   }

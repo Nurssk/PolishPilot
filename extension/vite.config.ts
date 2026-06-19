@@ -11,6 +11,10 @@ export default defineConfig({
         popup: resolve(__dirname, "index.html"),
         sidepanel: resolve(__dirname, "sidepanel.html"),
         fullPreview: resolve(__dirname, "full-preview.html"),
+        previewImage: resolve(__dirname, "preview-image.html"),
+        previewGallery: resolve(__dirname, "preview-gallery.html"),
+        designIdeas: resolve(__dirname, "design-ideas.html"),
+        recommendations: resolve(__dirname, "recommendations.html"),
         serviceWorker: resolve(__dirname, "src/background/serviceWorker.ts")
       },
       output: {

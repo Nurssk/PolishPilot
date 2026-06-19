@@ -3,6 +3,7 @@ import type { LayoutPatternId } from "../patterns/layoutPatterns";
 import type { UsedCssExtractionResult } from "../content/extractUsedCssRules";
 import type { StyleTokens } from "../content/extractStyleTokens";
 import type { PreviewDebugLog } from "./previewDebug";
+import type { GeminiUncodixifyResult } from "../analysis/uncodixifyTypes";
 
 export type SelectionRect = {
   x: number;
@@ -275,6 +276,7 @@ export type AIUnderstandingResult = {
   designerDescription: string;
   currentLayoutProblem: string;
   reasoning: string[];
+  uncodixify?: GeminiUncodixifyResult;
 };
 
 export type StyleContext = {

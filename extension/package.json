@@ -1,19 +1,21 @@
 {
   "name": "polishpilot-extension",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "vite build && vite build --config vite.content.config.ts && cp manifest.json dist/manifest.json",
-    "dev": "vite build --watch --emptyOutDir=false & vite build --watch --config vite.content.config.ts & wait",
+    "build:local": "vite build --mode development && vite build --mode development --config vite.content.config.ts && cp manifest.json dist/manifest.json",
+    "dev": "vite build --mode development --watch --emptyOutDir=false & vite build --mode development --watch --config vite.content.config.ts & wait",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.0.0",
-    "vite": "^7.0.0",
-    "typescript": "^5.8.0",
+    "firebase": "^12.14.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "typescript": "^5.8.0",
+    "vite": "^7.0.0"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.315",

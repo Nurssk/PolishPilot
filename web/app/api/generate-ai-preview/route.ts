@@ -22,7 +22,7 @@ type GenerateAIPreviewErrorCode =
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
 const GEMINI_TIMEOUT_MS = 60_000;
@@ -147,8 +147,19 @@ export async function POST(request: Request) {
       styleContext: body.styleContext,
       templateMode,
       templateImageBase64: body.templateImageBase64,
+      uncodixify: body.uncodixify,
     };
     const promptUsed = buildImagePreviewPrompt(payload);
+    if (process.env.NODE_ENV !== "production") {
+      // Safe summary only — no screenshot base64, no keys.
+      console.log("[AI Preview] prompt summary", {
+        requestId,
+        promptChars: promptUsed.length,
+        hasUncodixifyRecommendations: Boolean(payload.uncodixify?.recommendations?.length),
+        hasTemplate: Boolean(payload.selectedTemplateReference),
+        hasAnimation: Boolean(payload.selectedAnimationReference)
+      });
+    }
     const ai = new GoogleGenAI({ apiKey });
     const selected = await selectImageModel(ai, process.env.GEMINI_IMAGE_MODEL);
 

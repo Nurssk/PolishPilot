@@ -71,6 +71,9 @@ export type GenerateAIPreviewRequest = {
   };
   templateMode?: "text-only" | "schematic-image" | "both";
   templateImageBase64?: string;
+  uncodixify?: {
+    recommendations?: string[];
+  };
 };
 
 export function buildImagePreviewPrompt(input: GenerateAIPreviewRequest): string {
@@ -94,6 +97,10 @@ export function buildImagePreviewPrompt(input: GenerateAIPreviewRequest): string
         )
         .join("\n")
     : "No structured card items were extracted. Preserve visible screenshot content.";
+
+  const uncodixifyBlock = formatUncodixifyRecommendations(
+    input.uncodixify?.recommendations
+  );
 
   return `You are Design Humanizer, a senior UI/UX designer.
 You are given a screenshot of a selected UI section from the user's own website/app.
@@ -171,8 +178,23 @@ Strict rules:
 18. Use selected references only as high-level inspiration.
 19. Do not copy external assets, code, text, logos, or branding.
 20. If an animation is selected, represent it only as static visual direction in this image preview.
-
+${uncodixifyBlock}
 Create one polished visual mockup image of the redesigned selected section.`;
+}
+
+function formatUncodixifyRecommendations(recommendations: string[] | undefined) {
+  const cleaned = Array.isArray(recommendations)
+    ? recommendations.map((item) => item.trim()).filter(Boolean)
+    : [];
+
+  if (!cleaned.length) return "";
+
+  return `
+Improve this UI according to these Uncodixify recommendations:
+${cleaned.map((item) => `- ${item}`).join("\n")}
+- avoid generic AI SaaS composition;
+- preserve all visible text exactly.
+`;
 }
 
 function formatTemplateReference(reference: GenerateAIPreviewRequest["selectedTemplateReference"]) {

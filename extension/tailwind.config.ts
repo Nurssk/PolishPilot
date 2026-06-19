@@ -1,23 +1,39 @@
 import type { Config } from "tailwindcss";
 
 export default {
-  content: ["./index.html", "./sidepanel.html", "./src/**/*.{ts,tsx}"],
+  content: ["./*.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
         pilot: {
-          bg: "#070A12",
-          panel: "#0D1220",
-          card: "#111827",
-          border: "#243044",
-          soft: "#9CA3AF",
-          text: "#F8FAFC",
-          blue: "#60A5FA",
-          cyan: "#22D3EE"
+          bg: "var(--bg)",
+          surface: "var(--surface)",
+          surface2: "var(--surface-2)",
+          panel: "var(--surface)",
+          card: "var(--card)",
+          border: "var(--border)",
+          borderStrong: "var(--border-strong)",
+          soft: "var(--muted-2)",
+          text: "var(--text)",
+          muted: "var(--muted)",
+          faint: "var(--faint)",
+          primary: "var(--accent)",
+          primaryDeep: "var(--accent-hover)",
+          purple: "var(--accent)",
+          violet: "var(--accent-hover)",
+          glow: "var(--accent-soft)",
+          success: "var(--success)",
+          warning: "#8a5a16",
+          danger: "var(--danger)"
         }
       },
+      borderRadius: {
+        card: "var(--radius-card)",
+        control: "var(--radius-control)"
+      },
       boxShadow: {
-        pilot: "0 18px 60px rgba(0, 0, 0, 0.34)"
+        pilot: "var(--shadow)",
+        glow: "var(--accent-shadow)"
       }
     }
   },

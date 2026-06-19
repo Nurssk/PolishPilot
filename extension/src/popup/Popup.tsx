@@ -4,9 +4,12 @@ import {
   POLISH_PILOT_MODE_STORAGE_KEY,
   chromeLastErrorMessage
 } from "../shared/messages";
+import { getCurrentUser, type ExtensionUser } from "../shared/authService";
 import type { PolishPilotMode } from "../shared/types";
+import { EmailAuthForm } from "../components/EmailAuthForm";
 
 export function Popup() {
+  const [user, setUser] = useState<ExtensionUser | null>(null);
   const [status, setStatus] = useState<"idle" | "starting" | "ready" | "error">(
     "idle"
   );
@@ -18,6 +21,8 @@ export function Popup() {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       setActiveTabId(tabs[0]?.id ?? null);
     });
+
+    void getCurrentUser().then(setUser).catch(() => undefined);
 
     chrome.storage.local
       .get(POLISH_PILOT_MODE_STORAGE_KEY)
@@ -108,23 +113,23 @@ export function Popup() {
   return (
     <main className="w-72 bg-pilot-bg p-4 text-pilot-text">
       <div className="flex items-center gap-3">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-cyan-300/30 bg-cyan-300/15 text-sm font-black text-cyan-100">
-          PP
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-pilot-primary text-sm font-black text-white shadow-lg shadow-black/20">
+          DH
         </div>
         <div>
-          <h1 className="text-base font-bold leading-tight">PolishPilot</h1>
-          <p className="text-xs text-slate-400">Rectangle area understanding</p>
+          <h1 className="text-base font-black leading-tight">Design Humanizer</h1>
+          <p className="text-xs text-pilot-muted">AI UI polish assistant</p>
         </div>
       </div>
 
-      <div className="mt-4 rounded-xl border border-slate-800 bg-slate-950/60 p-1">
+      <div className="mt-4 rounded-xl border border-pilot-border bg-pilot-card/60 p-1">
         <div className="grid grid-cols-2 gap-1">
           {(["simple", "developer"] as const).map((option) => (
             <button
               className={`rounded-lg px-3 py-2 text-xs font-bold transition ${
                 mode === option
-                  ? "bg-cyan-300 text-slate-950"
-                  : "text-slate-300 hover:bg-slate-800"
+                  ? "bg-pilot-primary text-white shadow-glow"
+                  : "text-pilot-muted hover:bg-pilot-card"
               }`}
               key={option}
               onClick={() => void updateMode(option)}
@@ -136,10 +141,23 @@ export function Popup() {
         </div>
       </div>
 
-      <p className="mt-4 text-sm leading-5 text-slate-300">{message}</p>
+      <div className="mt-4 rounded-lg border border-pilot-border bg-pilot-panel/70 p-2.5">
+        {user ? (
+          <p className="truncate text-[11px] leading-4 text-pilot-muted">
+            Signed in as{" "}
+            <span className="font-semibold text-pilot-text">
+              {user.email ?? user.displayName ?? user.uid}
+            </span>
+          </p>
+        ) : (
+          <EmailAuthForm compact onSignedIn={setUser} />
+        )}
+      </div>
+
+      <p className="mt-4 text-sm leading-5 text-pilot-muted">{message}</p>
 
       <button
-        className="mt-4 w-full rounded-xl bg-cyan-300 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-100 disabled:cursor-wait disabled:opacity-70"
+        className="dh-button-primary mt-4 w-full px-4 py-2.5 text-sm disabled:cursor-wait disabled:opacity-70"
         disabled={status === "starting"}
         onClick={handleSelectArea}
         type="button"
@@ -151,7 +169,7 @@ export function Popup() {
             : "Select Area"}
       </button>
 
-      <div className="mt-3 rounded-lg border border-slate-800 bg-slate-900/70 p-2.5 text-[11px] leading-4 text-slate-400">
+      <div className="mt-3 rounded-lg border border-pilot-border bg-pilot-panel/70 p-2.5 text-[11px] leading-4 text-pilot-muted">
         A temporary overlay appears on the current page. Drag over a UI section
         to capture its screenshot and DOM summary.
       </div>

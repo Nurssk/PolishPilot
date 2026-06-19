@@ -8,6 +8,14 @@ export const FULL_PREVIEW_STORAGE_KEY = "fullPreviewData";
 export const AI_PREVIEW_STORAGE_KEY = "aiPreviewData";
 export const POLISH_PILOT_MODE_STORAGE_KEY = "polishPilotMode";
 
+// Floating-window data + selection sync (control-center architecture).
+export const DESIGN_IDEAS_STORAGE_KEY = "designIdeasData";
+export const RECOMMENDATIONS_STORAGE_KEY = "recommendationsData";
+export const SELECTED_TEMPLATE_STORAGE_KEY = "selectedTemplateId";
+export const SELECTED_ANIMATION_STORAGE_KEY = "selectedAnimationId";
+export const EXCLUDED_UNCODIX_RULES_STORAGE_KEY = "excludedUncodixRuleIds";
+export const AI_PREVIEW_REGENERATE_KEY = "aiPreviewRegenerateRequest";
+
 export function isPolishPilotMessage(value: unknown): value is PolishPilotMessage {
   return Boolean(
     value &&

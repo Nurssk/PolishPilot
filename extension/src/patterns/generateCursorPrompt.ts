@@ -1,115 +1,201 @@
 import type { AIUnderstandingResult, RectangleCapture } from "../shared/types";
+import type {
+  UncodixifyAnalysisResult,
+  UncodixifyFinding
+} from "../analysis/uncodixifyTypes";
 import type { AnimationReference } from "./animationReferences";
 import type { LayoutPattern } from "./layoutPatterns";
 import type { TemplateReference } from "./templateReferences";
 
-export function generateCursorPrompt(args: {
-  pattern: LayoutPattern;
+export type GenerateCursorPromptArgs = {
   aiResult?: AIUnderstandingResult | null;
   capture?: RectangleCapture | null;
+  // A design direction is only "selected" when the user actively picked one.
+  // `pattern` may be a fallback suggestion, so it does NOT by itself mean the
+  // user chose a direction — pass `designDirectionSelected` explicitly.
+  designDirectionSelected?: boolean;
+  pattern?: LayoutPattern | null;
   templateReference?: TemplateReference | null;
   animationReference?: AnimationReference | null;
-}): string {
+  uncodixify?: UncodixifyAnalysisResult | null;
+  includedUncodixifyRuleIds?: string[];
+};
+
+// Builds the user-facing Cursor/Codex prompt following the PromptGen
+// architecture (docs/PROMPT_GENERATION_PRINCIPLES.md): Role → Context → Task →
+// Detected Issues → Style Preservation Rules → Constraints → Expected Output →
+// Self-check.
+//
+// The prompt is centered on the detected Uncodixify issues. It only introduces a
+// design direction when the user actively selected one — otherwise it explicitly
+// tells the coding agent to preserve the existing visual style and fix only the
+// detected issues (no redesign).
+export function generateCursorPrompt(args: GenerateCursorPromptArgs): string {
   const sectionType =
     args.aiResult?.sectionType ?? args.capture?.detected.sectionType ?? "unknown";
   const layoutType =
     args.aiResult?.layoutType ?? args.capture?.detected.layoutType ?? "unknown";
-  const currentLayoutProblem =
-    args.aiResult?.currentLayoutProblem ||
-    "The selected section needs stronger layout hierarchy and spacing.";
-  const styleDirection = formatStyleDirection(args.capture);
-  const detectedKeywords = args.aiResult?.detectedKeywords?.join(", ") || "unknown";
-  const uiProblems = args.aiResult?.uiProblems?.join(", ") || currentLayoutProblem;
-  const templateReference = args.templateReference
-    ? `${args.templateReference.title} (${args.templateReference.url})`
-    : "none";
-  const animationReference = args.animationReference
-    ? `${args.animationReference.title} (${args.animationReference.url})`
-    : "none";
+  const hasDirection =
+    args.designDirectionSelected ??
+    Boolean(args.templateReference || args.animationReference);
 
-  return `You are working in a React + Next.js + Tailwind CSS project.
-Refactor the selected UI section using this layout pattern:
-${args.pattern.name}
+  const findings = selectIncludedFindings(args.uncodixify, args.includedUncodixifyRuleIds);
+  const styleContext = formatStylePreservation(args.capture);
 
-Design Humanizer context:
-Section type: ${sectionType}
-Current layout: ${layoutType}
-Current issue: ${currentLayoutProblem}
-Detected keywords: ${detectedKeywords}
-UI problems: ${uiProblems}
-Selected layout pattern: ${args.pattern.name}
-Selected template reference: ${templateReference}
-Selected animation idea: ${animationReference}
+  const sections: string[] = [];
 
-Instructions:
-1. Keep existing content, props, data mapping, links, API calls and business logic.
-2. Do not remove any existing content.
-3. Preserve the component API.
-4. Improve visual hierarchy and spacing.
-5. Use responsive Tailwind CSS.
-6. Keep mobile layout clean and single-column when needed.
-7. Add subtle hover states and accessible focus-visible states.
-8. Do not add unnecessary dependencies.
-9. Return the updated component code only.
-10. Keep the same content. Change layout, hierarchy, spacing, and arrangement only.
-11. Use the selected template/reference only as high-level inspiration.
-12. Do not copy exact code, assets, text, logos, or branding from references.
-13. Preserve card radius, background, shadow, and style direction where possible.
-14. If animation is selected, add subtle accessible motion and respect prefers-reduced-motion.
+  sections.push(`# Role
 
-Pattern direction:
-${args.pattern.promptInstruction}
+You are a senior frontend engineer and product UI designer working inside the user's existing codebase.`);
 
-Reference direction:
-${formatTemplateReference(args.templateReference)}
+  const contextParts = [
+    `This block was selected from the user's existing website/app.`,
+    `Section type: ${sectionType}. Current layout: ${layoutType}.`,
+    ``,
+    `Current visual style to preserve:`,
+    styleContext
+  ];
+  if (hasDirection) {
+    contextParts.push(
+      ``,
+      `Selected design direction (inspiration only):`,
+      formatDesignDirection(args)
+    );
+  }
+  sections.push(`# Context\n\n${contextParts.join("\n")}`);
 
-Animation direction:
-${formatAnimationReference(args.animationReference)}
+  sections.push(`# Task
 
-Tailwind hint:
-${args.pattern.tailwindHint}
+Fix the detected UI-quality issues in the selected block.
+This is not a redesign of the product. Only address the detected issues listed below while keeping the block's purpose and visual identity.`);
 
-Visual style direction:
-${styleDirection}`;
+  sections.push(`# Detected Issues
+
+${findings.length ? formatDetectedIssues(findings) : formatNoIssues()}`);
+
+  sections.push(`# Style Preservation Rules
+
+${
+    hasDirection
+      ? `Use the selected design direction as layout inspiration only.
+Do not copy external assets, brands, logos, or exact code.
+Preserve the product's existing visual identity unless a detected issue specifically requires changes.`
+      : `Do not change the core visual style of the existing UI.
+Do not redesign this into a different template.
+Only fix the detected issues listed below.
+Preserve current colors, typography, content structure, spacing rhythm, and component identity unless a detected issue specifically requires adjustment.`
+  }`);
+
+  sections.push(`# Constraints
+
+- Do not rewrite visible text unless necessary.
+- Do not change functionality.
+- Do not change business logic.
+- Do not remove important content.
+- Do not change data fetching.
+- Preserve accessibility.
+- Use existing project components/tokens if present.
+- Prefer small targeted changes over a full redesign.${
+    args.animationReference
+      ? "\n- If adding motion, keep it subtle and respect prefers-reduced-motion."
+      : ""
+  }`);
+
+  sections.push(`# Expected Output
+
+Modify the relevant UI code.
+Keep the changes minimal, intentional, and consistent with the existing codebase.
+Return a short summary of what changed.`);
+
+  sections.push(`# Self-check
+
+Before finishing, verify:
+- visible text is preserved;
+- functionality is unchanged;
+- only detected issues were addressed;
+- existing style was preserved unless a detected issue required a change;
+- no external assets or copied designs were introduced.`);
+
+  return sections.join("\n\n");
 }
 
-function formatTemplateReference(reference?: TemplateReference | null) {
-  if (!reference) return "No external template reference selected.";
-
-  return `Use ${reference.title} from ${reference.source} only as high-level visual inspiration.
-Category: ${reference.category}
-Tags: ${reference.tags.join(", ")}
-Usage note: ${reference.usageNote}`;
+function selectIncludedFindings(
+  uncodixify?: UncodixifyAnalysisResult | null,
+  includedRuleIds?: string[]
+): UncodixifyFinding[] {
+  if (!uncodixify || !uncodixify.findings.length) return [];
+  const includedSet = includedRuleIds ? new Set(includedRuleIds) : null;
+  return uncodixify.findings.filter(
+    (finding) => !includedSet || includedSet.has(finding.ruleId)
+  );
 }
 
-function formatAnimationReference(reference?: AnimationReference | null) {
-  if (!reference) return "No animation reference selected.";
-
-  return `Use ${reference.title} from ${reference.source} as motion inspiration only.
-Category: ${reference.category}
-Tags: ${reference.tags.join(", ")}
-Best for: ${reference.bestFor}
-Avoid when: ${reference.avoidWhen}
-Respect prefers-reduced-motion and avoid heavy motion.`;
+function formatDetectedIssues(findings: UncodixifyFinding[]): string {
+  return findings
+    .map((finding, index) => formatDetectedIssue(finding, index + 1))
+    .join("\n\n");
 }
 
-function formatStyleDirection(capture?: RectangleCapture | null) {
+// Evidence-based, not over-prescriptive. We give the issue, evidence, why it
+// matters, and a general correction direction — the coding agent decides the
+// concrete implementation against the existing design system.
+function formatDetectedIssue(finding: UncodixifyFinding, position: number): string {
+  const evidence = finding.evidence[0] ?? "Detected during analysis.";
+  const lines = [
+    `${position}. ${finding.title}`,
+    `Category: ${finding.category}`,
+    `Evidence: ${evidence}`,
+    `Why it matters: ${finding.whyItFeelsAI ?? "Reads as generic AI-generated UI."}`,
+    `Correction direction: ${finding.recommendation}`
+  ];
+  if (finding.betterDirection) {
+    lines.push(`Direction (not a forced value): ${finding.betterDirection}`);
+  }
+  return lines.join("\n");
+}
+
+function formatNoIssues(): string {
+  return `No strong AI/Codex UI issues were detected — the block looks human-designed.
+Apply only minor cleanup if something is clearly off. Do not invent issues, and do not redesign the block.`;
+}
+
+function formatDesignDirection(args: GenerateCursorPromptArgs): string {
+  const parts: string[] = [];
+
+  if (args.pattern) {
+    parts.push(`Layout pattern: ${args.pattern.name}
+Use this only as structural inspiration: ${args.pattern.promptInstruction}`);
+  }
+
+  if (args.templateReference) {
+    parts.push(`Template reference: ${args.templateReference.title} (${args.templateReference.source})
+Use only as high-level visual inspiration. Do not copy code, assets, text, logos, or branding.`);
+  }
+
+  if (args.animationReference) {
+    parts.push(`Animation idea: ${args.animationReference.title} (${args.animationReference.source})
+Use only as motion inspiration. Keep it subtle and respect prefers-reduced-motion.`);
+  }
+
+  if (!parts.length) {
+    return "Use the selected direction as layout inspiration only. Do not copy external assets or code.";
+  }
+
+  return parts.join("\n\n");
+}
+
+function formatStylePreservation(capture?: RectangleCapture | null): string {
   const styleTokens = capture?.styleTokens;
 
   if (styleTokens) {
-    return `Preserve the existing visual style:
-- Section background: ${styleTokens.section.background ?? "existing section background"}
+    return `- Section background: ${styleTokens.section.background ?? "existing section background"}
 - Text color: ${styleTokens.section.color ?? styleTokens.heading.color ?? "existing text color"}
 - Muted text color: ${styleTokens.muted.color ?? styleTokens.body.color ?? "existing muted text color"}
 - Card background: ${styleTokens.card.background ?? "existing card background"}
-- Border: ${styleTokens.card.border ?? styleTokens.card.borderColor ?? "existing border treatment"}
-- Border radius: ${styleTokens.card.borderRadius ?? "existing radius"}
-- Shadow: ${styleTokens.card.boxShadow ?? "existing shadow treatment"}
-- Button background: ${styleTokens.button.background ?? "existing button background"}
-- Button radius: ${styleTokens.button.borderRadius ?? "existing button radius"}
+- Border / radius: ${styleTokens.card.border ?? styleTokens.card.borderColor ?? "existing border"} / ${styleTokens.card.borderRadius ?? "existing radius"}
 - Font family: ${styleTokens.section.fontFamily ?? styleTokens.heading.fontFamily ?? "existing font family"}
 
-Use these as style direction, not as forced values if they conflict with the project's design system. Do not paste extracted CSS wholesale; preserve the visual language through the existing component and design tokens.`;
+Treat these as direction, not forced values. Preserve the visual language through the existing components and design tokens; do not paste extracted CSS wholesale.`;
   }
 
   const styleContext = capture?.styleContext;
@@ -118,13 +204,12 @@ Use these as style direction, not as forced values if they conflict with the pro
     return "Preserve the existing visual style from the component and design system.";
   }
 
-  return `Preserve the current visual style using these as direction, not exact forced values if they conflict with the existing design system:
-- Theme: ${styleContext.theme}
+  return `- Theme: ${styleContext.theme}
 - Background: ${styleContext.section.backgroundColor ?? "existing section background"}
 - Card background: ${styleContext.card.backgroundColor ?? "existing card background"}
 - Text color: ${styleContext.text.headingColor ?? styleContext.section.color ?? "existing text color"}
-- Muted text color: ${styleContext.text.mutedColor ?? styleContext.text.bodyColor ?? "existing muted text color"}
 - Accent color: ${styleContext.accent.color ?? styleContext.accent.backgroundColor ?? "existing accent color"}
 - Border radius: ${styleContext.card.borderRadius ?? styleContext.section.borderRadius ?? "existing radius"}
-- Shadow: ${styleContext.card.boxShadow ?? "existing shadow treatment"}`;
+
+Treat these as direction, not forced values.`;
 }

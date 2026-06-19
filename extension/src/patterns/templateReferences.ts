@@ -40,7 +40,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-abdulali254-aurora-button",
     "source": "21st.dev",
     "title": "Aurora Button",
-    "url": "https://21st.dev/community/components/abdulali254/aurora-button",
+    "url": "https://21st.dev/community/components/s/buttons",
     "category": "buttons",
     "tags": [
       "button",
@@ -52,15 +52,15 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:07.014Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/buttons"
   },
   {
     "id": "21st-dev-aceternity-action-search-bar",
     "source": "21st.dev",
     "title": "Action Search Bar",
-    "url": "https://21st.dev/community/components/aceternity/action-search-bar",
+    "url": "https://21st.dev/community/components/s/cta",
     "category": "cta",
     "tags": [
       "call-to-action",
@@ -77,15 +77,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:08.076Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cta"
   },
   {
     "id": "21st-dev-aceternity-animated-ai-input",
     "source": "21st.dev",
     "title": "Animated AI Input",
-    "url": "https://21st.dev/community/components/aceternity/animated-ai-input",
+    "url": "https://21st.dev/community/components/s/forms",
     "category": "forms",
     "tags": [
       "input",
@@ -102,15 +102,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:09.074Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/forms"
   },
   {
     "id": "21st-dev-aceternity-animated-hero",
     "source": "21st.dev",
     "title": "Animated hero",
-    "url": "https://21st.dev/community/components/aceternity/animated-hero",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "hero",
@@ -126,15 +126,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:10.162Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
     "id": "21st-dev-aceternity-animated-text-cycle",
     "source": "21st.dev",
     "title": "Animated Text Cycle",
-    "url": "https://21st.dev/community/components/aceternity/animated-text-cycle",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "text",
@@ -153,8 +153,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:11.117Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
@@ -230,7 +230,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-aceternity-background-paths",
     "source": "21st.dev",
     "title": "Background Paths",
-    "url": "https://21st.dev/community/components/aceternity/background-paths",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "landing-page",
@@ -249,8 +249,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:14.256Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
@@ -283,7 +283,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-aceternity-display-cards",
     "source": "21st.dev",
     "title": "Display Cards",
-    "url": "https://21st.dev/community/components/aceternity/display-cards",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "landing-page",
@@ -302,15 +302,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:15.860Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
     "id": "21st-dev-aceternity-hand-writing-text",
     "source": "21st.dev",
     "title": "Hand Writing Text",
-    "url": "https://21st.dev/community/components/aceternity/hand-writing-text",
+    "url": "https://21st.dev/community/components/s/cta",
     "category": "cta",
     "tags": [
       "motion-primitives",
@@ -328,8 +328,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:16.663Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cta"
   },
   {
@@ -475,7 +475,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-aceternity-scroll-expansion-hero",
     "source": "21st.dev",
     "title": "Scroll media expansion hero",
-    "url": "https://21st.dev/community/components/aceternity/scroll-expansion-hero",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "hero",
@@ -501,8 +501,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:22.171Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
@@ -536,7 +536,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-aceternity-splite",
     "source": "21st.dev",
     "title": "Spline Scene",
-    "url": "https://21st.dev/community/components/aceternity/splite",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "3d-elements",
@@ -554,15 +554,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:23.735Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
     "id": "21st-dev-aceternity-tubelight-navbar",
     "source": "21st.dev",
     "title": "Tubelight Navbar",
-    "url": "https://21st.dev/community/components/aceternity/tubelight-navbar",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "landing-page",
@@ -582,8 +582,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:24.656Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
@@ -641,7 +641,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-aghasisahakyan1-shadcnblocks-com-feature108",
     "source": "21st.dev",
     "title": "Feature 108",
-    "url": "https://21st.dev/community/components/aghasisahakyan1/shadcnblocks-com-feature108",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "tabs",
@@ -658,8 +658,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:27.802Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
@@ -689,7 +689,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-aghasisahakyan1-theme-toggle",
     "source": "21st.dev",
     "title": "Theme Toggle",
-    "url": "https://21st.dev/community/components/aghasisahakyan1/theme-toggle",
+    "url": "https://21st.dev/community/components/s/buttons",
     "category": "buttons",
     "tags": [
       "button",
@@ -701,8 +701,8 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:29.592Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/buttons"
   },
   {
@@ -735,7 +735,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-arunachalam0606-shape-landing-hero",
     "source": "21st.dev",
     "title": "Shape Landing Hero",
-    "url": "https://21st.dev/community/components/arunachalam0606/shape-landing-hero",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "landing-page",
@@ -753,15 +753,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:31.533Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
     "id": "21st-dev-ayushmxxn-3d-testimonails",
     "source": "21st.dev",
     "title": "3D Testimonails",
-    "url": "https://21st.dev/community/components/ayushmxxn/3d-testimonails",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "3d-effects",
@@ -783,15 +783,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:32.332Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
     "id": "21st-dev-ayushmxxn-animated-hero",
     "source": "21st.dev",
     "title": "Animated hero",
-    "url": "https://21st.dev/community/components/ayushmxxn/animated-hero",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "hero",
@@ -807,8 +807,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:33.132Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
@@ -897,7 +897,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-ayushmxxn-typewriter-effect",
     "source": "21st.dev",
     "title": "Typewriter Effect",
-    "url": "https://21st.dev/community/components/ayushmxxn/typewriter-effect",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "text-effects",
@@ -916,15 +916,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:37.325Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
     "id": "21st-dev-bankkroll-animated-glassy-pricing",
     "source": "21st.dev",
     "title": "Animated Glassy Pricing",
-    "url": "https://21st.dev/community/components/bankkroll/animated-glassy-pricing",
+    "url": "https://21st.dev/community/components/s/pricing",
     "category": "pricing",
     "tags": [
       "webgl",
@@ -950,15 +950,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:38.457Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/pricing"
   },
   {
     "id": "21st-dev-bankkroll-animated-testimonials",
     "source": "21st.dev",
     "title": "Animated Testimonials",
-    "url": "https://21st.dev/community/components/bankkroll/animated-testimonials",
+    "url": "https://21st.dev/community/components/s/testimonials",
     "category": "testimonials",
     "tags": [
       "testimonials",
@@ -976,8 +976,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:39.336Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/testimonials"
   },
   {
@@ -1018,7 +1018,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-bankkroll-pricing-cards",
     "source": "21st.dev",
     "title": "Pricing Section",
-    "url": "https://21st.dev/community/components/bankkroll/pricing-cards",
+    "url": "https://21st.dev/community/components/s/pricing",
     "category": "pricing",
     "tags": [
       "pricing-section",
@@ -1036,15 +1036,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:40.909Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/pricing"
   },
   {
     "id": "21st-dev-bankkroll-single-pricing-card",
     "source": "21st.dev",
     "title": "Single Pricing Card",
-    "url": "https://21st.dev/community/components/bankkroll/single-pricing-card",
+    "url": "https://21st.dev/community/components/s/pricing",
     "category": "pricing",
     "tags": [
       "pricing-section",
@@ -1062,15 +1062,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:41.672Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/pricing"
   },
   {
     "id": "21st-dev-bankkroll-testimonial-cards",
     "source": "21st.dev",
     "title": "Testimonial Cards",
-    "url": "https://21st.dev/community/components/bankkroll/testimonial-cards",
+    "url": "https://21st.dev/community/components/s/testimonials",
     "category": "testimonials",
     "tags": [
       "testimonials",
@@ -1088,8 +1088,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:42.584Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/testimonials"
   },
   {
@@ -1119,7 +1119,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-chetanverma16-magnetize-button",
     "source": "21st.dev",
     "title": "Magnetize Button",
-    "url": "https://21st.dev/community/components/chetanverma16/magnetize-button",
+    "url": "https://21st.dev/community/components/s/cta",
     "category": "cta",
     "tags": [
       "call-to-action",
@@ -1134,15 +1134,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:44.251Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cta"
   },
   {
     "id": "21st-dev-codehagen-display-cards",
     "source": "21st.dev",
     "title": "Display Cards",
-    "url": "https://21st.dev/community/components/codehagen/display-cards",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "text",
@@ -1161,15 +1161,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:45.216Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
     "id": "21st-dev-codehagen-gooey-text-morphing",
     "source": "21st.dev",
     "title": "Gooey Text Morphing",
-    "url": "https://21st.dev/community/components/codehagen/gooey-text-morphing",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "text",
@@ -1187,15 +1187,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:46.151Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
     "id": "21st-dev-codehagen-hero-badge",
     "source": "21st.dev",
     "title": "Hero Badge",
-    "url": "https://21st.dev/community/components/codehagen/hero-badge",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "announcements",
@@ -1213,15 +1213,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:46.975Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
     "id": "21st-dev-codehagen-hero-pill",
     "source": "21st.dev",
     "title": "Hero Pill",
-    "url": "https://21st.dev/community/components/codehagen/hero-pill",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "call-to-action",
@@ -1244,15 +1244,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:47.777Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
     "id": "21st-dev-codehagen-pricing",
     "source": "21st.dev",
     "title": "Pricing",
-    "url": "https://21st.dev/community/components/codehagen/pricing",
+    "url": "https://21st.dev/community/components/s/pricing",
     "category": "pricing",
     "tags": [
       "card",
@@ -1271,15 +1271,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:48.602Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/pricing"
   },
   {
     "id": "21st-dev-codehagen-splite",
     "source": "21st.dev",
     "title": "Spline Scene",
-    "url": "https://21st.dev/community/components/codehagen/splite",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "3d-elements",
@@ -1297,15 +1297,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:49.518Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
     "id": "21st-dev-codehagen-x-gradient-card",
     "source": "21st.dev",
     "title": "X Gradient Card",
-    "url": "https://21st.dev/community/components/codehagen/x-gradient-card",
+    "url": "https://21st.dev/community/components/s/cta",
     "category": "cta",
     "tags": [
       "card",
@@ -1323,15 +1323,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:50.346Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cta"
   },
   {
     "id": "21st-dev-cybergaz-button-colorful",
     "source": "21st.dev",
     "title": "Button Colorful with Hover Effect",
-    "url": "https://21st.dev/community/components/cybergaz/button-colorful",
+    "url": "https://21st.dev/community/components/s/cta",
     "category": "cta",
     "tags": [
       "button",
@@ -1346,8 +1346,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:51.122Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cta"
   },
   {
@@ -1427,7 +1427,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-danielpetho-gooey-text-morphing",
     "source": "21st.dev",
     "title": "Gooey Text Morphing",
-    "url": "https://21st.dev/community/components/danielpetho/gooey-text-morphing",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "text",
@@ -1445,8 +1445,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:54.890Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
@@ -1533,7 +1533,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-designali-in-ai-input-with-search",
     "source": "21st.dev",
     "title": "AI Input With Search",
-    "url": "https://21st.dev/community/components/designali-in/ai-input-with-search",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "chat",
@@ -1552,15 +1552,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:58.062Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
     "id": "21st-dev-designali-in-background-gradient-animation",
     "source": "21st.dev",
     "title": "Background Gradient Animation",
-    "url": "https://21st.dev/community/components/designali-in/background-gradient-animation",
+    "url": "https://21st.dev/community/components/s/cta",
     "category": "cta",
     "tags": [
       "landing-page",
@@ -1580,15 +1580,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:15:59.261Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cta"
   },
   {
     "id": "21st-dev-designali-in-dot-pattern-1",
     "source": "21st.dev",
     "title": "dot-pattern",
-    "url": "https://21st.dev/community/components/designali-in/dot-pattern-1",
+    "url": "https://21st.dev/community/components/s/buttons",
     "category": "buttons",
     "tags": [
       "button",
@@ -1600,8 +1600,8 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:16:00.308Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/buttons"
   },
   {
@@ -1636,7 +1636,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-designali-in-gradient-text",
     "source": "21st.dev",
     "title": "Gradient Text",
-    "url": "https://21st.dev/community/components/designali-in/gradient-text",
+    "url": "https://21st.dev/community/components",
     "category": "other",
     "tags": [
       "text",
@@ -1650,8 +1650,8 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:16:01.881Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components"
   },
   {
@@ -1740,7 +1740,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-designali-in-shader-background",
     "source": "21st.dev",
     "title": "Shader Background",
-    "url": "https://21st.dev/community/components/designali-in/shader-background",
+    "url": "https://21st.dev/community/components",
     "category": "other",
     "tags": [
       "shader"
@@ -1751,8 +1751,8 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:16:05.655Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components"
   },
   {
@@ -1785,7 +1785,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-designali-in-shape-landing-hero",
     "source": "21st.dev",
     "title": "Shape Landing Hero",
-    "url": "https://21st.dev/community/components/designali-in/shape-landing-hero",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "landing-page",
@@ -1803,15 +1803,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:16:07.200Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
     "id": "21st-dev-designali-in-sign-in-flow-1",
     "source": "21st.dev",
     "title": "Sign In Flow",
-    "url": "https://21st.dev/community/components/designali-in/sign-in-flow-1",
+    "url": "https://21st.dev/community/components/s/auth",
     "category": "auth",
     "tags": [
       "sign-in",
@@ -1833,15 +1833,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:16:07.934Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/auth"
   },
   {
     "id": "21st-dev-designali-in-vapour-text-effect",
     "source": "21st.dev",
     "title": "Vapour Text Effect",
-    "url": "https://21st.dev/community/components/designali-in/vapour-text-effect",
+    "url": "https://21st.dev/community/components",
     "category": "other",
     "tags": [
       "text",
@@ -1855,8 +1855,8 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:16:08.733Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components"
   },
   {
@@ -1946,7 +1946,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-dillionverma-features-8",
     "source": "21st.dev",
     "title": "Features 8",
-    "url": "https://21st.dev/community/components/dillionverma/features-8",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "saas",
@@ -1966,8 +1966,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:16:12.210Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
@@ -2047,7 +2047,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-dillionverma-typewriter",
     "source": "21st.dev",
     "title": "Typewriter",
-    "url": "https://21st.dev/community/components/dillionverma/typewriter",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "landing-page",
@@ -2065,8 +2065,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:16:16.145Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
@@ -2100,7 +2100,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-easemize-ai-input-with-loading",
     "source": "21st.dev",
     "title": "AI Input With Loading",
-    "url": "https://21st.dev/community/components/easemize/ai-input-with-loading",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "ai-chat",
@@ -2119,8 +2119,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:16:17.731Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
@@ -2154,7 +2154,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-easemize-ai-voice-input",
     "source": "21st.dev",
     "title": "AI Voice Input",
-    "url": "https://21st.dev/community/components/easemize/ai-voice-input",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "voice",
@@ -2173,8 +2173,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:16:19.294Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
@@ -2276,7 +2276,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-easemize-animated-shader-hero",
     "source": "21st.dev",
     "title": "Animated Shader Hero",
-    "url": "https://21st.dev/community/components/easemize/animated-shader-hero",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "hero",
@@ -2294,8 +2294,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:16:22.418Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
@@ -2351,7 +2351,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-easemize-single-pricing-card",
     "source": "21st.dev",
     "title": "Single Pricing Card",
-    "url": "https://21st.dev/community/components/easemize/single-pricing-card",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "pricing-card",
@@ -2371,8 +2371,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:16:25.147Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
@@ -2609,7 +2609,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-gaxocif204-mapcn-marker-content",
     "source": "21st.dev",
     "title": "MarkerContent",
-    "url": "https://21st.dev/community/components/gaxocif204/mapcn-marker-content",
+    "url": "https://21st.dev/community/components",
     "category": "other",
     "tags": [
       "map",
@@ -2624,8 +2624,8 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:16:34.730Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components"
   },
   {
@@ -2655,7 +2655,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-hari-gradient-text",
     "source": "21st.dev",
     "title": "Gradient Text",
-    "url": "https://21st.dev/community/components/hari/gradient-text",
+    "url": "https://21st.dev/community/components",
     "category": "other",
     "tags": [
       "gradient",
@@ -2669,8 +2669,8 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:16:36.484Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components"
   },
   {
@@ -3167,7 +3167,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-isaiahbjork-animated-ai-chat",
     "source": "21st.dev",
     "title": "Animated AI Chat",
-    "url": "https://21st.dev/community/components/isaiahbjork/animated-ai-chat",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "ui",
@@ -3187,8 +3187,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:16:53.969Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
@@ -3221,7 +3221,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-jatin-yadav05-display-cards",
     "source": "21st.dev",
     "title": "Display Cards",
-    "url": "https://21st.dev/community/components/jatin-yadav05/display-cards",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "landing-page",
@@ -3240,8 +3240,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:16:55.458Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
@@ -3274,7 +3274,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-jatin-yadav05-link-preview",
     "source": "21st.dev",
     "title": "Link Preview",
-    "url": "https://21st.dev/community/components/jatin-yadav05/link-preview",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "text",
@@ -3292,8 +3292,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:16:57.714Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
@@ -3327,7 +3327,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-jatin-yadav05-v0-ai-chat",
     "source": "21st.dev",
     "title": "v0 AI Chat",
-    "url": "https://21st.dev/community/components/jatin-yadav05/v0-ai-chat",
+    "url": "https://21st.dev/community/components/s/cta",
     "category": "cta",
     "tags": [
       "ai",
@@ -3345,8 +3345,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:16:59.194Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cta"
   },
   {
@@ -3405,7 +3405,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-kokonutd-agent-plan",
     "source": "21st.dev",
     "title": "Agent Plan",
-    "url": "https://21st.dev/community/components/kokonutd/agent-plan",
+    "url": "https://21st.dev/community/components/s/pricing",
     "category": "pricing",
     "tags": [
       "ai",
@@ -3427,15 +3427,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:01.878Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/pricing"
   },
   {
     "id": "21st-dev-kokonutd-ai-gen",
     "source": "21st.dev",
     "title": "AI Gen",
-    "url": "https://21st.dev/community/components/kokonutd/ai-gen",
+    "url": "https://21st.dev/community/components/s/cards",
     "category": "cards",
     "tags": [
       "ai",
@@ -3456,8 +3456,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:02.885Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cards"
   },
   {
@@ -3527,7 +3527,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-kokonutd-ai-prompt-box",
     "source": "21st.dev",
     "title": "AI prompt Box",
-    "url": "https://21st.dev/community/components/kokonutd/ai-prompt-box",
+    "url": "https://21st.dev/community/components/s/forms",
     "category": "forms",
     "tags": [
       "creative-ai",
@@ -3549,8 +3549,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:06.054Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/forms"
   },
   {
@@ -3613,7 +3613,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-kokonutd-avatar",
     "source": "21st.dev",
     "title": "Avatar",
-    "url": "https://21st.dev/community/components/kokonutd/avatar",
+    "url": "https://21st.dev/community/components/s/testimonials",
     "category": "testimonials",
     "tags": [
       "testimonials",
@@ -3629,8 +3629,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:08.831Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/testimonials"
   },
   {
@@ -3775,7 +3775,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-kokonutd-chatgpt-prompt-input",
     "source": "21st.dev",
     "title": "Chatgpt Prompt Input",
-    "url": "https://21st.dev/community/components/kokonutd/chatgpt-prompt-input",
+    "url": "https://21st.dev/community/components/s/forms",
     "category": "forms",
     "tags": [
       "ai-chat",
@@ -3800,8 +3800,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:14.529Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/forms"
   },
   {
@@ -3836,7 +3836,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-kokonutd-dark-gradient-pricing",
     "source": "21st.dev",
     "title": "Dark Gradient Pricing",
-    "url": "https://21st.dev/community/components/kokonutd/dark-gradient-pricing",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "pricing-section",
@@ -3856,15 +3856,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:16.120Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
     "id": "21st-dev-kokonutd-floating-action-menu",
     "source": "21st.dev",
     "title": "Floating Action Menu",
-    "url": "https://21st.dev/community/components/kokonutd/floating-action-menu",
+    "url": "https://21st.dev/community/components/s/cta",
     "category": "cta",
     "tags": [
       "menu",
@@ -3885,8 +3885,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:16.962Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cta"
   },
   {
@@ -3918,7 +3918,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-kokonutd-highlighter",
     "source": "21st.dev",
     "title": "Highlighter",
-    "url": "https://21st.dev/community/components/kokonutd/highlighter",
+    "url": "https://21st.dev/community/components/s/cta",
     "category": "cta",
     "tags": [
       "call-to-action",
@@ -3939,15 +3939,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:18.537Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cta"
   },
   {
     "id": "21st-dev-kokonutd-liquid-glass",
     "source": "21st.dev",
     "title": "Liquid Glass",
-    "url": "https://21st.dev/community/components/kokonutd/liquid-glass",
+    "url": "https://21st.dev/community/components/s/buttons",
     "category": "buttons",
     "tags": [
       "glass-morphism",
@@ -3965,8 +3965,8 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:19.377Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/buttons"
   },
   {
@@ -3999,7 +3999,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-kokonutd-pulse-beams",
     "source": "21st.dev",
     "title": "Pulse Beams",
-    "url": "https://21st.dev/community/components/kokonutd/pulse-beams",
+    "url": "https://21st.dev/community/components/s/cta",
     "category": "cta",
     "tags": [
       "beam",
@@ -4015,15 +4015,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:21.594Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cta"
   },
   {
     "id": "21st-dev-kokonutd-radial-orbital-timeline",
     "source": "21st.dev",
     "title": "Radial Orbital Timeline",
-    "url": "https://21st.dev/community/components/kokonutd/radial-orbital-timeline",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "timeline",
@@ -4044,15 +4044,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:22.368Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
     "id": "21st-dev-kokonutd-reveal-images",
     "source": "21st.dev",
     "title": "Reveal images",
-    "url": "https://21st.dev/community/components/kokonutd/reveal-images",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "hover",
@@ -4069,15 +4069,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:23.211Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
     "id": "21st-dev-kokonutd-section-with-mockup",
     "source": "21st.dev",
     "title": "Section With Mockup",
-    "url": "https://21st.dev/community/components/kokonutd/section-with-mockup",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "section",
@@ -4096,8 +4096,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:24.440Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
@@ -4130,7 +4130,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-kokonutd-sparkles",
     "source": "21st.dev",
     "title": "Sparkles",
-    "url": "https://21st.dev/community/components/kokonutd/sparkles",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "landing-page",
@@ -4149,8 +4149,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:25.976Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
@@ -4319,7 +4319,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-legionwebdev-bento-grid",
     "source": "21st.dev",
     "title": "Bento Grid",
-    "url": "https://21st.dev/community/components/legionwebdev/bento-grid",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "bento",
@@ -4338,15 +4338,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:32.144Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
     "id": "21st-dev-legionwebdev-cpu-architecture",
     "source": "21st.dev",
     "title": "CPU Architecture",
-    "url": "https://21st.dev/community/components/legionwebdev/cpu-architecture",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "bento",
@@ -4365,15 +4365,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:33.109Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
     "id": "21st-dev-ln-dev7-creative-pricing",
     "source": "21st.dev",
     "title": "Creative Pricing",
-    "url": "https://21st.dev/community/components/ln-dev7/creative-pricing",
+    "url": "https://21st.dev/community/components/s/pricing",
     "category": "pricing",
     "tags": [
       "pricing-section",
@@ -4390,8 +4390,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:33.961Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/pricing"
   },
   {
@@ -4423,7 +4423,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-lovesickfromthe6ix-background-paper-shaders",
     "source": "21st.dev",
     "title": "Background Paper Shaders",
-    "url": "https://21st.dev/community/components/lovesickfromthe6ix/background-paper-shaders",
+    "url": "https://21st.dev/community/components",
     "category": "other",
     "tags": [
       "shader"
@@ -4434,8 +4434,8 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:35.730Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components"
   },
   {
@@ -4505,7 +4505,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-mapcn-flightcn-flight-airport",
     "source": "21st.dev",
     "title": "FlightAirport",
-    "url": "https://21st.dev/community/components/mapcn/flightcn-flight-airport",
+    "url": "https://21st.dev/community/components",
     "category": "other",
     "tags": [
       "map",
@@ -4520,8 +4520,8 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:39.457Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components"
   },
   {
@@ -4845,7 +4845,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-maxim-bort-devel-animated-testimonials",
     "source": "21st.dev",
     "title": "Animated Testimonials",
-    "url": "https://21st.dev/community/components/maxim.bort.devel/animated-testimonials",
+    "url": "https://21st.dev/community/components/s/testimonials",
     "category": "testimonials",
     "tags": [
       "testimonials",
@@ -4861,8 +4861,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:55.373Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/testimonials"
   },
   {
@@ -4967,7 +4967,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-meschacirung-gallery4",
     "source": "21st.dev",
     "title": "Gallery with image cards",
-    "url": "https://21st.dev/community/components/meschacirung/gallery4",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "carousel",
@@ -4989,8 +4989,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:17:59.411Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
@@ -5084,7 +5084,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-minhxthanh-shader-animation",
     "source": "21st.dev",
     "title": "Shader Animation",
-    "url": "https://21st.dev/community/components/minhxthanh/shader-animation",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "animation",
@@ -5102,8 +5102,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:02.838Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
@@ -5170,7 +5170,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-orcdev-8bit-carousel",
     "source": "21st.dev",
     "title": "8bit Carousel",
-    "url": "https://21st.dev/community/components/orcdev/8bit-carousel",
+    "url": "https://21st.dev/community/components/s/forms",
     "category": "forms",
     "tags": [
       "combobox",
@@ -5189,15 +5189,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:04.989Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/forms"
   },
   {
     "id": "21st-dev-orcdev-8bit-cta1",
     "source": "21st.dev",
     "title": "8bit CTA 1 — Comparison",
-    "url": "https://21st.dev/community/components/orcdev/8bit-cta1",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "8bit",
@@ -5218,15 +5218,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:05.771Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
     "id": "21st-dev-orcdev-8bit-difficulty-select",
     "source": "21st.dev",
     "title": "8bit Difficulty Select",
-    "url": "https://21st.dev/community/components/orcdev/8bit-difficulty-select",
+    "url": "https://21st.dev/community/components/s/cards",
     "category": "cards",
     "tags": [
       "map",
@@ -5245,15 +5245,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:06.664Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cards"
   },
   {
     "id": "21st-dev-orcdev-8bit-empty",
     "source": "21st.dev",
     "title": "8bit Empty",
-    "url": "https://21st.dev/community/components/orcdev/8bit-empty",
+    "url": "https://21st.dev/community/components",
     "category": "other",
     "tags": [
       "8bit",
@@ -5268,15 +5268,15 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:07.371Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components"
   },
   {
     "id": "21st-dev-orcdev-8bit-enemy-health-display",
     "source": "21st.dev",
     "title": "8bit Enemy Health Display",
-    "url": "https://21st.dev/community/components/orcdev/8bit-enemy-health-display",
+    "url": "https://21st.dev/community/components",
     "category": "other",
     "tags": [
       "retro",
@@ -5291,15 +5291,15 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:08.095Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components"
   },
   {
     "id": "21st-dev-orcdev-8bit-faq1",
     "source": "21st.dev",
     "title": "8bit FAQ 1",
-    "url": "https://21st.dev/community/components/orcdev/8bit-faq1",
+    "url": "https://21st.dev/community/components",
     "category": "other",
     "tags": [
       "not-found",
@@ -5314,15 +5314,15 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:08.805Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components"
   },
   {
     "id": "21st-dev-orcdev-8bit-faq2",
     "source": "21st.dev",
     "title": "8bit FAQ 2 — Card Grid",
-    "url": "https://21st.dev/community/components/orcdev/8bit-faq2",
+    "url": "https://21st.dev/community/components/s/cards",
     "category": "cards",
     "tags": [
       "map",
@@ -5340,15 +5340,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:09.552Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cards"
   },
   {
     "id": "21st-dev-orcdev-8bit-faq3",
     "source": "21st.dev",
     "title": "8bit FAQ 3 Searchable",
-    "url": "https://21st.dev/community/components/orcdev/8bit-faq3",
+    "url": "https://21st.dev/community/components/s/forms",
     "category": "forms",
     "tags": [
       "changelog",
@@ -5366,15 +5366,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:10.334Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/forms"
   },
   {
     "id": "21st-dev-orcdev-8bit-game-over",
     "source": "21st.dev",
     "title": "8bit Game Over",
-    "url": "https://21st.dev/community/components/orcdev/8bit-game-over",
+    "url": "https://21st.dev/community/components/s/cards",
     "category": "cards",
     "tags": [
       "block",
@@ -5393,15 +5393,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:11.134Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cards"
   },
   {
     "id": "21st-dev-orcdev-8bit-game-progress",
     "source": "21st.dev",
     "title": "8bit Game Progress",
-    "url": "https://21st.dev/community/components/orcdev/8bit-game-progress",
+    "url": "https://21st.dev/community/components/s/cards",
     "category": "cards",
     "tags": [
       "8bit",
@@ -5419,15 +5419,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:11.936Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cards"
   },
   {
     "id": "21st-dev-orcdev-8bit-health-bar",
     "source": "21st.dev",
     "title": "8bit Health Bar",
-    "url": "https://21st.dev/community/components/orcdev/8bit-health-bar",
+    "url": "https://21st.dev/community/components",
     "category": "other",
     "tags": [
       "8bit",
@@ -5442,15 +5442,15 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:12.712Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components"
   },
   {
     "id": "21st-dev-orcdev-8bit-loading-screen",
     "source": "21st.dev",
     "title": "8bit Loading Screen",
-    "url": "https://21st.dev/community/components/orcdev/8bit-loading-screen",
+    "url": "https://21st.dev/community/components/s/cards",
     "category": "cards",
     "tags": [
       "8bit",
@@ -5468,15 +5468,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:13.529Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cards"
   },
   {
     "id": "21st-dev-orcdev-8bit-main-menu",
     "source": "21st.dev",
     "title": "8bit Main Menu",
-    "url": "https://21st.dev/community/components/orcdev/8bit-main-menu",
+    "url": "https://21st.dev/community/components/s/cards",
     "category": "cards",
     "tags": [
       "pause-menu",
@@ -5495,15 +5495,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:14.288Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cards"
   },
   {
     "id": "21st-dev-orcdev-8bit-mana-bar",
     "source": "21st.dev",
     "title": "8bit Mana Bar",
-    "url": "https://21st.dev/community/components/orcdev/8bit-mana-bar",
+    "url": "https://21st.dev/community/components",
     "category": "other",
     "tags": [
       "color",
@@ -5518,15 +5518,15 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:15.432Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components"
   },
   {
     "id": "21st-dev-orcdev-8bit-not-found1",
     "source": "21st.dev",
     "title": "8bit 404 Page",
-    "url": "https://21st.dev/community/components/orcdev/8bit-not-found1",
+    "url": "https://21st.dev/community/components/s/cta",
     "category": "cta",
     "tags": [
       "faq",
@@ -5546,15 +5546,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:16.250Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cta"
   },
   {
     "id": "21st-dev-orcdev-8bit-pause-menu",
     "source": "21st.dev",
     "title": "8bit Pause Menu",
-    "url": "https://21st.dev/community/components/orcdev/8bit-pause-menu",
+    "url": "https://21st.dev/community/components/s/cards",
     "category": "cards",
     "tags": [
       "8bit",
@@ -5572,15 +5572,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:17.051Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cards"
   },
   {
     "id": "21st-dev-orcdev-8bit-resizable",
     "source": "21st.dev",
     "title": "8bit Resizable",
-    "url": "https://21st.dev/community/components/orcdev/8bit-resizable",
+    "url": "https://21st.dev/community/components",
     "category": "other",
     "tags": [
       "8bit",
@@ -5595,15 +5595,15 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:17.892Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components"
   },
   {
     "id": "21st-dev-orcdev-8bit-team2",
     "source": "21st.dev",
     "title": "8bit Changelog",
-    "url": "https://21st.dev/community/components/orcdev/8bit-team2",
+    "url": "https://21st.dev/community/components/s/cards",
     "category": "cards",
     "tags": [],
     "description": "An 8-bit styled changelog block. Vertical list of release entries with date, title, description, an optional version badge, and pixel separators between entries. Built from retro badge, card, and separator primitives.",
@@ -5615,15 +5615,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:18.891Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cards"
   },
   {
     "id": "21st-dev-orcdev-8bit-timeline2",
     "source": "21st.dev",
     "title": "8bit Timeline Horizontal",
-    "url": "https://21st.dev/community/components/orcdev/8bit-timeline2",
+    "url": "https://21st.dev/community/components",
     "category": "other",
     "tags": [
       "8bit",
@@ -5638,15 +5638,15 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:19.661Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components"
   },
   {
     "id": "21st-dev-orcdev-animated-blur-number",
     "source": "21st.dev",
     "title": "Animated Blur Number",
-    "url": "https://21st.dev/community/components/orcdev/animated-blur-number",
+    "url": "https://21st.dev/community/components/s/pricing",
     "category": "pricing",
     "tags": [],
     "description": "An animated number that transitions digit-by-digit with an iOS-style spring, blurring only the digits that change. A drop-in for counters, stats, prices and live metrics.",
@@ -5659,8 +5659,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:20.410Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/pricing"
   },
   {
@@ -5719,7 +5719,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-originui-testimonials",
     "source": "21st.dev",
     "title": "Testimonials",
-    "url": "https://21st.dev/community/components/originui/testimonials",
+    "url": "https://21st.dev/community/components/s/testimonials",
     "category": "testimonials",
     "tags": [
       "testimonials",
@@ -5736,8 +5736,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:22.966Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/testimonials"
   },
   {
@@ -5796,7 +5796,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-ravikatiyar162-shader-lines",
     "source": "21st.dev",
     "title": "Shader Lines",
-    "url": "https://21st.dev/community/components/ravikatiyar162/shader-lines",
+    "url": "https://21st.dev/community/components",
     "category": "other",
     "tags": [
       "animated",
@@ -5808,8 +5808,8 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:26.800Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components"
   },
   {
@@ -5846,7 +5846,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-reuno-ui-neon-button",
     "source": "21st.dev",
     "title": "Neon Button",
-    "url": "https://21st.dev/community/components/reuno-ui/neon-button",
+    "url": "https://21st.dev/community/components/s/buttons",
     "category": "buttons",
     "tags": [
       "button",
@@ -5858,8 +5858,8 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:28.778Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/buttons"
   },
   {
@@ -5886,7 +5886,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-reuno-ui-spooky-smoke-animation",
     "source": "21st.dev",
     "title": "Spooky Smoke Animation",
-    "url": "https://21st.dev/community/components/reuno-ui/spooky-smoke-animation",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "shader",
@@ -5908,15 +5908,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:30.299Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
     "id": "21st-dev-ridemountainpig-8bit-faq1",
     "source": "21st.dev",
     "title": "8bit FAQ 1",
-    "url": "https://21st.dev/community/components/ridemountainpig/8bit-faq1",
+    "url": "https://21st.dev/community/components",
     "category": "other",
     "tags": [
       "retro",
@@ -5931,8 +5931,8 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:31.127Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components"
   },
   {
@@ -5989,7 +5989,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-sean0205-animated-cards-stack",
     "source": "21st.dev",
     "title": "Animated Cards Stack",
-    "url": "https://21st.dev/community/components/sean0205/animated-cards-stack",
+    "url": "https://21st.dev/community/components/s/testimonials",
     "category": "testimonials",
     "tags": [
       "animated-card",
@@ -6009,8 +6009,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:33.685Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/testimonials"
   },
   {
@@ -6038,7 +6038,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-serafimcloud-falling-pattern",
     "source": "21st.dev",
     "title": "Falling Pattern",
-    "url": "https://21st.dev/community/components/serafimcloud/falling-pattern",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "backgrounds",
@@ -6057,8 +6057,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:35.288Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
@@ -6087,7 +6087,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-serafimcloud-preloader",
     "source": "21st.dev",
     "title": "Preloader",
-    "url": "https://21st.dev/community/components/serafimcloud/preloader",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "page-transition",
@@ -6106,15 +6106,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:36.890Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
     "id": "21st-dev-serafimcloud-slide-button",
     "source": "21st.dev",
     "title": "Slide Button",
-    "url": "https://21st.dev/community/components/serafimcloud/slide-button",
+    "url": "https://21st.dev/community/components/s/buttons",
     "category": "buttons",
     "tags": [
       "slide-button",
@@ -6128,8 +6128,8 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:37.631Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/buttons"
   },
   {
@@ -6163,7 +6163,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-shadcnblockscom-cpu-architecture",
     "source": "21st.dev",
     "title": "CPU Architecture",
-    "url": "https://21st.dev/community/components/shadcnblockscom/cpu-architecture",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "bento",
@@ -6182,15 +6182,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:38.927Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
     "id": "21st-dev-shadcnblockscom-feature-with-image-comparison",
     "source": "21st.dev",
     "title": "Feature with Image Comparison",
-    "url": "https://21st.dev/community/components/shadcnblockscom/feature-with-image-comparison",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "features",
@@ -6208,8 +6208,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:39.795Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
@@ -6310,7 +6310,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-shatlyk1011-gradient-borders-button",
     "source": "21st.dev",
     "title": "Gradient Borders Button",
-    "url": "https://21st.dev/community/components/shatlyk1011/gradient-borders-button",
+    "url": "https://21st.dev/community/components/s/buttons",
     "category": "buttons",
     "tags": [
       "avatar",
@@ -6322,15 +6322,15 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:44.311Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/buttons"
   },
   {
     "id": "21st-dev-shatlyk1011-hover-border-gradient",
     "source": "21st.dev",
     "title": "Hover Border Gradient",
-    "url": "https://21st.dev/community/components/shatlyk1011/hover-border-gradient",
+    "url": "https://21st.dev/community/components/s/buttons",
     "category": "buttons",
     "tags": [
       "glow",
@@ -6344,8 +6344,8 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:45.098Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/buttons"
   },
   {
@@ -6504,7 +6504,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-sshahaider-hover-button",
     "source": "21st.dev",
     "title": "Hover Button",
-    "url": "https://21st.dev/community/components/sshahaider/hover-button",
+    "url": "https://21st.dev/community/components/s/cta",
     "category": "cta",
     "tags": [
       "landing-page",
@@ -6523,8 +6523,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:51.033Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cta"
   },
   {
@@ -6556,7 +6556,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-sshahaider-pricing-section-with-comparison",
     "source": "21st.dev",
     "title": "Pricing Section with Comparison",
-    "url": "https://21st.dev/community/components/sshahaider/pricing-section-with-comparison",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "features",
@@ -6574,15 +6574,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:52.638Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
     "id": "21st-dev-sshahaider-shader-animation",
     "source": "21st.dev",
     "title": "Shader Animation",
-    "url": "https://21st.dev/community/components/sshahaider/shader-animation",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "shader",
@@ -6598,8 +6598,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:53.446Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
@@ -6701,7 +6701,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-suraj-xd-liquid-glass-button",
     "source": "21st.dev",
     "title": "Liquid Glass Button",
-    "url": "https://21st.dev/community/components/suraj-xd/liquid-glass-button",
+    "url": "https://21st.dev/community/components/s/buttons",
     "category": "buttons",
     "tags": [
       "button",
@@ -6714,15 +6714,15 @@ export const templateReferences: TemplateReference[] = [
     "relatedPatternIds": [],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:57.689Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/buttons"
   },
   {
     "id": "21st-dev-thimows-animated-text-cycle",
     "source": "21st.dev",
     "title": "Animated Text Cycle",
-    "url": "https://21st.dev/community/components/thimows/animated-text-cycle",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "text",
@@ -6741,15 +6741,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:58.621Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
     "id": "21st-dev-thimows-sparkles-text",
     "source": "21st.dev",
     "title": "Sparkles Text",
-    "url": "https://21st.dev/community/components/thimows/sparkles-text",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "text",
@@ -6768,8 +6768,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:18:59.382Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
@@ -6803,7 +6803,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-tommyjepsen-container-scroll-animation",
     "source": "21st.dev",
     "title": "Container Scroll Animation",
-    "url": "https://21st.dev/community/components/tommyjepsen/container-scroll-animation",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "hero",
@@ -6822,15 +6822,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:19:01.512Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
     "id": "21st-dev-tommyjepsen-expandable-tabs",
     "source": "21st.dev",
     "title": "Expandable Tabs",
-    "url": "https://21st.dev/community/components/tommyjepsen/expandable-tabs",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "menu",
@@ -6855,8 +6855,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:19:02.317Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
@@ -6924,7 +6924,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-tommyjepsen-pricing-interaction",
     "source": "21st.dev",
     "title": "Pricing Interaction",
-    "url": "https://21st.dev/community/components/tommyjepsen/pricing-interaction",
+    "url": "https://21st.dev/community/components/s/pricing",
     "category": "pricing",
     "tags": [
       "pricing-section",
@@ -6942,8 +6942,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:19:04.930Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/pricing"
   },
   {
@@ -6976,7 +6976,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-tommyjepsen-single-pricing-card-1",
     "source": "21st.dev",
     "title": "Single Pricing Card",
-    "url": "https://21st.dev/community/components/tommyjepsen/single-pricing-card-1",
+    "url": "https://21st.dev/community/components/s/pricing",
     "category": "pricing",
     "tags": [
       "pricing-section",
@@ -7002,15 +7002,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:19:06.806Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/pricing"
   },
   {
     "id": "21st-dev-tommyjepsen-sparkles-text",
     "source": "21st.dev",
     "title": "Sparkles Text",
-    "url": "https://21st.dev/community/components/tommyjepsen/sparkles-text",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "text",
@@ -7029,15 +7029,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:19:07.605Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
     "id": "21st-dev-vaib215-circular-testimonials",
     "source": "21st.dev",
     "title": "Circular Testimonials",
-    "url": "https://21st.dev/community/components/vaib215/circular-testimonials",
+    "url": "https://21st.dev/community/components/s/testimonials",
     "category": "testimonials",
     "tags": [
       "feedback",
@@ -7063,8 +7063,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:19:08.407Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/testimonials"
   },
   {
@@ -7098,7 +7098,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-vaib215-pricing",
     "source": "21st.dev",
     "title": "Pricing",
-    "url": "https://21st.dev/community/components/vaib215/pricing",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "pricing-section",
@@ -7117,8 +7117,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:19:10.114Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
@@ -7186,7 +7186,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-vaib215-testimonials-columns-1",
     "source": "21st.dev",
     "title": "Testimonials Columns",
-    "url": "https://21st.dev/community/components/vaib215/testimonials-columns-1",
+    "url": "https://21st.dev/community/components/s/testimonials",
     "category": "testimonials",
     "tags": [
       "reviews",
@@ -7204,15 +7204,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:19:12.725Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/testimonials"
   },
   {
     "id": "21st-dev-victorwelander-container-scroll-animation",
     "source": "21st.dev",
     "title": "Container Scroll Animation",
-    "url": "https://21st.dev/community/components/victorwelander/container-scroll-animation",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "hero",
@@ -7231,8 +7231,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:19:13.510Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
@@ -7293,7 +7293,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-victorwelander-lamp",
     "source": "21st.dev",
     "title": "Lamp",
-    "url": "https://21st.dev/community/components/victorwelander/lamp",
+    "url": "https://21st.dev/community/components/s/hero",
     "category": "hero",
     "tags": [
       "landing-page",
@@ -7311,15 +7311,15 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:19:16.249Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/hero"
   },
   {
     "id": "21st-dev-victorwelander-pricing-card",
     "source": "21st.dev",
     "title": "Pricing Card",
-    "url": "https://21st.dev/community/components/victorwelander/pricing-card",
+    "url": "https://21st.dev/community/components/s/features",
     "category": "features",
     "tags": [
       "pricing-section",
@@ -7338,8 +7338,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:19:17.049Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/features"
   },
   {
@@ -7426,7 +7426,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-xubohuah-hand-writing-text",
     "source": "21st.dev",
     "title": "Hand Writing Text",
-    "url": "https://21st.dev/community/components/xubohuah/hand-writing-text",
+    "url": "https://21st.dev/community/components/s/cta",
     "category": "cta",
     "tags": [
       "motion-primitives",
@@ -7444,8 +7444,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:19:20.710Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/cta"
   },
   {
@@ -7553,7 +7553,7 @@ export const templateReferences: TemplateReference[] = [
     "id": "21st-dev-youcefbnm-stagger-testimonials",
     "source": "21st.dev",
     "title": "Stagger Testimonials",
-    "url": "https://21st.dev/community/components/youcefbnm/stagger-testimonials",
+    "url": "https://21st.dev/community/components/s/testimonials",
     "category": "testimonials",
     "tags": [
       "testimonials",
@@ -7570,8 +7570,8 @@ export const templateReferences: TemplateReference[] = [
     ],
     "usageNote": "Use as high-level visual inspiration only. Do not copy exact code, text, assets, logos, or branding.",
     "scrapedAt": "2026-06-06T17:06:57.661Z",
-    "urlStatus": "broken",
-    "checkedAt": "2026-06-06T19:19:25.475Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/testimonials"
   }
 ];

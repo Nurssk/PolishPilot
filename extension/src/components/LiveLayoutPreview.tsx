@@ -476,7 +476,7 @@ function ProductPanel({
     <div className="border p-3" style={styles.card}>
       <div className="mb-2 flex items-center gap-1.5">
         <span className="h-2 w-2 rounded-full bg-red-300/80" />
-        <span className="h-2 w-2 rounded-full bg-yellow-300/80" />
+        <span className="h-2 w-2 rounded-full bg-pilot-primary/80" />
         <span className="h-2 w-2 rounded-full bg-emerald-300/80" />
       </div>
       <div className="grid gap-2">

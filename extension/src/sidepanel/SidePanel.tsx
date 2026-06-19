@@ -1,23 +1,41 @@
 import "../styles/tailwind.css";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AI_PREVIEW_STORAGE_KEY,
+  AI_PREVIEW_REGENERATE_KEY,
+  DESIGN_IDEAS_STORAGE_KEY,
+  EXCLUDED_UNCODIX_RULES_STORAGE_KEY,
   FULL_PREVIEW_STORAGE_KEY,
   LATEST_AI_RESULT_STORAGE_KEY,
   LATEST_CAPTURE_STORAGE_KEY,
   POLISH_PILOT_MODE_STORAGE_KEY,
+  RECOMMENDATIONS_STORAGE_KEY,
+  SELECTED_ANIMATION_STORAGE_KEY,
   SELECTED_PATTERN_STORAGE_KEY,
+  SELECTED_TEMPLATE_STORAGE_KEY,
   formatPixels,
   isPolishPilotMessage
 } from "../shared/messages";
 import { API_BASE_URL, apiUrl } from "../shared/apiConfig";
+import { downloadBase64Image, previewDownloadFilename } from "../shared/downloadImage";
+import {
+  addGeneratedPreview,
+  GENERATED_PREVIEWS_KEY,
+  getGeneratedPreviews
+} from "../shared/generatedPreviewStore";
+import type { GeneratedPreviewImage } from "../shared/generatedPreviewTypes";
 import { PatternCard } from "../components/PatternCard";
+import { AccountPanel } from "../components/AccountPanel";
+import { getAuthHeaders } from "../shared/authService";
+import { UncodixifyCheck } from "../components/UncodixifyCheck";
+import { analyzeUncodixify } from "../analysis/analyzeUncodixify";
 import { buildHumanizedPreviewHtml } from "../patterns/buildHumanizedPreviewHtml";
 import {
   extractPreviewContent,
   type PreviewContent
 } from "../patterns/extractPreviewItems";
 import { generateCursorPrompt } from "../patterns/generateCursorPrompt";
+import { validateGeneratedPrompt } from "../patterns/validateGeneratedPrompt";
 import { selectHumanizerSuggestions } from "../patterns/selectHumanizerSuggestions";
 import {
   appendPreviewDebugLogs,
@@ -37,6 +55,7 @@ import type {
   PolishPilotMode,
   RectangleCapture
 } from "../shared/types";
+import type { DesignIdeasData, RecommendationsData } from "../shared/windowData";
 
 const ANALYZE_URL = apiUrl("/api/analyze-area");
 const AI_PREVIEW_URL = apiUrl("/api/generate-ai-preview");
@@ -181,6 +200,9 @@ export function SidePanel() {
   const [geminiLogs, setGeminiLogs] = useState<GeminiLogEntry[]>([]);
   const [debugCopied, setDebugCopied] = useState(false);
   const [previewDebugCopied, setPreviewDebugCopied] = useState(false);
+  const [generatedPreviews, setGeneratedPreviews] = useState<GeneratedPreviewImage[]>([]);
+  const [excludedUncodixRuleIds, setExcludedUncodixRuleIds] = useState<string[]>([]);
+  const generateAIPreviewRef = useRef<(() => Promise<void>) | null>(null);
 
   useEffect(() => {
     void refreshData();
@@ -207,6 +229,30 @@ export function SidePanel() {
       const nextPatternId = changes[SELECTED_PATTERN_STORAGE_KEY]?.newValue as
         | LayoutPatternId
         | undefined;
+      const nextGeneratedPreviews = changes[GENERATED_PREVIEWS_KEY]?.newValue as
+        | GeneratedPreviewImage[]
+        | undefined;
+
+      // Selections made inside the floating windows sync back here.
+      if (SELECTED_TEMPLATE_STORAGE_KEY in changes) {
+        setSelectedTemplateId(
+          (changes[SELECTED_TEMPLATE_STORAGE_KEY]?.newValue as string | null | undefined) ??
+            null
+        );
+      }
+      if (SELECTED_ANIMATION_STORAGE_KEY in changes) {
+        setSelectedAnimationId(
+          (changes[SELECTED_ANIMATION_STORAGE_KEY]?.newValue as string | null | undefined) ??
+            null
+        );
+      }
+      if (EXCLUDED_UNCODIX_RULES_STORAGE_KEY in changes) {
+        const next = changes[EXCLUDED_UNCODIX_RULES_STORAGE_KEY]?.newValue;
+        setExcludedUncodixRuleIds(Array.isArray(next) ? (next as string[]) : []);
+      }
+      if (AI_PREVIEW_REGENERATE_KEY in changes && changes[AI_PREVIEW_REGENERATE_KEY]?.newValue) {
+        void generateAIPreviewRef.current?.();
+      }
 
       if (nextCapture) {
         setCapture((current) => {
@@ -223,6 +269,13 @@ export function SidePanel() {
             setSelectedPatternId(null);
             setSelectedTemplateId(null);
             setSelectedAnimationId(null);
+            setExcludedUncodixRuleIds([]);
+            void chrome.storage.session.remove([
+              SELECTED_PATTERN_STORAGE_KEY,
+              SELECTED_TEMPLATE_STORAGE_KEY,
+              SELECTED_ANIMATION_STORAGE_KEY,
+              EXCLUDED_UNCODIX_RULES_STORAGE_KEY
+            ]);
           }
 
           return nextCapture;
@@ -233,6 +286,11 @@ export function SidePanel() {
         setAIStatus("success");
       }
       if (nextPatternId) setSelectedPatternId(nextPatternId);
+      if (Array.isArray(nextGeneratedPreviews)) {
+        setGeneratedPreviews(nextGeneratedPreviews);
+      } else if (GENERATED_PREVIEWS_KEY in changes && !nextGeneratedPreviews) {
+        setGeneratedPreviews([]);
+      }
     }
 
     function handleRuntimeMessage(message: unknown) {
@@ -249,6 +307,13 @@ export function SidePanel() {
         setSelectedPatternId(null);
         setSelectedTemplateId(null);
         setSelectedAnimationId(null);
+        setExcludedUncodixRuleIds([]);
+        void chrome.storage.session.remove([
+          SELECTED_PATTERN_STORAGE_KEY,
+          SELECTED_TEMPLATE_STORAGE_KEY,
+          SELECTED_ANIMATION_STORAGE_KEY,
+          EXCLUDED_UNCODIX_RULES_STORAGE_KEY
+        ]);
       }
     }
 
@@ -276,6 +341,34 @@ export function SidePanel() {
     () => aiResult ?? (capture ? buildFallbackAIResultFromCapture(capture) : null),
     [aiResult, capture]
   );
+  const uncodixifyResult = useMemo(
+    () => analyzeUncodixify(capture, effectiveAIResult),
+    [capture, effectiveAIResult]
+  );
+  const includedUncodixRuleIds = useMemo(() => {
+    if (!uncodixifyResult) return [];
+    const excluded = new Set(excludedUncodixRuleIds);
+    return uncodixifyResult.findings
+      .map((finding) => finding.ruleId)
+      .filter((ruleId) => !excluded.has(ruleId));
+  }, [uncodixifyResult, excludedUncodixRuleIds]);
+  const includedUncodixRecommendations = useMemo(() => {
+    if (!uncodixifyResult) return [];
+    const included = new Set(includedUncodixRuleIds);
+    return uncodixifyResult.findings
+      .filter((finding) => included.has(finding.ruleId))
+      .map((finding) => finding.recommendation);
+  }, [uncodixifyResult, includedUncodixRuleIds]);
+
+  function toggleUncodixRule(ruleId: string) {
+    setExcludedUncodixRuleIds((current) => {
+      const next = current.includes(ruleId)
+        ? current.filter((id) => id !== ruleId)
+        : [...current, ruleId];
+      void chrome.storage.session.set({ [EXCLUDED_UNCODIX_RULES_STORAGE_KEY]: next });
+      return next;
+    });
+  }
   const suggestions = useMemo(
     () =>
       effectiveAIResult
@@ -303,6 +396,101 @@ export function SidePanel() {
     suggestedTemplates.find((reference) => reference.id === selectedTemplateId) ?? null;
   const selectedAnimation =
     suggestedAnimations.find((reference) => reference.id === selectedAnimationId) ?? null;
+  const latestGeneratedPreview = generatedPreviews[0] ?? null;
+  // A design direction counts only when the user actively selected one (not the
+  // fallback first suggestion). This drives the Cursor prompt's preservation rule.
+  const designDirectionSelected = Boolean(
+    selectedPatternId || selectedTemplateId || selectedAnimationId
+  );
+  const cursorPromptText = useMemo(
+    () =>
+      generateCursorPrompt({
+        aiResult: effectiveAIResult,
+        capture,
+        designDirectionSelected,
+        pattern: selectedPattern,
+        templateReference: selectedTemplate,
+        animationReference: selectedAnimation,
+        uncodixify: uncodixifyResult,
+        includedUncodixifyRuleIds: includedUncodixRuleIds
+      }),
+    [
+      effectiveAIResult,
+      capture,
+      designDirectionSelected,
+      selectedPattern,
+      selectedTemplate,
+      selectedAnimation,
+      uncodixifyResult,
+      includedUncodixRuleIds
+    ]
+  );
+
+  // Mirror the latest suggestions to the Design Ideas floating window.
+  useEffect(() => {
+    const data: DesignIdeasData = {
+      mode,
+      hasAnalysis: Boolean(effectiveAIResult),
+      sourceTitle: capture?.title,
+      sourceUrl: capture?.url,
+      layoutPatterns: suggestedPatterns,
+      templateReferences: suggestions?.templateReferences ?? [],
+      animationReferences: suggestedAnimations,
+      fitReason:
+        effectiveAIResult?.designerDescription ||
+        effectiveAIResult?.currentLayoutProblem ||
+        undefined,
+      selectedPatternId,
+      selectedTemplateId,
+      selectedAnimationId
+    };
+    void chrome.storage.session.set({ [DESIGN_IDEAS_STORAGE_KEY]: data });
+  }, [
+    mode,
+    effectiveAIResult,
+    capture,
+    suggestions,
+    suggestedPatterns,
+    suggestedAnimations,
+    selectedPatternId,
+    selectedTemplateId,
+    selectedAnimationId
+  ]);
+
+  // Mirror the Uncodixify analysis to the Recommendations floating window.
+  useEffect(() => {
+    const data: RecommendationsData = {
+      mode,
+      hasAnalysis: Boolean(effectiveAIResult),
+      sourceTitle: capture?.title,
+      sourceUrl: capture?.url,
+      analysis: uncodixifyResult,
+      excludedRuleIds: excludedUncodixRuleIds
+    };
+    void chrome.storage.session.set({ [RECOMMENDATIONS_STORAGE_KEY]: data });
+  }, [mode, effectiveAIResult, capture, uncodixifyResult, excludedUncodixRuleIds]);
+
+  async function openDesignIdeasWindow() {
+    await chrome.tabs.create({ url: chrome.runtime.getURL("design-ideas.html") });
+  }
+
+  async function openRecommendationsWindow() {
+    await chrome.tabs.create({ url: chrome.runtime.getURL("recommendations.html") });
+  }
+
+  async function openAIPreviewWindow() {
+    if (latestGeneratedPreview) {
+      await chrome.tabs.create({
+        url: chrome.runtime.getURL(`preview-image.html?id=${latestGeneratedPreview.id}`)
+      });
+      return;
+    }
+    // Nothing generated yet — generate now (which opens the tab on success).
+    await generateAIPreview();
+  }
+
+  // Keep a live reference so the AI Preview window's "Regenerate" can call it.
+  generateAIPreviewRef.current = generateAIPreview;
 
   async function refreshData() {
     const [localResult, sessionResult] = await Promise.all([
@@ -310,7 +498,11 @@ export function SidePanel() {
       chrome.storage.session.get([
         LATEST_CAPTURE_STORAGE_KEY,
         LATEST_AI_RESULT_STORAGE_KEY,
-        SELECTED_PATTERN_STORAGE_KEY
+        SELECTED_PATTERN_STORAGE_KEY,
+        SELECTED_TEMPLATE_STORAGE_KEY,
+        SELECTED_ANIMATION_STORAGE_KEY,
+        EXCLUDED_UNCODIX_RULES_STORAGE_KEY,
+        GENERATED_PREVIEWS_KEY
       ])
     ]);
     const storedMode = localResult[POLISH_PILOT_MODE_STORAGE_KEY];
@@ -324,6 +516,22 @@ export function SidePanel() {
     setAIStatus(storedAIResult ? "success" : "idle");
     setSelectedPatternId(
       (sessionResult[SELECTED_PATTERN_STORAGE_KEY] as LayoutPatternId | undefined) ?? null
+    );
+    setSelectedTemplateId(
+      (sessionResult[SELECTED_TEMPLATE_STORAGE_KEY] as string | undefined) ?? null
+    );
+    setSelectedAnimationId(
+      (sessionResult[SELECTED_ANIMATION_STORAGE_KEY] as string | undefined) ?? null
+    );
+    setExcludedUncodixRuleIds(
+      Array.isArray(sessionResult[EXCLUDED_UNCODIX_RULES_STORAGE_KEY])
+        ? (sessionResult[EXCLUDED_UNCODIX_RULES_STORAGE_KEY] as string[])
+        : []
+    );
+    setGeneratedPreviews(
+      Array.isArray(sessionResult[GENERATED_PREVIEWS_KEY])
+        ? (sessionResult[GENERATED_PREVIEWS_KEY] as GeneratedPreviewImage[])
+        : []
     );
     setHasLoadedCapture(true);
   }
@@ -399,7 +607,7 @@ export function SidePanel() {
     try {
       const response = await fetch(ANALYZE_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...(await getAuthHeaders()) },
         body: JSON.stringify(buildAnalyzePayload(targetCapture))
       });
       const body = await response.json().catch(() => null);
@@ -495,12 +703,12 @@ export function SidePanel() {
   }
 
   async function copyPatternPrompt(pattern: LayoutPattern) {
-    const prompt = generateCursorPrompt({
-      pattern,
-      aiResult: effectiveAIResult,
-      capture,
-      templateReference: selectedTemplate,
-      animationReference: selectedAnimation
+    const prompt = cursorPromptText;
+    logPromptSafely("cursor", prompt, {
+      designDirectionSelected,
+      includedFixCount: includedUncodixRuleIds.length,
+      hasTemplate: Boolean(selectedTemplate),
+      hasAnimation: Boolean(selectedAnimation)
     });
     await navigator.clipboard.writeText(prompt);
     setCopiedPatternId(pattern.id);
@@ -605,7 +813,7 @@ export function SidePanel() {
     try {
       const response = await fetch(AI_PREVIEW_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...(await getAuthHeaders()) },
         body: JSON.stringify({
           screenshotBase64: capture.screenshotBase64,
           url: capture.url,
@@ -624,7 +832,10 @@ export function SidePanel() {
           selectedAnimationReference: selectedAnimation,
           previewContent,
           styleContext: capture.styleContext,
-          templateMode: "text-only"
+          templateMode: "text-only",
+          uncodixify: includedUncodixRecommendations.length
+            ? { recommendations: includedUncodixRecommendations }
+            : undefined
         })
       });
       const body = (await response.json().catch(() => null)) as
@@ -691,33 +902,38 @@ export function SidePanel() {
           patternId: selectedPattern.id,
           patternName: selectedPattern.name,
           previewImageBase64: body.previewImageBase64,
+          previewId: body.requestId,
           debug: body.debug
         }
       });
 
-      const previewResponse = await chrome.runtime.sendMessage({
-        type: "SHOW_AI_IMAGE_PREVIEW",
-        payload: {
-          previewImageBase64: body.previewImageBase64,
-          patternName: selectedPattern.name
-        }
-      });
+      const generatedPreview: GeneratedPreviewImage = {
+        id: body.requestId || `preview-${Date.now()}`,
+        createdAt: new Date().toISOString(),
+        sourceUrl: capture.url,
+        sourceTitle: capture.title,
+        patternId: selectedPattern.id,
+        patternName: selectedPattern.name,
+        sectionType: effectiveAIResult?.sectionType ?? capture.detected.sectionType,
+        layoutType: effectiveAIResult?.layoutType ?? capture.detected.layoutType,
+        imageBase64: body.previewImageBase64,
+        sourceScreenshotBase64: capture.screenshotBase64,
+        promptUsed: body.promptUsed,
+        model: body.model,
+        provider: "gemini",
+        uncodixifyScore: uncodixifyResult?.score,
+        uncodixifyFindings: uncodixifyResult?.findings
+          .filter((finding) => includedUncodixRuleIds.includes(finding.ruleId))
+          .map((finding) => finding.title)
+      };
 
-      if (
-        previewResponse &&
-        typeof previewResponse === "object" &&
-        "ok" in previewResponse &&
-        !previewResponse.ok
-      ) {
-        throw new Error(
-          "error" in previewResponse
-            ? String(previewResponse.error)
-            : "Could not show AI preview on page."
-        );
-      }
+      await addGeneratedPreview(generatedPreview);
+      setGeneratedPreviews(await getGeneratedPreviews());
+      await openGeneratedPreviewWindow(generatedPreview.id);
 
-      setPagePreviewStatus("AI visual preview shown on page.");
+      setPagePreviewStatus("AI preview generated.");
       addGeminiLog("success", "AI preview generated", {
+        previewId: generatedPreview.id,
         requestId: body.requestId,
         model: body.model,
         durationMs: body.durationMs
@@ -747,10 +963,62 @@ export function SidePanel() {
     setPagePreviewStatus("Page preview closed.");
   }
 
+  async function openGeneratedPreviewTab(previewId: string) {
+    const url = chrome.runtime.getURL(`preview-image.html?id=${previewId}`);
+
+    await chrome.tabs.create({ url });
+  }
+
+  async function openGeneratedPreviewWindow(previewId: string) {
+    await chrome.tabs.create({
+      url: chrome.runtime.getURL(`preview-image.html?id=${previewId}`)
+    });
+  }
+
+  async function openGeneratedPreviewGallery() {
+    const url = chrome.runtime.getURL("preview-gallery.html");
+
+    await chrome.tabs.create({ url });
+  }
+
+  async function showGeneratedPreviewOnPage(preview = latestGeneratedPreview) {
+    if (!preview) {
+      setPagePreviewStatus("No generated AI preview available.");
+      return;
+    }
+
+    const response = await chrome.runtime.sendMessage({
+      type: "SHOW_AI_IMAGE_PREVIEW",
+      payload: {
+        previewImageBase64: preview.imageBase64,
+        patternName: preview.patternName ?? "Generated preview"
+      }
+    });
+
+    if (response && typeof response === "object" && "ok" in response && !response.ok) {
+      setPagePreviewStatus(
+        "error" in response ? String(response.error) : "Could not show AI preview on page."
+      );
+      return;
+    }
+
+    setPagePreviewStatus("AI preview shown on page.");
+  }
+
+  function downloadGeneratedPreview(preview = latestGeneratedPreview) {
+    if (!preview) {
+      setPagePreviewStatus("No generated AI preview available.");
+      return;
+    }
+
+    downloadBase64Image(preview.imageBase64, previewDownloadFilename(preview.createdAt));
+  }
+
   async function startNewScreenshot() {
     setSelectedPatternId(null);
     setSelectedTemplateId(null);
     setSelectedAnimationId(null);
+    setExcludedUncodixRuleIds([]);
     setCopiedPatternId(null);
     setAIPreviewStatus("idle");
     setAIPreviewError("");
@@ -764,6 +1032,9 @@ export function SidePanel() {
 
     await chrome.storage.session.remove([
       SELECTED_PATTERN_STORAGE_KEY,
+      SELECTED_TEMPLATE_STORAGE_KEY,
+      SELECTED_ANIMATION_STORAGE_KEY,
+      EXCLUDED_UNCODIX_RULES_STORAGE_KEY,
       FULL_PREVIEW_STORAGE_KEY,
       AI_PREVIEW_STORAGE_KEY
     ]);
@@ -990,29 +1261,46 @@ export function SidePanel() {
     );
   }
 
+  const includedFixCount = includedUncodixRuleIds.length;
+  const copyPromptLabel =
+    selectedPattern && copiedPatternId === selectedPattern.id
+      ? "Copied"
+      : includedFixCount
+        ? `Copy Prompt (${includedFixCount} ${includedFixCount === 1 ? "fix" : "fixes"})`
+        : "Copy Cursor Prompt";
+  const analysisStatusLabel =
+    aiStatus === "loading"
+      ? "Analyzing"
+      : aiStatus === "error"
+        ? "Local rules"
+        : effectiveAIResult
+          ? "Ready"
+          : capture
+            ? "Captured"
+            : "Waiting";
+
   return (
-    <main className="min-h-screen bg-pilot-bg px-3 py-3 text-pilot-text">
-      <header className="sticky top-0 z-10 -mx-3 border-b border-slate-800 bg-pilot-bg/95 px-3 pb-3 backdrop-blur">
+    <main className="min-h-screen bg-pilot-bg px-4 pb-8 pt-4 text-base text-pilot-text">
+      <header className="sticky top-0 z-20 -mx-4 border-b border-pilot-border bg-pilot-bg/95 px-4 pb-4 backdrop-blur">
         <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h1 className="text-base font-bold tracking-tight">PolishPilot</h1>
-            <p className="text-xs text-slate-400">Control panel</p>
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-pilot-primary text-base font-black text-white">
+              DH
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-xl font-black leading-tight tracking-tight">
+                Design Humanizer
+              </h1>
+            </div>
           </div>
-          <button
-            className="shrink-0 rounded-lg border border-slate-700 bg-slate-950/70 px-3 py-2 text-xs font-bold text-slate-100 shadow-sm transition hover:border-cyan-300/60 hover:bg-cyan-300/10 hover:text-cyan-50"
-            onClick={() => void startNewScreenshot()}
-            type="button"
-          >
-            New Screenshot
-          </button>
         </div>
-        <div className="mt-3 grid grid-cols-2 gap-1 rounded-xl border border-slate-800 bg-slate-950/60 p-1">
+        <div className="mt-3 grid grid-cols-2 gap-1 rounded-lg border border-pilot-border bg-pilot-panel p-1">
           {(["simple", "developer"] as const).map((option) => (
             <button
-              className={`rounded-lg px-3 py-2 text-xs font-bold transition ${
+              className={`rounded-md px-3 py-2.5 text-sm font-bold transition ${
                 mode === option
-                  ? "bg-cyan-300 text-slate-950"
-                  : "text-slate-300 hover:bg-slate-800"
+                  ? "bg-pilot-primary text-white"
+                  : "text-pilot-muted hover:bg-pilot-primary/10 hover:text-pilot-text"
               }`}
               key={option}
               onClick={() => void updateMode(option)}
@@ -1024,26 +1312,35 @@ export function SidePanel() {
         </div>
       </header>
 
-      <section className="mt-3 rounded-xl border border-slate-800 bg-slate-900/74 p-3 shadow-pilot">
+      <section className="mt-4 space-y-2">
+        <button
+          className="dh-button-primary flex h-14 w-full items-center justify-center gap-2 text-base"
+          onClick={() => void startNewScreenshot()}
+          type="button"
+        >
+          <span className="text-xl leading-none">+</span>
+          New Screenshot
+        </button>
+      </section>
+
+      <AccountPanel mode={mode} />
+
+      <section className="dh-card mt-4 p-4">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 className="text-sm font-bold text-slate-50">Selected area</h2>
-            <p className="mt-1 text-xs leading-5 text-slate-400">
-              {capture
-                ? `${formatPixels(capture.selectedRect.width)} x ${formatPixels(
-                    capture.selectedRect.height
-                  )} captured`
-                : hasLoadedCapture
-                  ? "Select an area from the popup."
-                  : "Loading latest capture..."}
-            </p>
+            <h2 className="text-lg font-black text-pilot-text">Selected Area</h2>
+            {!capture ? (
+              <p className="mt-1 text-sm leading-6 text-pilot-muted">
+                {hasLoadedCapture ? "Select an area from the popup." : "Loading latest capture..."}
+              </p>
+            ) : null}
           </div>
-          <span className="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-2 py-1 text-[11px] font-bold text-cyan-100">
-            {mode === "simple" ? "Simple" : "Developer"}
+          <span className="dh-chip">
+            {capture ? "Screenshot ready" : "Waiting"}
           </span>
         </div>
 
-        <div className="mt-3 flex min-h-32 items-center justify-center overflow-hidden rounded-lg border border-slate-700 bg-slate-950 p-2">
+        <div className="mt-3 flex min-h-32 items-center justify-center overflow-hidden rounded-lg border border-pilot-border bg-pilot-card/55 p-2">
           {imageSrc ? (
             <img
               alt="Selected UI area"
@@ -1051,22 +1348,30 @@ export function SidePanel() {
               src={imageSrc}
             />
           ) : (
-            <p className="text-xs font-medium text-slate-400">No screenshot captured</p>
+            <p className="text-sm font-semibold text-pilot-soft">No screenshot captured</p>
           )}
         </div>
 
-        <button
-          className="mt-3 w-full rounded-lg border border-cyan-200/50 bg-cyan-200 px-3 py-2 text-xs font-black text-slate-950 transition hover:bg-cyan-100 disabled:cursor-not-allowed disabled:border-slate-700 disabled:bg-slate-800 disabled:text-slate-500"
-          disabled={!capture || !selectedPattern}
-          onClick={() => void openFullPreview()}
-          type="button"
-        >
-          Open Full Preview
-        </button>
+        {mode === "developer" ? (
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            <Metric
+              label="Area"
+              value={
+                capture
+                  ? `${formatPixels(capture.selectedRect.width)} x ${formatPixels(
+                      capture.selectedRect.height
+                    )}`
+                  : "none"
+              }
+            />
+            <Metric label="Backend" value={backendHealthStatus} />
+            <Metric label="AI" value={aiStatus} />
+          </div>
+        ) : null}
 
         {mode === "developer" ? (
           <button
-            className="mt-2 w-full rounded-lg border border-slate-700 bg-slate-950/60 px-3 py-2 text-xs font-bold text-slate-100 transition hover:bg-slate-800/80 disabled:cursor-not-allowed disabled:text-slate-500"
+            className="dh-button-secondary mt-3 w-full px-3 py-2.5 text-sm"
             disabled={!capture || aiStatus === "loading"}
             onClick={() => void analyzeWithGemini()}
             type="button"
@@ -1076,191 +1381,388 @@ export function SidePanel() {
         ) : null}
       </section>
 
-      <section className="mt-3 rounded-xl border border-slate-800 bg-slate-900/74 p-3">
-        <div className="grid grid-cols-2 gap-2">
-          <Metric label="Backend" value={backendHealthStatus} />
-          <Metric label="AI" value={aiStatus} />
+      <section className="dh-card mt-4 p-4">
+        <div className="flex items-center justify-between gap-2">
+          <h2 className="text-lg font-black text-pilot-text">Analysis</h2>
+          <span className="dh-chip">{analysisStatusLabel}</span>
         </div>
         {effectiveAIResult ? (
-          <p className="mt-3 text-xs leading-5 text-slate-300">
-            {effectiveAIResult.designerDescription ||
-              `${effectiveAIResult.sectionType} section, ${effectiveAIResult.layoutType} layout`}
+          <>
+            {mode === "developer" ? (
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="dh-chip">{effectiveAIResult.sectionType}</span>
+                <span className="dh-chip">{effectiveAIResult.layoutType}</span>
+                <span className="dh-chip">
+                  {effectiveAIResult.uiProblems[0] ?? "polish opportunity"}
+                </span>
+              </div>
+            ) : null}
+            <p className="mt-3 text-sm leading-6 text-pilot-muted">
+              {effectiveAIResult.designerDescription ||
+                `${effectiveAIResult.sectionType} section, ${effectiveAIResult.layoutType} layout`}
+            </p>
+          </>
+        ) : (
+          <p className="mt-3 text-sm leading-6 text-pilot-muted">
+            {capture
+              ? "Analyzing the selected block…"
+              : "Select an area to analyze."}
+          </p>
+        )}
+        {aiStatus === "error" ? (
+          <p className="mt-3 whitespace-pre-line text-sm leading-6 text-pilot-danger">
+            {mode === "simple"
+              ? "AI analysis is unavailable. Local recommendations are ready."
+              : aiError}
           </p>
         ) : null}
-        {aiError ? (
-          <p className="mt-3 whitespace-pre-line text-xs leading-5 text-red-100">
-            {aiError}
-          </p>
-        ) : null}
-        {aiStatus === "error" && mode === "simple" ? (
+        {aiStatus === "error" ? (
           <button
-            className="mt-3 w-full rounded-lg border border-cyan-300/30 bg-cyan-300/10 px-3 py-2 text-xs font-bold text-cyan-50 transition hover:bg-cyan-300/16 disabled:cursor-not-allowed disabled:border-slate-800 disabled:bg-slate-900 disabled:text-slate-500"
+            className="dh-button-secondary mt-3 w-full px-3 py-2.5 text-sm"
             disabled={!capture}
-            onClick={() => void analyzeWithGemini(capture, true)}
+            onClick={() => void analyzeWithGemini(capture, mode === "simple")}
             type="button"
           >
             Retry Analysis
           </button>
         ) : null}
         {backendHealthError && mode === "developer" ? (
-          <p className="mt-3 whitespace-pre-line text-xs leading-5 text-red-100">
+          <p className="mt-3 whitespace-pre-line text-sm leading-6 text-pilot-danger">
             {backendHealthError}
           </p>
         ) : null}
       </section>
 
-      {mode === "developer" ? (
-        <GeminiDebugPanel
-          aiStatus={aiStatus}
-          aiPreviewDebug={aiPreviewDebug}
-          aiPreviewStatus={aiPreviewStatus}
-          backendHealthStatus={backendHealthStatus}
-          capture={capture}
-          copied={debugCopied}
-          debug={geminiDebug}
-          logs={geminiLogs}
-          onCheckBackend={() => void checkBackendHealth()}
-          onCopyDebugInfo={() => void copyDebugInfo()}
-          onClearPreviewDebugLogs={() => void clearPreviewDebugLogs()}
-          onCopyPreviewDebugLogs={() => void copyPreviewDebugLogs()}
-          onRetryGemini={() => void analyzeWithGemini(capture, false)}
-          previewDebugCopied={previewDebugCopied}
-        />
-      ) : null}
+      <UncodixifyCheck
+        result={uncodixifyResult}
+        mode={mode}
+        variant="summary"
+        geminiRaw={effectiveAIResult?.uncodixify ?? null}
+        includedRuleIds={includedUncodixRuleIds}
+        onToggleRule={toggleUncodixRule}
+      />
 
-      <section className="mt-3 rounded-xl border border-slate-800 bg-slate-900/74 p-3">
-        <h2 className="text-sm font-bold text-slate-50">Design layouts</h2>
-        <p className="mt-1 text-xs leading-5 text-slate-400">
-          Local layout patterns selected from the AI category and keyword signals.
-        </p>
-        <div className="mt-3 space-y-3">
-          {suggestedPatterns.length ? (
-            suggestedPatterns.map((pattern) => (
-              <PatternCard
-                copied={copiedPatternId === pattern.id}
-                copyLabel="Copy Prompt"
-                key={pattern.id}
-                pattern={pattern}
-                selectLabel="Select"
-                selected={selectedPattern?.id === pattern.id}
-                onCopyPrompt={() => void copyPatternPrompt(pattern)}
-                onSelect={() => void selectPattern(pattern)}
-              />
-            ))
-          ) : (
-            <p className="rounded-lg border border-slate-800 bg-slate-950/45 p-3 text-xs leading-5 text-slate-400">
-              Layout suggestions appear after capture or analysis.
-            </p>
-          )}
-        </div>
-      </section>
-
-      <section className="mt-3 rounded-xl border border-slate-800 bg-slate-900/74 p-3">
-        <h2 className="text-sm font-bold text-slate-50">Template references</h2>
-        <p className="mt-1 text-xs leading-5 text-slate-400">
-          Public 21st.dev references for high-level inspiration only.
-        </p>
-        <div className="mt-3 space-y-2">
-          {suggestedTemplates.length ? (
-            suggestedTemplates.map((reference) => (
-              <TemplateReferenceCard
-                key={reference.id}
-                mode={mode}
-                reference={reference}
-                selected={selectedTemplate?.id === reference.id}
-                onOpen={() => void openTemplateReference(reference)}
-                onSelect={() => setSelectedTemplateId(reference.id)}
-              />
-            ))
-          ) : (
-            <p className="rounded-lg border border-slate-800 bg-slate-950/45 p-3 text-xs leading-5 text-slate-400">
-              Template references appear after capture or analysis.
-            </p>
-          )}
-        </div>
-      </section>
-
-      <section className="mt-3 rounded-xl border border-slate-800 bg-slate-900/74 p-3">
-        <h2 className="text-sm font-bold text-slate-50">Animation ideas</h2>
-        <p className="mt-1 text-xs leading-5 text-slate-400">
-          ReactBits references selected separately from layout suggestions.
-        </p>
-        <div className="mt-3 space-y-2">
-          {suggestedAnimations.length ? (
-            suggestedAnimations.map((reference) => (
-              <AnimationReferenceCard
-                key={reference.id}
-                reference={reference}
-                selected={selectedAnimation?.id === reference.id}
-                onSelect={() => setSelectedAnimationId(reference.id)}
-              />
-            ))
-          ) : (
-            <p className="rounded-lg border border-slate-800 bg-slate-950/45 p-3 text-xs leading-5 text-slate-400">
-              Animation ideas appear after capture or analysis.
-            </p>
-          )}
-        </div>
-      </section>
-
-      {mode === "developer" && suggestions ? (
-        <SuggestionDebugPanel
-          debug={suggestions.debug}
-          referenceHealth={getReferenceHealthDebug(templateReferences, selectedTemplate)}
-        />
-      ) : null}
-
-      <section className="mt-3 rounded-xl border border-slate-800 bg-slate-900/74 p-3">
-        <h2 className="text-sm font-bold text-slate-50">AI visual preview</h2>
-        <p className="mt-1 text-xs leading-5 text-slate-400">
-          Optional image mockup using the screenshot and selected layout pattern.
-        </p>
-        <button
-          className="mt-3 w-full rounded-lg border border-cyan-200/50 bg-cyan-200 px-3 py-2 text-xs font-black text-slate-950 transition hover:bg-cyan-100 disabled:cursor-not-allowed disabled:border-slate-700 disabled:bg-slate-800 disabled:text-slate-500"
-          disabled={!capture || !selectedPattern || aiPreviewStatus === "loading"}
-          onClick={() => void generateAIPreview()}
-          type="button"
-        >
-          {aiPreviewStatus === "loading" ? "Generating visual preview..." : "Generate AI Preview"}
-        </button>
-        {aiPreviewStatus === "success" ? (
-          <p className="mt-3 text-xs leading-5 text-cyan-100">
-            AI visual preview shown on page.
-          </p>
-        ) : null}
-        {aiPreviewError ? (
-          <p className="mt-3 text-xs leading-5 text-red-100">{aiPreviewError}</p>
-        ) : null}
-      </section>
-
-      <section className="mt-3 rounded-xl border border-slate-800 bg-slate-900/74 p-3">
-        <h2 className="text-sm font-bold text-slate-50">Page overlay</h2>
-        <p className="mt-1 text-xs leading-5 text-slate-400">
-          Optional preview directly on the current page.
-        </p>
+      <section className="dh-card mt-4 p-4">
+        <h2 className="text-lg font-black text-pilot-text">Actions</h2>
         <div className="mt-3 grid gap-2">
           <button
-            className="rounded-lg border border-cyan-300/30 bg-cyan-300/10 px-3 py-2 text-xs font-bold text-cyan-50 transition hover:bg-cyan-300/16 disabled:cursor-not-allowed disabled:border-slate-800 disabled:bg-slate-900 disabled:text-slate-500"
-            disabled={!selectedPattern}
-            onClick={() => void showOnPage()}
+            className="dh-button-secondary w-full px-3 py-3 text-sm"
+            disabled={!effectiveAIResult}
+            onClick={() => void openRecommendationsWindow()}
             type="button"
           >
-            Show on page
+            Open Recommendations
           </button>
           <button
-            className="rounded-lg border border-slate-700 bg-slate-950/60 px-3 py-2 text-xs font-bold text-slate-100 transition hover:border-red-300/70 hover:bg-red-500/10"
-            onClick={() => void closePagePreview()}
+            className="dh-button-secondary w-full px-3 py-3 text-sm"
+            disabled={!effectiveAIResult}
+            onClick={() => void openDesignIdeasWindow()}
             type="button"
           >
-            Close page preview
+            Open Design Ideas
+          </button>
+          <button
+            className="dh-button-secondary w-full px-3 py-3 text-sm"
+            disabled={!capture || aiPreviewStatus === "loading"}
+            onClick={() => void openAIPreviewWindow()}
+            type="button"
+          >
+            {aiPreviewStatus === "loading" ? "Generating AI Preview…" : "Open AI Preview"}
+          </button>
+          <button
+            className="dh-button-primary w-full px-3 py-3.5 text-base"
+            disabled={!selectedPattern}
+            onClick={() => (selectedPattern ? void copyPatternPrompt(selectedPattern) : undefined)}
+            type="button"
+          >
+            {copyPromptLabel}
           </button>
         </div>
+        {aiPreviewStatus === "error" && aiPreviewError ? (
+          <p className="mt-3 rounded-md border border-pilot-border bg-pilot-bg p-3 text-sm leading-6 text-pilot-muted">
+            AI Preview is unavailable. Use the Cursor Prompt.
+          </p>
+        ) : null}
         {pagePreviewStatus ? (
-          <p className="mt-3 text-xs leading-5 text-slate-300">{pagePreviewStatus}</p>
+          <p className="mt-3 text-sm leading-6 text-pilot-soft">{pagePreviewStatus}</p>
         ) : null}
       </section>
+
+      {mode === "developer" ? (
+        <details className="dh-card mt-4 p-4" open>
+          <summary className="cursor-pointer text-sm font-black text-pilot-text">
+            Developer Details
+          </summary>
+
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            <button
+              className="dh-button-secondary px-3 py-2 text-xs"
+              disabled={!capture || !selectedPattern || aiPreviewStatus === "loading"}
+              onClick={() => void generateAIPreview()}
+              type="button"
+            >
+              {aiPreviewStatus === "loading" ? "Generating…" : "Generate AI Preview"}
+            </button>
+            <button
+              className="dh-button-secondary px-3 py-2 text-xs"
+              disabled={!generatedPreviews.length}
+              onClick={() => void openGeneratedPreviewGallery()}
+              type="button"
+            >
+              Open Gallery
+            </button>
+            <button
+              className="dh-button-secondary px-3 py-2 text-xs"
+              disabled={!selectedPattern}
+              onClick={() => void openFullPreview()}
+              type="button"
+            >
+              Open Full Preview
+            </button>
+            <button
+              className="dh-button-secondary px-3 py-2 text-xs"
+              disabled={!selectedPattern}
+              onClick={() => void showOnPage()}
+              type="button"
+            >
+              Show on page
+            </button>
+            <button
+              className="dh-button-secondary px-3 py-2 text-xs"
+              disabled={!latestGeneratedPreview}
+              onClick={() => downloadGeneratedPreview(latestGeneratedPreview)}
+              type="button"
+            >
+              Download Preview
+            </button>
+            <button
+              className="dh-button-secondary px-3 py-2 text-xs hover:border-pilot-danger/70"
+              onClick={() => void closePagePreview()}
+              type="button"
+            >
+              Close page preview
+            </button>
+          </div>
+
+          <GeminiDebugPanel
+            aiStatus={aiStatus}
+            aiPreviewDebug={aiPreviewDebug}
+            aiPreviewStatus={aiPreviewStatus}
+            backendHealthStatus={backendHealthStatus}
+            capture={capture}
+            copied={debugCopied}
+            debug={geminiDebug}
+            logs={geminiLogs}
+            onCheckBackend={() => void checkBackendHealth()}
+            onCopyDebugInfo={() => void copyDebugInfo()}
+            onClearPreviewDebugLogs={() => void clearPreviewDebugLogs()}
+            onCopyPreviewDebugLogs={() => void copyPreviewDebugLogs()}
+            onRetryGemini={() => void analyzeWithGemini(capture, false)}
+            previewDebugCopied={previewDebugCopied}
+          />
+
+          <PromptDebugPanel
+            cursorPrompt={cursorPromptText}
+            aiImagePrompt={aiPreviewDebug.promptUsed}
+            analysisSummary={buildAnalysisPromptSummary(capture, geminiDebug, effectiveAIResult)}
+            designDirectionSelected={designDirectionSelected}
+            includedFixCount={includedUncodixRuleIds.length}
+          />
+
+          {suggestions ? (
+            <SuggestionDebugPanel
+              debug={suggestions.debug}
+              referenceHealth={getReferenceHealthDebug(templateReferences, selectedTemplate)}
+            />
+          ) : null}
+        </details>
+      ) : null}
     </main>
   );
+}
+
+function PromptDebugPanel({
+  cursorPrompt,
+  aiImagePrompt,
+  analysisSummary,
+  designDirectionSelected,
+  includedFixCount
+}: {
+  cursorPrompt: string;
+  aiImagePrompt?: string;
+  analysisSummary: string;
+  designDirectionSelected: boolean;
+  includedFixCount: number;
+}) {
+  const [copied, setCopied] = useState<"debug" | "cursor" | null>(null);
+  const safeImagePrompt = aiImagePrompt
+    ? redactBase64(aiImagePrompt)
+    : "Not generated yet. Generate an AI Preview to populate this.";
+  const validation = validateGeneratedPrompt(cursorPrompt, {
+    hasFindings: includedFixCount > 0,
+    designDirectionSelected
+  });
+
+  function flash(which: "debug" | "cursor") {
+    setCopied(which);
+    window.setTimeout(() => setCopied((c) => (c === which ? null : c)), 1600);
+  }
+
+  async function copyCursor() {
+    await navigator.clipboard.writeText(cursorPrompt);
+    flash("cursor");
+  }
+
+  async function copyDebug() {
+    const text = [
+      "=== Gemini Analysis Prompt (summary) ===",
+      analysisSummary,
+      "",
+      "=== AI Image Preview Prompt ===",
+      safeImagePrompt,
+      "",
+      "=== Cursor/Codex Prompt ===",
+      cursorPrompt
+    ].join("\n");
+    await navigator.clipboard.writeText(text);
+    flash("debug");
+  }
+
+  return (
+    <details className="mt-3 rounded-lg border border-pilot-border bg-pilot-panel p-3">
+      <summary className="cursor-pointer text-sm font-bold text-pilot-text">
+        Prompt Debug
+      </summary>
+
+      <div className="mt-2 flex flex-wrap gap-2 text-[10px] text-pilot-soft">
+        <span className="rounded bg-pilot-bg px-1.5 py-0.5">
+          design direction: {designDirectionSelected ? "selected" : "none"}
+        </span>
+        <span className="rounded bg-pilot-bg px-1.5 py-0.5">
+          fixes in prompt: {includedFixCount}
+        </span>
+        <span className="rounded bg-pilot-bg px-1.5 py-0.5">
+          screenshot: attached separately
+        </span>
+      </div>
+
+      <div className="mt-3 rounded-md border border-pilot-border bg-pilot-card/60 p-2">
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-[11px] font-bold text-pilot-text">Prompt validation</span>
+          <span
+            className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.06em] ${
+              validation.errors.length
+                ? "bg-pilot-danger/15 text-pilot-danger"
+                : validation.warnings.length
+                  ? "bg-pilot-warning/12 text-pilot-warning"
+                  : "bg-pilot-success/12 text-pilot-success"
+            }`}
+          >
+            {validation.errors.length
+              ? "Errors"
+              : validation.warnings.length
+                ? "Warnings"
+                : "Valid"}
+          </span>
+        </div>
+        {validation.errors.length || validation.warnings.length ? (
+          <ul className="mt-2 space-y-0.5 text-[10px] leading-4">
+            {validation.errors.map((message, index) => (
+              <li className="text-pilot-danger" key={`e-${index}`}>
+                • {message}
+              </li>
+            ))}
+            {validation.warnings.map((message, index) => (
+              <li className="text-pilot-warning" key={`w-${index}`}>
+                • {message}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-1 text-[10px] text-pilot-soft">
+            Prompt follows the PromptGen architecture and safety rules.
+          </p>
+        )}
+      </div>
+
+      <PromptBlock title="1. Gemini Analysis Prompt (summary)" value={analysisSummary} />
+      <PromptBlock title="2. AI Image Preview Prompt" value={safeImagePrompt} />
+      <PromptBlock title="3. Cursor/Codex Prompt" value={cursorPrompt} open />
+
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        <button
+          className="rounded-lg border border-pilot-border bg-pilot-card px-3 py-2 text-xs font-bold text-pilot-text transition hover:border-pilot-borderStrong"
+          onClick={() => void copyDebug()}
+          type="button"
+        >
+          {copied === "debug" ? "Copied" : "Copy Prompt Debug"}
+        </button>
+        <button
+          className="dh-button-primary px-3 py-2 text-xs"
+          onClick={() => void copyCursor()}
+          type="button"
+        >
+          {copied === "cursor" ? "Copied" : "Copy Cursor Prompt"}
+        </button>
+      </div>
+    </details>
+  );
+}
+
+function PromptBlock({
+  title,
+  value,
+  open
+}: {
+  title: string;
+  value: string;
+  open?: boolean;
+}) {
+  return (
+    <details className="mt-2 rounded-md border border-pilot-border bg-pilot-card/60 p-2" open={open}>
+      <summary className="cursor-pointer text-[11px] font-bold text-pilot-muted">
+        {title}
+      </summary>
+      <pre className="mt-2 max-h-72 overflow-auto whitespace-pre-wrap break-words text-[10px] leading-4 text-pilot-muted">
+        {value}
+      </pre>
+    </details>
+  );
+}
+
+// Reconstructs a safe, human-readable summary of what is sent to the Gemini UI
+// analysis endpoint. The full system prompt is built server-side in
+// web/app/api/analyze-area/route.ts. This never includes screenshot base64.
+function buildAnalysisPromptSummary(
+  capture: RectangleCapture | null,
+  debug: GeminiDebugState,
+  aiResult: AIUnderstandingResult | null
+): string {
+  if (!capture) {
+    return "No capture yet. Select an area to send a UI analysis request.";
+  }
+  const counts = capture.counts;
+  return [
+    "Gemini UI analysis request (system prompt is built server-side).",
+    "[screenshot image attached separately]",
+    `Model: ${debug.model ?? "auto (gemini flash)"}`,
+    `Selected area: ${Math.round(capture.selectedRect.width)}x${Math.round(
+      capture.selectedRect.height
+    )}`,
+    `Matched elements: ${debug.matchedElementsCount ?? capture.matchedElements.length}`,
+    `Counts: ${counts.headings} headings, ${counts.buttons} buttons, ${counts.images} images, ${counts.cardsEstimate} cards`,
+    `Local detection: ${capture.detected.sectionType} / ${capture.detected.layoutType}`,
+    `Includes Uncodixify visual-quality check: yes`,
+    `Result section/layout: ${aiResult?.sectionType ?? "?"} / ${aiResult?.layoutType ?? "?"}`,
+    "Expected output: strict JSON (AIUnderstandingResult + uncodixify block)."
+  ].join("\n");
+}
+
+// Defensive: strip any data:image/base64 blob from a prompt before display/copy.
+function redactBase64(text: string): string {
+  return text
+    .replace(/data:image\/[a-zA-Z]+;base64,[A-Za-z0-9+/=]+/g, "[screenshot image attached separately]")
+    .replace(/[A-Za-z0-9+/=]{400,}/g, "[binary data omitted]");
 }
 
 function GeminiDebugPanel({
@@ -1299,10 +1801,10 @@ function GeminiDebugPanel({
   return (
     <>
       <details
-        className="mt-3 rounded-xl border border-slate-800 bg-slate-900/74 p-3"
+        className="mt-3 rounded-xl border border-pilot-border bg-pilot-panel/82 p-3"
         open={aiStatus === "error"}
       >
-        <summary className="cursor-pointer text-sm font-bold text-slate-50">
+        <summary className="cursor-pointer text-sm font-bold text-pilot-text">
           Gemini Debug
         </summary>
 
@@ -1359,9 +1861,9 @@ function GeminiDebugPanel({
 
         {debug.error ? (
           <div className="mt-3 rounded-lg border border-red-300/20 bg-red-950/20 p-3">
-            <p className="text-xs font-bold text-red-100">{debug.error.message}</p>
+            <p className="text-xs font-bold text-red-700">{debug.error.message}</p>
             {debug.error.details ? (
-              <p className="mt-2 break-words text-xs leading-5 text-red-100/80">
+              <p className="mt-2 break-words text-xs leading-5 text-red-700/80">
                 {debug.error.details}
               </p>
             ) : null}
@@ -1370,11 +1872,11 @@ function GeminiDebugPanel({
 
         {aiPreviewDebug.error ? (
           <div className="mt-3 rounded-lg border border-red-300/20 bg-red-950/20 p-3">
-            <p className="text-xs font-bold text-red-100">
+            <p className="text-xs font-bold text-red-700">
               AI Preview: {aiPreviewDebug.error.message}
             </p>
             {aiPreviewDebug.error.details ? (
-              <p className="mt-2 break-words text-xs leading-5 text-red-100/80">
+              <p className="mt-2 break-words text-xs leading-5 text-red-700/80">
                 {aiPreviewDebug.error.details}
               </p>
             ) : null}
@@ -1383,7 +1885,7 @@ function GeminiDebugPanel({
 
         {aiPreviewDebug.modelSelectionWarning ? (
           <div className="mt-3 rounded-lg border border-amber-300/20 bg-amber-950/20 p-3">
-            <p className="text-xs font-bold text-amber-100">
+            <p className="text-xs font-bold text-amber-800">
               {aiPreviewDebug.modelSelectionWarning}
             </p>
           </div>
@@ -1397,11 +1899,11 @@ function GeminiDebugPanel({
         ) : null}
 
         {aiPreviewDebug.promptUsed ? (
-          <details className="mt-3 rounded-lg border border-slate-800 bg-slate-950/50 p-3">
-            <summary className="cursor-pointer text-xs font-bold text-slate-100">
+          <details className="mt-3 rounded-lg border border-pilot-border bg-pilot-card/50 p-3">
+            <summary className="cursor-pointer text-xs font-bold text-pilot-text">
               AI preview prompt
             </summary>
-            <pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap break-words text-[11px] leading-5 text-slate-300">
+            <pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap break-words text-[11px] leading-5 text-pilot-muted">
               {aiPreviewDebug.promptUsed}
             </pre>
           </details>
@@ -1409,7 +1911,7 @@ function GeminiDebugPanel({
 
         <div className="mt-3 grid grid-cols-2 gap-2">
           <button
-            className="rounded-lg border border-cyan-300/30 bg-cyan-300/10 px-3 py-2 text-xs font-bold text-cyan-50 transition hover:bg-cyan-300/16 disabled:cursor-not-allowed disabled:border-slate-800 disabled:bg-slate-900 disabled:text-slate-500"
+            className="rounded-lg border border-pilot-primary/30 bg-pilot-primary/10 px-3 py-2 text-xs font-bold text-pilot-primaryDeep transition hover:bg-pilot-primary/16 disabled:cursor-not-allowed disabled:border-pilot-border disabled:bg-pilot-panel disabled:text-pilot-soft"
             disabled={backendHealthStatus === "checking"}
             onClick={onCheckBackend}
             type="button"
@@ -1417,7 +1919,7 @@ function GeminiDebugPanel({
             {backendHealthStatus === "checking" ? "Checking..." : "Check backend"}
           </button>
           <button
-            className="rounded-lg border border-cyan-300/30 bg-cyan-300/10 px-3 py-2 text-xs font-bold text-cyan-50 transition hover:bg-cyan-300/16 disabled:cursor-not-allowed disabled:border-slate-800 disabled:bg-slate-900 disabled:text-slate-500"
+            className="rounded-lg border border-pilot-primary/30 bg-pilot-primary/10 px-3 py-2 text-xs font-bold text-pilot-primaryDeep transition hover:bg-pilot-primary/16 disabled:cursor-not-allowed disabled:border-pilot-border disabled:bg-pilot-panel disabled:text-pilot-soft"
             disabled={aiStatus === "loading"}
             onClick={onRetryGemini}
             type="button"
@@ -1425,7 +1927,7 @@ function GeminiDebugPanel({
             Retry Gemini
           </button>
           <button
-            className="rounded-lg border border-slate-700 bg-slate-950/60 px-3 py-2 text-xs font-bold text-slate-100 transition hover:bg-slate-800/80"
+            className="rounded-lg border border-pilot-border bg-pilot-card/60 px-3 py-2 text-xs font-bold text-pilot-text transition hover:bg-pilot-card/80"
             onClick={onCopyDebugInfo}
             type="button"
           >
@@ -1433,52 +1935,52 @@ function GeminiDebugPanel({
           </button>
         </div>
 
-        <div className="mt-3 rounded-lg border border-slate-800 bg-slate-950/45 p-3">
-          <h3 className="text-xs font-bold text-slate-100">Logs</h3>
+        <div className="mt-3 rounded-lg border border-pilot-border bg-pilot-card/45 p-3">
+          <h3 className="text-xs font-bold text-pilot-text">Logs</h3>
           <div className="mt-2 max-h-48 space-y-2 overflow-auto">
             {logs.length ? (
               logs.map((entry) => (
                 <div
-                  className="rounded-md border border-slate-800 bg-slate-950/60 p-2"
+                  className="rounded-md border border-pilot-border bg-pilot-card/60 p-2"
                   key={entry.id}
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className={logLevelClassName(entry.level)}>{entry.level}</span>
-                    <span className="text-[10px] text-slate-500">{entry.time}</span>
+                    <span className="text-[10px] text-pilot-soft">{entry.time}</span>
                   </div>
-                  <p className="mt-1 text-xs text-slate-200">{entry.message}</p>
+                  <p className="mt-1 text-xs text-pilot-text">{entry.message}</p>
                   {entry.data ? (
-                    <pre className="mt-2 max-h-24 overflow-auto whitespace-pre-wrap break-words text-[10px] leading-4 text-slate-400">
+                    <pre className="mt-2 max-h-24 overflow-auto whitespace-pre-wrap break-words text-[10px] leading-4 text-pilot-muted">
                       {JSON.stringify(entry.data, null, 2)}
                     </pre>
                   ) : null}
                 </div>
               ))
             ) : (
-              <p className="text-xs text-slate-400">No Gemini logs yet.</p>
+              <p className="text-xs text-pilot-muted">No Gemini logs yet.</p>
             )}
           </div>
         </div>
       </details>
 
       <details
-        className="mt-3 rounded-xl border border-slate-800 bg-slate-900/74 p-3"
+        className="mt-3 rounded-xl border border-pilot-border bg-pilot-panel/82 p-3"
         open={previewDebugLogs.length > 0}
       >
-        <summary className="cursor-pointer text-sm font-bold text-slate-50">
+        <summary className="cursor-pointer text-sm font-bold text-pilot-text">
           Preview Debug Logs
         </summary>
 
         <div className="mt-3 grid grid-cols-2 gap-2">
           <button
-            className="rounded-lg border border-slate-700 bg-slate-950/60 px-3 py-2 text-xs font-bold text-slate-100 transition hover:bg-slate-800/80"
+            className="rounded-lg border border-pilot-border bg-pilot-card/60 px-3 py-2 text-xs font-bold text-pilot-text transition hover:bg-pilot-card/80"
             onClick={onCopyPreviewDebugLogs}
             type="button"
           >
             {previewDebugCopied ? "Copied" : "Copy Preview Debug Logs"}
           </button>
           <button
-            className="rounded-lg border border-slate-700 bg-slate-950/60 px-3 py-2 text-xs font-bold text-slate-100 transition hover:border-red-300/70 hover:bg-red-500/10"
+            className="rounded-lg border border-pilot-border bg-pilot-card/60 px-3 py-2 text-xs font-bold text-pilot-text transition hover:border-red-300/70 hover:bg-red-500/10"
             onClick={onClearPreviewDebugLogs}
             type="button"
           >
@@ -1493,7 +1995,7 @@ function GeminiDebugPanel({
               .reverse()
               .map((log) => <PreviewDebugLogEntry key={log.id} log={log} />)
           ) : (
-            <p className="rounded-lg border border-slate-800 bg-slate-950/45 p-3 text-xs leading-5 text-slate-400">
+            <p className="rounded-lg border border-pilot-border bg-pilot-card/45 p-3 text-xs leading-5 text-pilot-muted">
               No preview debug logs yet. Select an area, then open or show a preview.
             </p>
           )}
@@ -1505,16 +2007,16 @@ function GeminiDebugPanel({
 
 function PreviewDebugLogEntry({ log }: { log: PreviewDebugLog }) {
   return (
-    <article className="rounded-lg border border-slate-800 bg-slate-950/45 p-3">
+    <article className="rounded-lg border border-pilot-border bg-pilot-card/45 p-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <span className="rounded-full border border-cyan-300/25 bg-cyan-300/10 px-2 py-1 text-[10px] font-black uppercase tracking-[0.08em] text-cyan-100">
+        <span className="rounded-full border border-pilot-primary/25 bg-pilot-primary/10 px-2 py-1 text-[10px] font-black uppercase tracking-[0.08em] text-pilot-primaryDeep">
           {log.stage}
         </span>
-        <span className="text-[10px] text-slate-500">
+        <span className="text-[10px] text-pilot-soft">
           {new Date(log.timestamp).toLocaleTimeString()}
         </span>
       </div>
-      <p className="mt-2 text-xs font-bold text-slate-100">{log.message}</p>
+      <p className="mt-2 text-xs font-bold text-pilot-text">{log.message}</p>
       {log.summary ? (
         <DebugDetails title="Summary" value={JSON.stringify(log.summary, null, 2)} />
       ) : null}
@@ -1534,11 +2036,11 @@ function PreviewDebugLogEntry({ log }: { log: PreviewDebugLog }) {
 
 function DebugDetails({ title, value }: { title: string; value: string }) {
   return (
-    <details className="mt-2 rounded-md border border-slate-800 bg-slate-950/70 p-2">
-      <summary className="cursor-pointer text-[11px] font-bold text-slate-300">
+    <details className="mt-2 rounded-md border border-pilot-border bg-pilot-card/70 p-2">
+      <summary className="cursor-pointer text-[11px] font-bold text-pilot-muted">
         {title}
       </summary>
-      <pre className="mt-2 max-h-52 overflow-auto whitespace-pre-wrap break-words text-[10px] leading-4 text-slate-400">
+      <pre className="mt-2 max-h-52 overflow-auto whitespace-pre-wrap break-words text-[10px] leading-4 text-pilot-muted">
         {value}
       </pre>
     </details>
@@ -1547,11 +2049,11 @@ function DebugDetails({ title, value }: { title: string; value: string }) {
 
 function Metric({ label, value }: { label: string; value: number | string }) {
   return (
-    <div className="rounded-lg border border-slate-800 bg-slate-950/45 p-2">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-500">
+    <div className="rounded-lg border border-pilot-border bg-pilot-card/45 p-2">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-pilot-soft">
         {label}
       </p>
-      <p className="mt-1 break-words text-sm font-bold text-slate-50">{value}</p>
+      <p className="mt-1 break-words text-sm font-bold text-pilot-text">{value}</p>
     </div>
   );
 }
@@ -1576,41 +2078,41 @@ function TemplateReferenceCard({
     <article
       className={`rounded-lg border p-3 transition ${
         selected
-          ? "border-cyan-300/80 bg-cyan-300/10"
-          : "border-slate-800 bg-slate-950/45 hover:border-slate-600"
+          ? "border-pilot-primary/80 bg-pilot-primary/10"
+          : "border-pilot-border bg-pilot-card/45 hover:border-pilot-primary/45"
       }`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h3 className="text-sm font-semibold text-slate-50">{reference.title}</h3>
-          <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.08em] text-cyan-200/80">
+          <h3 className="text-sm font-semibold text-pilot-text">{reference.title}</h3>
+          <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.08em] text-pilot-primary/80">
             {reference.source} · {reference.category}
           </p>
         </div>
         {selected ? (
-          <span className="shrink-0 rounded-full border border-cyan-300/40 bg-cyan-300/15 px-2 py-0.5 text-[10px] font-semibold text-cyan-100">
+          <span className="shrink-0 rounded-full border border-pilot-primary/40 bg-pilot-primary/15 px-2 py-0.5 text-[10px] font-semibold text-pilot-primaryDeep">
             Attached
           </span>
         ) : null}
       </div>
       <div className="mt-2 flex flex-wrap gap-1">
         {isBroken && mode === "developer" ? (
-          <span className="rounded-full border border-red-300/40 bg-red-300/10 px-2 py-0.5 text-[10px] font-bold text-red-100">
+          <span className="rounded-full border border-red-300/40 bg-red-100/80 px-2 py-0.5 text-[10px] font-bold text-red-700">
             Broken link
           </span>
         ) : null}
         {isUnknown ? (
-          <span className="rounded-full border border-amber-300/40 bg-amber-300/10 px-2 py-0.5 text-[10px] font-bold text-amber-100">
+          <span className="rounded-full border border-amber-300/40 bg-amber-100/80 px-2 py-0.5 text-[10px] font-bold text-amber-800">
             Unchecked link
           </span>
         ) : null}
         {reference.urlStatus === "ok" ? (
-          <span className="rounded-full border border-emerald-300/40 bg-emerald-300/10 px-2 py-0.5 text-[10px] font-bold text-emerald-100">
+          <span className="rounded-full border border-emerald-300/40 bg-emerald-100/80 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
             Link checked
           </span>
         ) : null}
       </div>
-      <p className="mt-2 line-clamp-2 text-xs leading-5 text-slate-300">
+      <p className="mt-2 line-clamp-2 text-xs leading-5 text-pilot-muted">
         {isBroken ? "Reference unavailable. A fallback 21st.dev page will be used." : reference.description ?? reference.usageNote}
       </p>
       <TagList tags={reference.tags.slice(0, 5)} />
@@ -1618,8 +2120,8 @@ function TemplateReferenceCard({
         <button
           className={`rounded-lg px-2.5 py-2 text-xs font-semibold transition ${
             selected
-              ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200"
-              : "bg-slate-800 text-slate-100 hover:bg-slate-700"
+              ? "bg-pilot-primary text-white hover:bg-pilot-primaryDeep"
+              : "bg-pilot-card text-pilot-text hover:bg-pilot-card"
           }`}
           onClick={onSelect}
           type="button"
@@ -1627,7 +2129,7 @@ function TemplateReferenceCard({
           Attach reference
         </button>
         <button
-          className="rounded-lg border border-slate-700 px-2.5 py-2 text-center text-xs font-semibold text-slate-100 transition hover:border-cyan-300/70 hover:bg-cyan-300/10"
+          className="rounded-lg border border-pilot-border px-2.5 py-2 text-center text-xs font-semibold text-pilot-text transition hover:border-pilot-primary/70 hover:bg-pilot-primary/10"
           onClick={onOpen}
           type="button"
         >
@@ -1651,31 +2153,31 @@ function AnimationReferenceCard({
     <article
       className={`rounded-lg border p-3 transition ${
         selected
-          ? "border-cyan-300/80 bg-cyan-300/10"
-          : "border-slate-800 bg-slate-950/45 hover:border-slate-600"
+          ? "border-pilot-primary/80 bg-pilot-primary/10"
+          : "border-pilot-border bg-pilot-card/45 hover:border-pilot-primary/45"
       }`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h3 className="text-sm font-semibold text-slate-50">{reference.title}</h3>
-          <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.08em] text-cyan-200/80">
+          <h3 className="text-sm font-semibold text-pilot-text">{reference.title}</h3>
+          <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.08em] text-pilot-primary/80">
             {reference.source} · {reference.category}
           </p>
         </div>
         {selected ? (
-          <span className="shrink-0 rounded-full border border-cyan-300/40 bg-cyan-300/15 px-2 py-0.5 text-[10px] font-semibold text-cyan-100">
+          <span className="shrink-0 rounded-full border border-pilot-primary/40 bg-pilot-primary/15 px-2 py-0.5 text-[10px] font-semibold text-pilot-primaryDeep">
             Selected
           </span>
         ) : null}
       </div>
-      <p className="mt-2 text-xs leading-5 text-slate-300">{reference.bestFor}</p>
+      <p className="mt-2 text-xs leading-5 text-pilot-muted">{reference.bestFor}</p>
       <TagList tags={reference.tags.slice(0, 5)} />
       <div className="mt-3 grid grid-cols-2 gap-2">
         <button
           className={`rounded-lg px-2.5 py-2 text-xs font-semibold transition ${
             selected
-              ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200"
-              : "bg-slate-800 text-slate-100 hover:bg-slate-700"
+              ? "bg-pilot-primary text-white hover:bg-pilot-primaryDeep"
+              : "bg-pilot-card text-pilot-text hover:bg-pilot-card"
           }`}
           onClick={onSelect}
           type="button"
@@ -1683,7 +2185,7 @@ function AnimationReferenceCard({
           Use animation idea
         </button>
         <a
-          className="rounded-lg border border-slate-700 px-2.5 py-2 text-center text-xs font-semibold text-slate-100 transition hover:border-cyan-300/70 hover:bg-cyan-300/10"
+          className="rounded-lg border border-pilot-border px-2.5 py-2 text-center text-xs font-semibold text-pilot-text transition hover:border-pilot-primary/70 hover:bg-pilot-primary/10"
           href={reference.url}
           rel="noreferrer"
           target="_blank"
@@ -1702,7 +2204,7 @@ function TagList({ tags }: { tags: string[] }) {
     <div className="mt-2 flex flex-wrap gap-1">
       {tags.map((tag) => (
         <span
-          className="rounded-full border border-slate-700 bg-slate-900 px-2 py-0.5 text-[10px] font-medium text-slate-300"
+          className="rounded-full border border-pilot-border bg-pilot-panel px-2 py-0.5 text-[10px] font-medium text-pilot-muted"
           key={tag}
         >
           {tag}
@@ -1734,29 +2236,29 @@ function SuggestionDebugPanel({
   };
 }) {
   return (
-    <section className="mt-3 rounded-xl border border-slate-800 bg-slate-900/74 p-3">
-      <h2 className="text-sm font-bold text-slate-50">Suggestion debug</h2>
+    <section className="mt-3 rounded-xl border border-pilot-border bg-pilot-panel/82 p-3">
+      <h2 className="text-sm font-bold text-pilot-text">Suggestion debug</h2>
       <div className="mt-3 grid grid-cols-2 gap-2">
         <Metric label="References" value={referenceHealth.total} />
         <Metric label="OK links" value={referenceHealth.ok} />
         <Metric label="Broken links" value={referenceHealth.broken} />
         <Metric label="Unknown links" value={referenceHealth.unknown} />
       </div>
-      <p className="mt-2 text-[11px] leading-5 text-slate-400">
+      <p className="mt-2 text-[11px] leading-5 text-pilot-muted">
         Selected reference status: {referenceHealth.selectedStatus}
       </p>
       <TagList tags={debug.inputKeywords.slice(0, 30)} />
-      <div className="mt-3 max-h-72 overflow-auto rounded-lg border border-slate-800 bg-slate-950/70">
+      <div className="mt-3 max-h-72 overflow-auto rounded-lg border border-pilot-border bg-pilot-card/70">
         {debug.scores.map((score) => (
           <div
-            className="grid grid-cols-[74px_1fr_42px] gap-2 border-b border-slate-800 px-2 py-2 text-[10px] last:border-b-0"
+            className="grid grid-cols-[74px_1fr_42px] gap-2 border-b border-pilot-border px-2 py-2 text-[10px] last:border-b-0"
             key={`${score.type}-${score.id}`}
           >
-            <span className="font-bold uppercase text-cyan-100">{score.type}</span>
-            <span className="min-w-0 truncate text-slate-300" title={score.id}>
+            <span className="font-bold uppercase text-pilot-primaryDeep">{score.type}</span>
+            <span className="min-w-0 truncate text-pilot-muted" title={score.id}>
               {score.id}
             </span>
-            <span className="text-right font-bold text-slate-50">{score.score}</span>
+            <span className="text-right font-bold text-pilot-text">{score.score}</span>
           </div>
         ))}
       </div>
@@ -1911,16 +2413,16 @@ function logLevelClassName(level: GeminiLogEntry["level"]) {
     "rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em]";
 
   if (level === "success") {
-    return `${base} bg-emerald-300/10 text-emerald-100`;
+    return `${base} bg-emerald-100/80 text-emerald-700`;
   }
   if (level === "error") {
-    return `${base} bg-red-300/10 text-red-100`;
+    return `${base} bg-red-100/80 text-red-700`;
   }
   if (level === "warn") {
-    return `${base} bg-amber-300/10 text-amber-100`;
+    return `${base} bg-amber-100/80 text-amber-800`;
   }
 
-  return `${base} bg-cyan-300/10 text-cyan-100`;
+  return `${base} bg-pilot-primary/10 text-pilot-primaryDeep`;
 }
 
 function getScreenshotImageSrc(screenshotBase64: string | undefined): string {
@@ -2096,6 +2598,17 @@ function inferAnimationKeywords(
 
 function isFetchFailure(error: unknown) {
   return error instanceof TypeError || String(error).includes("Failed to fetch");
+}
+
+// Safe, development-only prompt logging. Never logs prompt content, screenshots,
+// or secrets — only the type, length, and section metadata.
+function logPromptSafely(
+  type: "cursor" | "ai-image" | "analysis",
+  prompt: string,
+  meta: Record<string, unknown>
+) {
+  if (!import.meta.env.DEV) return;
+  console.log(`[prompt:${type}]`, { chars: prompt.length, ...meta });
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

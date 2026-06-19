@@ -124,12 +124,18 @@ type AIUnderstandingResult = {
   designerDescription: string;
   currentLayoutProblem: string;
   reasoning: string[];
+  uncodixify: {
+    summary: string;
+    detectedRuleIds: string[];
+    visualEvidence: string[];
+    topRecommendations: string[];
+  };
 };
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
 const GEMINI_MODELS = ["gemini-2.5-flash", "gemini-2.0-flash"] as const;
@@ -222,6 +228,34 @@ const ANIMATION_CATEGORIES = [
   "other"
 ] as const;
 
+const UNCODIXIFY_RULE_IDS = [
+  "oversized-radius",
+  "pill-overload",
+  "gradient-overuse",
+  "glow-heavy-ui",
+  "glassmorphism-default",
+  "dramatic-shadows",
+  "decorative-eyebrows",
+  "uppercase-label-overuse",
+  "fake-premium-copy",
+  "hero-inside-dashboard",
+  "metric-card-grid-default",
+  "fake-charts",
+  "blue-cyan-ai-dashboard",
+  "overpadded-layout",
+  "weak-hierarchy",
+  "repetitive-equal-cards",
+  "nested-panel-overload",
+  "decorative-badges",
+  "transform-hover-overuse",
+  "inconsistent-spacing",
+  "sidebar-floating-shell",
+  "decorative-status-dots",
+  "too-many-muted-labels",
+  "random-glass-panels",
+  "generic-saas-composition"
+] as const;
+
 const BLOCK_TYPES = [
   "heading",
   "text",
@@ -255,12 +289,42 @@ Analyze:
 6. What design intent it serves.
 7. What animation categories could improve it.
 8. What local pattern/template categories should be searched.
+9. Whether the selected UI looks like generic AI/Codex-generated UI (Uncodixify check).
 Return strict JSON only.
 Important:
 - Use keywords that help match local template and animation databases.
 - Useful examples: hero, product-preview, trust-bar, cta, button, gradient, dashboard, features, cards, equal-grid, icon-cards, bento, hierarchy, pricing, plan, comparison, stats, metric, social-proof, form, lead-capture, testimonial, logo-cloud, hover, card-hover, stagger, reveal, text-reveal, button-microinteraction.
 - Do not include markdown.
-- confidence must be between 0 and 1.`;
+- confidence must be between 0 and 1.
+
+## Uncodixify visual quality check
+
+Evaluate whether the selected UI looks like generic AI/Codex-generated UI.
+
+Check for:
+- oversized rounded corners
+- pill overload
+- glow-heavy styling
+- glassmorphism
+- dramatic shadows
+- fake premium gradients
+- decorative eyebrow labels
+- uppercase label overuse
+- fake charts or metrics
+- weak hierarchy
+- repetitive equal cards
+- overpadded layouts
+- nested panels
+- generic dark SaaS composition
+- blue/cyan AI-dashboard colors
+- unnecessary decorative animation cues
+
+Rules for the Uncodixify check:
+- Only report issues that are clearly visible in the screenshot or supported by the DOM/CSS data.
+- Do NOT produce generic advice. Every detectedRuleId must be backed by concrete visualEvidence.
+- detectedRuleIds MUST be chosen ONLY from this exact list (use these exact ids):
+${UNCODIXIFY_RULE_IDS.join(", ")}.
+- If the UI looks clean and human-designed, return an empty detectedRuleIds array.`;
 
 const RESPONSE_SHAPE = `Return exactly one JSON object with:
 {
@@ -280,7 +344,19 @@ const RESPONSE_SHAPE = `Return exactly one JSON object with:
   "animationKeywords": ["keyword"],
   "designerDescription": "",
   "currentLayoutProblem": "",
-  "reasoning": [""]
+  "reasoning": [""],
+  "uncodixify": {
+    "summary": "One sentence on whether this looks AI/Codex-generated and why.",
+    "detectedRuleIds": ["oversized-radius", "glow-heavy-ui"],
+    "visualEvidence": [
+      "The cards use large rounded corners and glow shadows.",
+      "Several chips are decorative and do not communicate state."
+    ],
+    "topRecommendations": [
+      "Reduce card radius to 8-12px.",
+      "Replace glow with simple borders and spacing hierarchy."
+    ]
+  }
 }`;
 
 export async function OPTIONS() {
@@ -368,6 +444,14 @@ export async function POST(request: Request) {
 
     const ai = new GoogleGenAI({ apiKey });
     const prompt = buildGeminiPrompt(payload);
+    if (process.env.NODE_ENV !== "production") {
+      // Safe summary only — no screenshot base64, no keys.
+      logGemini(requestId, "analysis prompt summary", {
+        promptChars: prompt.length,
+        matchedElements: payload.matchedElements.length,
+        includesUncodixifyCheck: true
+      });
+    }
     const generated = await generateGeminiText(ai, normalizedImage, prompt, requestId);
     debugBase = {
       ...debugBase,
@@ -378,23 +462,28 @@ export async function POST(request: Request) {
     logGemini(requestId, "Gemini response received");
     logGemini(requestId, `raw response length: ${generated.text.length}`);
 
-    let parsed: unknown;
     let jsonParseStrategy: JsonParseStrategy;
+    let result: AIUnderstandingResult;
     try {
       const parsedResult = parseGeminiJson(generated.text);
-      parsed = parsedResult.value;
       jsonParseStrategy = parsedResult.strategy;
-      logGemini(requestId, "JSON parse success", { strategy: jsonParseStrategy });
+      const normalized = normalizeAIUnderstandingCandidate(parsedResult.value);
+      result = sanitizeAIUnderstandingResult(normalized);
+      logGemini(requestId, "JSON parse success", {
+        strategy: jsonParseStrategy,
+        parsedShape: describeJsonShape(parsedResult.value),
+        normalizedShape: describeJsonShape(normalized)
+      });
     } catch (error) {
-      logGemini(requestId, "JSON parse failure", { error: safeErrorMessage(error) });
-      parsed = buildFallbackAIUnderstandingResult(payload);
+      logGemini(requestId, "JSON parse or shape failure", {
+        error: safeErrorMessage(error)
+      });
+      result = buildFallbackAIUnderstandingResult(payload);
       jsonParseStrategy = "fallback";
-      logGemini(requestId, "using local fallback result after JSON parse failure", {
+      logGemini(requestId, "using local fallback result after Gemini JSON failure", {
         error: safeErrorMessage(error)
       });
     }
-
-    const result = sanitizeAIUnderstandingResult(parsed);
 
     const durationMs = Date.now() - startedAt;
     logGemini(requestId, "response sent", { durationMs });
@@ -757,6 +846,57 @@ function repairLikelyJson(text: string) {
     .replace(/(-?\d+(?:\.\d+)?)\s+(?=["{\[])/g, "$1,");
 }
 
+function normalizeAIUnderstandingCandidate(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    const objectItem = value.find(isRecord);
+    return objectItem ? normalizeAIUnderstandingCandidate(objectItem) : value;
+  }
+
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+
+    if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
+      return normalizeAIUnderstandingCandidate(parseGeminiJson(trimmed).value);
+    }
+
+    return value;
+  }
+
+  if (!isRecord(value)) {
+    return value;
+  }
+
+  for (const key of [
+    "result",
+    "analysis",
+    "data",
+    "response",
+    "understanding",
+    "aiUnderstanding",
+    "uiAnalysis"
+  ]) {
+    const nested = value[key];
+
+    if (isRecord(nested) || Array.isArray(nested)) {
+      return normalizeAIUnderstandingCandidate(nested);
+    }
+  }
+
+  return value;
+}
+
+function describeJsonShape(value: unknown) {
+  if (Array.isArray(value)) {
+    return `array(${value.length})`;
+  }
+
+  if (isRecord(value)) {
+    return `object(${Object.keys(value).slice(0, 8).join(",")})`;
+  }
+
+  return typeof value;
+}
+
 function buildFallbackAIUnderstandingResult(payload: AnalyzeAreaRequest): AIUnderstandingResult {
   const detected = isRecord(payload.detected) ? payload.detected : {};
   const counts = isRecord(payload.counts) ? payload.counts : {};
@@ -811,7 +951,14 @@ function buildFallbackAIUnderstandingResult(payload: AnalyzeAreaRequest): AIUnde
     reasoning: [
       "Gemini response JSON could not be parsed.",
       "Fallback result was built from local DOM counts and detected layout metadata."
-    ]
+    ],
+    uncodixify: {
+      summary:
+        "Gemini visual evaluation was unavailable; Uncodixify relies on local DOM/CSS rules for this block.",
+      detectedRuleIds: [],
+      visualEvidence: [],
+      topRecommendations: []
+    }
   };
 }
 
@@ -837,8 +984,30 @@ function sanitizeAIUnderstandingResult(value: unknown): AIUnderstandingResult {
     currentLayoutProblem: stringOrEmpty(value.currentLayoutProblem),
     reasoning: Array.isArray(value.reasoning)
       ? value.reasoning.slice(0, 12).map(stringOrEmpty).filter(Boolean)
-      : []
+      : [],
+    uncodixify: sanitizeUncodixify(value.uncodixify)
   };
+}
+
+function sanitizeUncodixify(value: unknown): AIUnderstandingResult["uncodixify"] {
+  const record = isRecord(value) ? value : {};
+
+  return {
+    summary: stringOrEmpty(record.summary),
+    detectedRuleIds: sanitizeEnumArray(record.detectedRuleIds, UNCODIXIFY_RULE_IDS, 25),
+    visualEvidence: sanitizeStringSentenceArray(record.visualEvidence, 12),
+    topRecommendations: sanitizeStringSentenceArray(record.topRecommendations, 8)
+  };
+}
+
+function sanitizeStringSentenceArray(value: unknown, limit: number) {
+  return Array.isArray(value)
+    ? value
+        .slice(0, limit)
+        .map(stringOrEmpty)
+        .map((item) => item.trim())
+        .filter(Boolean)
+    : [];
 }
 
 function sanitizeRecommendedCategories(value: unknown): AIUnderstandingResult["recommendedCategories"] {
