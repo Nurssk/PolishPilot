@@ -1,15 +1,14 @@
 import type { UserPlan } from "./types";
 
-// Monthly usage limits per plan. Preparation only — these are NOT yet enforced
-// on the existing API routes (that requires auth + server-side usage tracking).
-
 export const FREE_LIMITS = {
-  monthlyAnalysisLimit: 10,
+  monthlyAnalysisLimit: 5,
+  monthlyScreenshotLimit: 5,
   monthlyPreviewLimit: 3
 };
 
 export const PRO_LIMITS = {
   monthlyAnalysisLimit: 300,
+  monthlyScreenshotLimit: 300,
   monthlyPreviewLimit: 50
 };
 

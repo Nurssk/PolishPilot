@@ -4,6 +4,7 @@ import type { UsedCssExtractionResult } from "../content/extractUsedCssRules";
 import type { StyleTokens } from "../content/extractStyleTokens";
 import type { PreviewDebugLog } from "./previewDebug";
 import type { GeminiUncodixifyResult } from "../analysis/uncodixifyTypes";
+import type { ScreenshotUsage } from "./usageService";
 
 export type SelectionRect = {
   x: number;
@@ -179,6 +180,11 @@ export type CaptureUpdatedMessage = {
   capture: RectangleCapture;
 };
 
+export type UsageUpdatedMessage = {
+  type: "USAGE_UPDATED";
+  usage: ScreenshotUsage;
+};
+
 export type InPagePreviewPayload = {
   selectedRect: SelectionRect;
   patternId: LayoutPatternId;
@@ -215,6 +221,7 @@ export type PolishPilotMessage =
   | RectangleSelectionCompleteMessage
   | RectangleCaptureReadyMessage
   | CaptureUpdatedMessage
+  | UsageUpdatedMessage
   | ShowInPagePreviewMessage
   | ShowAIImagePreviewMessage
   | RemoveInPagePreviewMessage;

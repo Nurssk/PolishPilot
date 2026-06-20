@@ -1,7 +1,6 @@
-import { verifyAppSessionToken } from "../../../lib/auth/emailCodeAuth";
-import { verifyFirebaseToken } from "../../../lib/auth/verifyFirebaseToken";
+import { readAuthenticatedUser } from "../../../lib/auth/readAuthenticatedUser";
+import { getScreenshotUsage } from "../../../lib/billing/screenshotUsage";
 import { getLimitsForPlan } from "../../../lib/billing/usageLimits";
-import type { UserPlan } from "../../../lib/billing/types";
 
 export const runtime = "nodejs";
 
@@ -15,12 +14,9 @@ export async function OPTIONS() {
   return new Response(null, { status: 204, headers: corsHeaders });
 }
 
-// Sample protected route: returns the verified user identity + plan.
-// Accepts the extension email session token, with Firebase ID-token fallback for
-// older clients.
 export async function GET(request: Request) {
-  const token = readBearerToken(request);
-  if (!token) {
+  const verified = await readAuthenticatedUser(request);
+  if (!verified) {
     return json(
       {
         ok: false,
@@ -30,36 +26,19 @@ export async function GET(request: Request) {
     );
   }
 
-  const verified = verifyAppSessionToken(token) ?? (await verifyFirebaseToken(token));
-  if (!verified) {
-    return json(
-      {
-        ok: false,
-        error: { code: "INVALID_TOKEN", message: "Firebase ID token is invalid or expired." }
-      },
-      401
-    );
-  }
-
-  // Plan is "free" until Polar billing is connected (no DB yet).
-  const plan: UserPlan = "free";
+  const usage = verified.email ? await getScreenshotUsage(verified.email) : null;
+  const plan = usage?.plan ?? "free";
 
   return json(
     {
       ok: true,
       user: { uid: verified.uid, email: verified.email ?? null },
       plan,
-      limits: getLimitsForPlan(plan)
+      limits: getLimitsForPlan(plan),
+      usage
     },
     200
   );
-}
-
-function readBearerToken(request: Request): string | null {
-  const header = request.headers.get("authorization") ?? request.headers.get("Authorization");
-  if (!header) return null;
-  const match = header.match(/^Bearer\s+(.+)$/i);
-  return match ? match[1].trim() : null;
 }
 
 function json(body: unknown, status: number) {

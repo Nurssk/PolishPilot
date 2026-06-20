@@ -1,15 +1,14 @@
 import "../styles/tailwind.css";
 import { useEffect, useState } from "react";
-import {
-  POLISH_PILOT_MODE_STORAGE_KEY,
-  chromeLastErrorMessage
-} from "../shared/messages";
+import { POLISH_PILOT_MODE_STORAGE_KEY } from "../shared/messages";
 import { getCurrentUser, type ExtensionUser } from "../shared/authService";
 import type { PolishPilotMode } from "../shared/types";
 import { EmailAuthForm } from "../components/EmailAuthForm";
+import { getScreenshotUsage, type ScreenshotUsage } from "../shared/usageService";
 
 export function Popup() {
   const [user, setUser] = useState<ExtensionUser | null>(null);
+  const [usage, setUsage] = useState<ScreenshotUsage | null>(null);
   const [status, setStatus] = useState<"idle" | "starting" | "ready" | "error">(
     "idle"
   );
@@ -34,7 +33,29 @@ export function Popup() {
         }
       })
       .catch(() => undefined);
+
+    const handleUsageMessage = (message: unknown) => {
+      if (
+        message &&
+        typeof message === "object" &&
+        "type" in message &&
+        message.type === "USAGE_UPDATED" &&
+        "usage" in message
+      ) {
+        setUsage(message.usage as ScreenshotUsage);
+      }
+    };
+    chrome.runtime.onMessage.addListener(handleUsageMessage);
+    return () => chrome.runtime.onMessage.removeListener(handleUsageMessage);
   }, []);
+
+  useEffect(() => {
+    if (!user) {
+      setUsage(null);
+      return;
+    }
+    void getScreenshotUsage().then(setUsage).catch(() => undefined);
+  }, [user]);
 
   async function updateMode(nextMode: PolishPilotMode) {
     setMode(nextMode);
@@ -49,13 +70,31 @@ export function Popup() {
       setMessage("No active tab found.");
       return;
     }
+    if (!user) {
+      setStatus("error");
+      setMessage("Sign in to use screenshots.");
+      return;
+    }
 
     setStatus("starting");
     setMessage("Opening side panel...");
 
     try {
       await chrome.sidePanel.open({ tabId: activeTabId });
-      await sendStartSelectionMessage(activeTabId);
+      const response = await chrome.runtime.sendMessage({
+        type: "START_NEW_SCREENSHOT"
+      });
+
+      if (
+        response &&
+        typeof response === "object" &&
+        "ok" in response &&
+        !response.ok
+      ) {
+        throw new Error(
+          "error" in response ? String(response.error) : "Could not start screenshot selection."
+        );
+      }
 
       window.close();
     } catch (error) {
@@ -63,37 +102,6 @@ export function Popup() {
       setStatus("error");
       setMessage(userFacingError(error));
     }
-  }
-
-  async function sendStartSelectionMessage(tabId: number, attemptedInjection = false): Promise<void> {
-    try {
-      await sendTabMessage(tabId, { type: "START_RECTANGLE_SELECTION" });
-    } catch (error) {
-      if (attemptedInjection) {
-        throw error;
-      }
-
-      await chrome.scripting.executeScript({
-        target: { tabId },
-        files: ["assets/contentScript.js"]
-      });
-      await sendStartSelectionMessage(tabId, true);
-    }
-  }
-
-  function sendTabMessage(tabId: number, message: { type: "START_RECTANGLE_SELECTION" }) {
-    return new Promise<void>((resolve, reject) => {
-      chrome.tabs.sendMessage(tabId, message, () => {
-        const error = chromeLastErrorMessage();
-
-        if (error && !isClosedMessagePortError(error)) {
-          reject(new Error(error));
-          return;
-        }
-
-        resolve();
-      });
-    });
   }
 
   function userFacingError(error: unknown): string {
@@ -104,10 +112,6 @@ export function Popup() {
     }
 
     return errorMessage || "Could not start rectangle selection.";
-  }
-
-  function isClosedMessagePortError(errorMessage: string) {
-    return /message port closed before a response was received/i.test(errorMessage);
   }
 
   return (
@@ -148,6 +152,11 @@ export function Popup() {
             <span className="font-semibold text-pilot-text">
               {user.email ?? user.displayName ?? user.uid}
             </span>
+            {usage ? (
+              <span className="mt-1 block font-semibold text-pilot-text">
+                {usage.screenshotsRemaining}/{usage.screenshotsTotal} screenshots left
+              </span>
+            ) : null}
           </p>
         ) : (
           <EmailAuthForm compact onSignedIn={setUser} />
@@ -158,15 +167,19 @@ export function Popup() {
 
       <button
         className="dh-button-primary mt-4 w-full px-4 py-2.5 text-sm disabled:cursor-wait disabled:opacity-70"
-        disabled={status === "starting"}
+        disabled={status === "starting" || !user || usage?.screenshotsRemaining === 0}
         onClick={handleSelectArea}
         type="button"
       >
         {status === "starting"
           ? "Starting..."
-          : mode === "simple"
-            ? "Improve Selected Area"
-            : "Select Area"}
+          : !user
+            ? "Sign in to continue"
+            : usage?.screenshotsRemaining === 0
+              ? "No screenshots left"
+              : mode === "simple"
+                ? "Improve Selected Area"
+                : "Select Area"}
       </button>
 
       <div className="mt-3 rounded-lg border border-pilot-border bg-pilot-panel/70 p-2.5 text-[11px] leading-4 text-pilot-muted">

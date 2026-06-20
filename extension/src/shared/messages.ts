@@ -28,6 +28,7 @@ export function isPolishPilotMessage(value: unknown): value is PolishPilotMessag
         "RECTANGLE_SELECTION_COMPLETE",
         "RECTANGLE_CAPTURE_READY",
         "CAPTURE_UPDATED",
+        "USAGE_UPDATED",
         "SHOW_IN_PAGE_PREVIEW",
         "SHOW_AI_IMAGE_PREVIEW",
         "REMOVE_IN_PAGE_PREVIEW"

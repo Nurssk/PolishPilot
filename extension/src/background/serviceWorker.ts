@@ -5,6 +5,7 @@ import {
   SELECTED_PATTERN_STORAGE_KEY,
   isPolishPilotMessage
 } from "../shared/messages";
+import { consumeScreenshotCredit, getScreenshotUsage } from "../shared/usageService";
 import type {
   PolishPilotMessage,
   RectangleCapture,
@@ -33,7 +34,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       .then(() => sendResponse({ ok: true }))
       .catch((error: unknown) => {
         console.error("PolishPilot capture failed", error);
-        sendResponse({ ok: false, error: String(error) });
+        sendResponse({ ok: false, error: error instanceof Error ? error.message : String(error) });
       });
 
     return true;
@@ -44,7 +45,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       .then(() => sendResponse({ ok: true }))
       .catch((error: unknown) => {
         console.error("PolishPilot start screenshot failed", error);
-        sendResponse({ ok: false, error: String(error) });
+        sendResponse({ ok: false, error: error instanceof Error ? error.message : String(error) });
       });
 
     return true;
@@ -61,7 +62,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       .then(() => sendResponse({ ok: true }))
       .catch((error: unknown) => {
         console.error("PolishPilot preview message failed", error);
-        sendResponse({ ok: false, error: String(error) });
+        sendResponse({ ok: false, error: error instanceof Error ? error.message : String(error) });
       });
 
     return true;
@@ -83,6 +84,7 @@ async function handleRectangleSelection(
     visibleScreenshot,
     message.payload.selectedRect
   );
+  const usage = await consumeScreenshotCredit();
 
   latestCapture = {
     ...message.payload,
@@ -103,9 +105,18 @@ async function handleRectangleSelection(
     type: "CAPTURE_UPDATED",
     capture: latestCapture
   });
+  chrome.runtime.sendMessage({
+    type: "USAGE_UPDATED",
+    usage
+  });
 }
 
 async function startNewScreenshot() {
+  const usage = await getScreenshotUsage();
+  if (usage.screenshotsRemaining <= 0) {
+    throw new Error("You have no screenshots left this period.");
+  }
+
   const [tab] = await chrome.tabs.query({
     active: true,
     currentWindow: true
