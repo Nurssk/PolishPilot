@@ -15,7 +15,6 @@ export default defineConfig({
         previewGallery: resolve(__dirname, "preview-gallery.html"),
         designIdeas: resolve(__dirname, "design-ideas.html"),
         recommendations: resolve(__dirname, "recommendations.html"),
-        offscreen: resolve(__dirname, "offscreen.html"),
         serviceWorker: resolve(__dirname, "src/background/serviceWorker.ts")
       },
       output: {

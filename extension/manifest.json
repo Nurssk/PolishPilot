@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "PolishPilot",
   "description": "Drag over a UI section to capture a screenshot crop and understand its layout.",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "action": {
     "default_title": "PolishPilot",
     "default_popup": "index.html"
@@ -18,11 +18,8 @@
       "run_at": "document_idle"
     }
   ],
-  "permissions": ["activeTab", "offscreen", "sidePanel", "scripting", "storage", "tabs"],
+  "permissions": ["activeTab", "sidePanel", "scripting", "storage", "tabs"],
   "host_permissions": ["http://*/*", "https://*/*"],
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; frame-src https://polish-pilot.vercel.app"
-  },
   "side_panel": {
     "default_path": "sidepanel.html"
   }

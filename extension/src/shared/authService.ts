@@ -1,11 +1,3 @@
-import { signOut, type User } from "firebase/auth/web-extension";
-import { firebaseAuth } from "./firebase";
-import {
-  GOOGLE_AUTH_START_MESSAGE,
-  type GoogleAuthFailure,
-  type GoogleAuthResult
-} from "./googleAuthMessages";
-
 export type ExtensionUser = {
   uid: string;
   email: string | null;
@@ -24,15 +16,12 @@ export type AuthState = {
 
 export type AuthErrorCode =
   | "AUTH_NOT_CONFIGURED"
-  | "GOOGLE_AUTH_NOT_CONFIGURED"
   | "INVALID_EMAIL"
   | "INVALID_CODE"
   | "CODE_EXPIRED"
-  | "CODE_SEND_FAILED"
-  | "INVALID_OAUTH_CLIENT"
-  | "USER_CANCELLED"
+  | "CODE_USED"
+  | "CODE_EXCHANGE_FAILED"
   | "NETWORK_ERROR"
-  | "FLOW_FAILED"
   | "UNKNOWN";
 
 export class AuthError extends Error {
@@ -44,118 +33,70 @@ export class AuthError extends Error {
   }
 }
 
-export type RequestEmailCodeResult = {
+export type ExchangeWebsiteCodeResult = {
   email: string;
-  debugCode?: string;
+  token: string;
+  tokenType: "Bearer";
+  expiresInSeconds: number;
 };
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ?? "";
-const EXTENSION_AUTH_URL = import.meta.env.VITE_EXTENSION_AUTH_URL?.trim() ?? "";
+const AUTH_AUTHORIZE_URL = "https://www.beuniq.design/extension/authorize";
+const AUTH_EXCHANGE_URL = "https://www.beuniq.design/api/extension-auth/exchange";
 const AUTH_PROFILE_KEY = "authUserProfile";
 const AUTH_TOKEN_KEY = "authSessionToken";
+const AUTH_TOKEN_EXPIRES_AT_KEY = "authSessionTokenExpiresAt";
 
 const authListeners = new Set<(user: ExtensionUser | null) => void>();
 
-export function isAuthConfigured(): boolean {
-  return API_BASE_URL.length > 0;
+export function getAuthorizeUrl(): string {
+  return AUTH_AUTHORIZE_URL;
 }
 
-export function getGoogleAuthPageUrl(): string {
-  return EXTENSION_AUTH_URL || `${API_BASE_URL}/extension-auth`;
+export async function openAuthorizationPage(): Promise<void> {
+  if (chrome?.tabs?.create) {
+    await chrome.tabs.create({ url: AUTH_AUTHORIZE_URL });
+    return;
+  }
+  window.open(AUTH_AUTHORIZE_URL, "_blank", "noopener,noreferrer");
 }
 
-export async function signInWithGoogle(): Promise<ExtensionUser> {
-  if (!chrome?.runtime?.sendMessage) {
-    throw new AuthError("FLOW_FAILED", "Chrome runtime messaging is unavailable.");
-  }
-
-  let result: GoogleAuthResult;
-  try {
-    result = await chrome.runtime.sendMessage({ type: GOOGLE_AUTH_START_MESSAGE });
-  } catch (error) {
-    throw new AuthError("FLOW_FAILED", errorMessage(error));
-  }
-
-  if (!result?.ok) {
-    throw mapGoogleAuthError(result);
-  }
-
-  const user: ExtensionUser = {
-    ...result.user,
-    idToken: result.idToken
-  };
-  await persistSession(user, result.idToken);
-  notifyAuthListeners(user);
-  return user;
-}
-
-export async function requestEmailCode(email: string): Promise<RequestEmailCodeResult> {
+export async function exchangeWebsiteCode(
+  email: string,
+  code: string
+): Promise<ExtensionUser> {
   const normalizedEmail = normalizeEmail(email);
+  const normalizedCode = normalizeCode(code);
+
   if (!normalizedEmail) {
     throw new AuthError("INVALID_EMAIL", "Enter a valid email address.");
   }
-  const body = await authFetch<{
-    ok: true;
-    email: string;
-    debugCode?: string;
-  }>("/api/auth/email/start", {
-    method: "POST",
-    body: JSON.stringify({ email: normalizedEmail })
-  });
+  if (normalizedCode.length !== 6) {
+    throw new AuthError("INVALID_CODE", "Enter the 6-character code.");
+  }
 
-  return {
+  const body = await exchangeCodeRequest(normalizedEmail, normalizedCode);
+  const user: ExtensionUser = {
+    uid: body.email,
     email: body.email,
-    ...(body.debugCode ? { debugCode: body.debugCode } : {})
-  };
-}
-
-export async function verifyEmailCode(email: string, code: string): Promise<ExtensionUser> {
-  const normalizedEmail = normalizeEmail(email);
-  const normalizedCode = code.trim();
-  if (!normalizedEmail) {
-    throw new AuthError("INVALID_EMAIL", "Enter a valid email address.");
-  }
-  if (!/^\d{6}$/.test(normalizedCode)) {
-    throw new AuthError("INVALID_CODE", "Enter the 6-digit code.");
-  }
-
-  const body = await authFetch<{
-    ok: true;
-    token: string;
-    user: { uid: string; email: string };
-  }>("/api/auth/email/verify", {
-    method: "POST",
-    body: JSON.stringify({ email: normalizedEmail, code: normalizedCode })
-  });
-
-  const user: ExtensionUser = {
-    uid: body.user.uid,
-    email: body.user.email,
     displayName: null,
     photoURL: null,
     idToken: body.token
   };
-  await persistSession(user, body.token);
+
+  await persistSession(user, body.token, body.expiresInSeconds);
   notifyAuthListeners(user);
   return user;
 }
 
 export async function signOutUser(): Promise<void> {
-  await signOut(firebaseAuth).catch(() => undefined);
   await clearSession();
   notifyAuthListeners(null);
 }
 
 export async function getCurrentUser(): Promise<ExtensionUser | null> {
-  if (firebaseAuth.currentUser) {
-    const token = await firebaseAuth.currentUser.getIdToken().catch(() => undefined);
-    const user = toExtensionUser(firebaseAuth.currentUser, token);
-    if (token) await persistSession(user, token);
-    return user;
-  }
   const [profile, token] = await Promise.all([readCachedProfile(), readCachedToken()]);
   if (!profile || !token) return null;
-  if (isTokenExpired(token)) {
+  if (await isStoredTokenExpired()) {
     await clearSession();
     return null;
   }
@@ -173,11 +114,9 @@ export function onAuthStateChangedSafe(
 }
 
 export async function getCurrentIdToken(): Promise<string | null> {
-  if (firebaseAuth.currentUser) {
-    return firebaseAuth.currentUser.getIdToken().catch(() => null);
-  }
   const token = await readCachedToken();
-  if (token && isTokenExpired(token)) {
+  if (!token) return null;
+  if (await isStoredTokenExpired()) {
     await clearSession();
     notifyAuthListeners(null);
     return null;
@@ -185,118 +124,81 @@ export async function getCurrentIdToken(): Promise<string | null> {
   return token;
 }
 
-// Optional auth headers for backend requests. Returns {} when not logged in, so
-// anonymous/free analysis keeps working unchanged.
 export async function getAuthHeaders(): Promise<Record<string, string>> {
   const token = await getCurrentIdToken();
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
-async function authFetch<T>(path: string, init: RequestInit): Promise<T> {
-  if (!isAuthConfigured()) {
-    throw new AuthError("AUTH_NOT_CONFIGURED", "The API base URL is not configured.");
-  }
-
+async function exchangeCodeRequest(
+  email: string,
+  code: string
+): Promise<ExchangeWebsiteCodeResult> {
   let response: Response;
   try {
-    response = await fetch(`${API_BASE_URL}${path}`, {
-      ...init,
-      headers: {
-        "Content-Type": "application/json",
-        ...(init.headers ?? {})
-      }
+    response = await fetch(AUTH_EXCHANGE_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, code })
     });
   } catch {
-    throw new AuthError("NETWORK_ERROR", "Could not reach the authentication server.");
+    throw new AuthError("NETWORK_ERROR", "Could not reach the authorization server.");
   }
 
   const body = (await response.json().catch(() => null)) as
     | {
-        ok?: boolean;
-        error?: { code?: string; message?: string };
+        token?: unknown;
+        tokenType?: unknown;
+        expiresInSeconds?: unknown;
+        email?: unknown;
+        error?: { code?: unknown; message?: unknown };
       }
     | null;
 
-  if (!response.ok || body?.ok === false || !body) {
-    throw mapApiError(body?.error?.code, body?.error?.message);
+  if (!response.ok || !body?.token || body.tokenType !== "Bearer") {
+    throw mapExchangeError(body?.error?.code, body?.error?.message);
   }
 
-  return body as T;
-}
+  if (
+    typeof body.token !== "string" ||
+    typeof body.email !== "string" ||
+    typeof body.expiresInSeconds !== "number"
+  ) {
+    throw new AuthError("CODE_EXCHANGE_FAILED", "Authorization server returned an invalid response.");
+  }
 
-function mapApiError(code?: string, message?: string): AuthError {
-  if (code === "INVALID_EMAIL") {
-    return new AuthError("INVALID_EMAIL", message || "Enter a valid email address.");
-  }
-  if (code === "INVALID_CODE") {
-    return new AuthError("INVALID_CODE", message || "The code is invalid.");
-  }
-  if (code === "CODE_EXPIRED") {
-    return new AuthError("CODE_EXPIRED", message || "The code has expired.");
-  }
-  if (code === "EMAIL_SEND_FAILED" || code === "EMAIL_NOT_CONFIGURED") {
-    return new AuthError("CODE_SEND_FAILED", message || "Could not send the code.");
-  }
-  if (code === "AUTH_NOT_CONFIGURED") {
-    return new AuthError("AUTH_NOT_CONFIGURED", message || "Email login is not configured.");
-  }
-  return new AuthError("UNKNOWN", message || "Sign-in failed.");
-}
-
-function mapFirebaseError(error: unknown): AuthError {
-  const code = (error as { code?: string })?.code ?? "";
-  const message = errorMessage(error);
-  if (code === "auth/operation-not-allowed") {
-    return new AuthError("GOOGLE_AUTH_NOT_CONFIGURED", "Google sign-in is disabled in Firebase.");
-  }
-  if (code === "auth/unauthorized-domain") {
-    return new AuthError("FLOW_FAILED", "This extension is not authorized for Firebase sign-in.");
-  }
-  if (code === "auth/network-request-failed") {
-    return new AuthError("NETWORK_ERROR", "Network error during sign-in.");
-  }
-  return new AuthError("UNKNOWN", message || "Google sign-in failed.");
-}
-
-function mapGoogleAuthError(result: GoogleAuthFailure | undefined): AuthError {
-  const code = result?.error?.code ?? "";
-  const message = result?.error?.message ?? "Google sign-in failed.";
-  if (code === "auth/popup-closed-by-user" || /cancel|closed/i.test(message)) {
-    return new AuthError("USER_CANCELLED", "Sign-in was cancelled.");
-  }
-  if (code === "auth/operation-not-allowed") {
-    return new AuthError("GOOGLE_AUTH_NOT_CONFIGURED", "Google sign-in is disabled in Firebase.");
-  }
-  if (code === "auth/unauthorized-domain") {
-    return new AuthError("FLOW_FAILED", "The auth page domain is not authorized in Firebase.");
-  }
-  if (code === "auth/network-request-failed") {
-    return new AuthError("NETWORK_ERROR", "Network error during sign-in.");
-  }
-  if (code === "offscreen/auth-url-missing") {
-    return new AuthError("GOOGLE_AUTH_NOT_CONFIGURED", "The extension auth page URL is not configured.");
-  }
-  return new AuthError("FLOW_FAILED", message);
-}
-
-function toExtensionUser(user: User, idToken?: string): ExtensionUser {
   return {
-    uid: user.uid,
-    email: user.email,
-    displayName: user.displayName,
-    photoURL: user.photoURL,
-    ...(idToken ? { idToken } : {})
+    token: body.token,
+    tokenType: "Bearer",
+    expiresInSeconds: body.expiresInSeconds,
+    email: body.email
   };
 }
 
-function errorMessage(error: unknown): string {
-  if (error instanceof Error) return error.message;
-  const lastError = chrome?.runtime?.lastError?.message;
-  if (lastError) return lastError;
-  return String(error);
+function mapExchangeError(code?: unknown, message?: unknown): AuthError {
+  const normalizedCode = typeof code === "string" ? code.toUpperCase() : "";
+  const normalizedMessage =
+    typeof message === "string" && message ? message : "Could not connect this extension.";
+
+  if (normalizedCode.includes("EXPIRED")) {
+    return new AuthError("CODE_EXPIRED", normalizedMessage);
+  }
+  if (normalizedCode.includes("USED") || normalizedCode.includes("CONSUMED")) {
+    return new AuthError("CODE_USED", normalizedMessage);
+  }
+  if (normalizedCode.includes("INVALID_EMAIL")) {
+    return new AuthError("INVALID_EMAIL", normalizedMessage);
+  }
+  if (normalizedCode.includes("INVALID_CODE") || normalizedCode.includes("INVALID")) {
+    return new AuthError("INVALID_CODE", normalizedMessage);
+  }
+  return new AuthError("CODE_EXCHANGE_FAILED", normalizedMessage);
 }
 
-async function persistSession(user: ExtensionUser, token: string): Promise<void> {
+async function persistSession(
+  user: ExtensionUser,
+  token: string,
+  expiresInSeconds: number
+): Promise<void> {
   const safe = {
     uid: user.uid,
     email: user.email,
@@ -305,34 +207,17 @@ async function persistSession(user: ExtensionUser, token: string): Promise<void>
   };
   await chrome.storage.local.set({
     [AUTH_PROFILE_KEY]: safe,
-    [AUTH_TOKEN_KEY]: token
+    [AUTH_TOKEN_KEY]: token,
+    [AUTH_TOKEN_EXPIRES_AT_KEY]: Date.now() + expiresInSeconds * 1000
   });
 }
 
 async function clearSession(): Promise<void> {
-  await chrome.storage.local.remove([AUTH_PROFILE_KEY, AUTH_TOKEN_KEY]);
-}
-
-function isTokenExpired(token: string): boolean {
-  const payload = decodeTokenPayload(token);
-  if (!payload) return false;
-  return typeof payload.exp === "number" && payload.exp <= Math.floor(Date.now() / 1000) + 60;
-}
-
-function decodeTokenPayload(token: string): { exp?: unknown } | null {
-  try {
-    const isEmailToken = token.startsWith("pp_email_");
-    const tokenBody = isEmailToken ? token.slice("pp_email_".length) : token;
-    const payloadSegment = tokenBody.split(".")[isEmailToken ? 0 : 1];
-    if (!payloadSegment) return null;
-    const base64 = payloadSegment.replace(/-/g, "+").replace(/_/g, "/").padEnd(
-      payloadSegment.length + ((4 - (payloadSegment.length % 4)) % 4),
-      "="
-    );
-    return JSON.parse(atob(base64)) as { exp?: unknown };
-  } catch {
-    return null;
-  }
+  await chrome.storage.local.remove([
+    AUTH_PROFILE_KEY,
+    AUTH_TOKEN_KEY,
+    AUTH_TOKEN_EXPIRES_AT_KEY
+  ]);
 }
 
 async function readCachedProfile(): Promise<ExtensionUser | null> {
@@ -358,6 +243,16 @@ async function readCachedToken(): Promise<string | null> {
   }
 }
 
+async function isStoredTokenExpired(): Promise<boolean> {
+  try {
+    const result = await chrome.storage.local.get(AUTH_TOKEN_EXPIRES_AT_KEY);
+    const expiresAt = result[AUTH_TOKEN_EXPIRES_AT_KEY];
+    return typeof expiresAt === "number" && expiresAt <= Date.now() + 60_000;
+  } catch {
+    return false;
+  }
+}
+
 function notifyAuthListeners(user: ExtensionUser | null): void {
   for (const listener of authListeners) {
     listener(user);
@@ -367,4 +262,8 @@ function notifyAuthListeners(user: ExtensionUser | null): void {
 function normalizeEmail(email: string): string {
   const normalized = email.trim().toLowerCase();
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized) ? normalized : "";
+}
+
+export function normalizeCode(code: string): string {
+  return code.replace(/[^a-z0-9]/gi, "").toUpperCase().slice(0, 6);
 }
