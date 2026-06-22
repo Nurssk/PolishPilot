@@ -30,6 +30,12 @@ export function runLocalUncodixifyCheck(
     .join(" ");
   const isDark =
     input.styleContext?.theme === "dark" || input.styleTokens?.theme === "dark";
+  const sectionType: string = input.detected?.sectionType ?? "unknown";
+
+  // --- hero UX rule base --------------------------------------------------
+  if (sectionType === "hero") {
+    findings.push(...detectHeroSectionIssues(input, elements, total, classText));
+  }
 
   // --- radius: oversized rounded corners ---------------------------------
   const oversizedRadius = elements.filter(
@@ -207,7 +213,6 @@ export function runLocalUncodixifyCheck(
   }
 
   // --- cards: metric/KPI grid default ------------------------------------
-  const sectionType: string = input.detected?.sectionType ?? "unknown";
   if (
     (sectionType === "stats" || sectionType === "dashboard") &&
     (equalGrid || equalCards.count >= 3) &&
@@ -317,6 +322,104 @@ export function runLocalUncodixifyCheck(
   }
 
   return dedupeByRuleId(findings);
+}
+
+function detectHeroSectionIssues(
+  input: LocalUncodixifyInput,
+  elements: MatchedElement[],
+  total: number,
+  classText: string
+): LocalUncodixifyFinding[] {
+  const findings: LocalUncodixifyFinding[] = [];
+  const headings = elements.filter((element) => isHeadingLike(element));
+  const buttonLike = elements.filter((element) => isButtonLike(element));
+  const textBlocks = elements.filter((element) => isHeroSupportingText(element));
+  const longestSupportingText = textBlocks
+    .map((element) => ({ element, wordCount: wordCount(element.text) }))
+    .sort((a, b) => b.wordCount - a.wordCount)[0];
+  const hasVisualProof = hasHeroVisualProof(input, elements, classText);
+  const hasTrustSupport = hasHeroTrustSupport(input, elements, classText);
+
+  if (!headings.length) {
+    findings.push({
+      ruleId: "hero-missing-clear-headline",
+      confidence: 0.72,
+      evidence: ["Hero section detected, but no heading-like element was found."]
+    });
+  } else {
+    const strongestHeading = headings
+      .map((element) => ({ element, size: parsePx(element.style.fontSize), text: element.text.trim() }))
+      .sort((a, b) => b.size - a.size)[0];
+    if (strongestHeading && wordCount(strongestHeading.text) <= 2) {
+      findings.push({
+        ruleId: "hero-missing-clear-headline",
+        confidence: 0.52,
+        evidence: [`Largest hero heading is very short/vague: "${truncate(strongestHeading.text, 60)}".`]
+      });
+    }
+  }
+
+  if (longestSupportingText?.wordCount && longestSupportingText.wordCount > 25) {
+    findings.push({
+      ruleId: "hero-supporting-copy-too-long",
+      confidence: Math.min(0.82, 0.55 + longestSupportingText.wordCount / 160),
+      evidence: [
+        `Hero supporting copy has ${longestSupportingText.wordCount} words; target is one concise paragraph under 25 words.`,
+        `Text: "${truncate(longestSupportingText.element.text.trim(), 110)}".`
+      ]
+    });
+  }
+
+  if (buttonLike.length === 0) {
+    findings.push({
+      ruleId: "hero-missing-primary-cta",
+      confidence: 0.78,
+      evidence: ["Hero section has no button/link CTA in the selected area."]
+    });
+  } else if (buttonLike.length >= 3) {
+    findings.push({
+      ruleId: "hero-competing-ctas",
+      confidence: confidenceFromCount(buttonLike.length, total, 0.55),
+      evidence: [
+        `${buttonLike.length} button/link actions were detected in the hero, which can split focus.`,
+        `Actions: ${buttonLike.slice(0, 4).map((element) => `"${truncate(element.text.trim(), 28)}"`).join(", ")}.`
+      ]
+    });
+  }
+
+  if (!hasVisualProof) {
+    findings.push({
+      ruleId: "hero-missing-relevant-visual",
+      confidence: 0.52,
+      evidence: ["Hero has no detected image, SVG/icon system, product preview card, or visual proof element."]
+    });
+  }
+
+  if (!hasTrustSupport) {
+    findings.push({
+      ruleId: "hero-missing-trust-support",
+      confidence: 0.45,
+      evidence: ["No nearby trust support was detected (logos, testimonial, metric, or reassurance text)."]
+    });
+  }
+
+  if (headings.length && buttonLike.length && !heroCtaNearHeading(headings, buttonLike)) {
+    findings.push({
+      ruleId: "hero-poor-scan-flow",
+      confidence: 0.5,
+      evidence: ["The primary hero action appears spatially disconnected from the main heading."]
+    });
+  }
+
+  if (hasPerformanceHeavyHeroVisual(input, elements, classText)) {
+    findings.push({
+      ruleId: "hero-performance-heavy-visual",
+      confidence: 0.5,
+      evidence: ["Hero uses video/background/animation-heavy signals; ensure core heading and CTA load first."]
+    });
+  }
+
+  return findings;
 }
 
 // --- evidence helpers ----------------------------------------------------
@@ -463,6 +566,98 @@ function isFloatingSidebar(element: MatchedElement, classText: string): boolean 
   const rounded = maxBorderRadiusPx(element.style.borderRadius) >= 10;
   const floats = maxShadowBlurPx(element.style.boxShadow) > 0;
   return tall && (rounded || floats);
+}
+
+function isButtonLike(element: MatchedElement): boolean {
+  const tag = (element.tagName ?? "").toLowerCase();
+  const className = (element.className ?? "").toLowerCase();
+  if (tag === "button") return true;
+  if (element.role === "button") return true;
+  if (tag === "a" && element.text.trim().length > 0 && element.text.trim().length <= 48) {
+    return true;
+  }
+  return /btn|button|cta/.test(className);
+}
+
+function isHeroSupportingText(element: MatchedElement): boolean {
+  const tag = (element.tagName ?? "").toLowerCase();
+  if (/^h[1-6]$/.test(tag) || isButtonLike(element)) return false;
+  const text = element.text.trim();
+  if (!text || text.length < 24) return false;
+  if (text.length > 420) return false;
+  const size = parsePx(element.style.fontSize);
+  return tag === "p" || size <= 22;
+}
+
+function wordCount(value: string | undefined): number {
+  if (!value) return 0;
+  return (value.trim().match(/\b[\p{L}\p{N}'-]+\b/gu) ?? []).length;
+}
+
+function hasHeroVisualProof(
+  input: LocalUncodixifyInput,
+  elements: MatchedElement[],
+  classText: string
+): boolean {
+  if ((input.counts?.images ?? 0) > 0 || (input.counts?.svgs ?? 0) >= 2) return true;
+  if ((input.counts?.cardsEstimate ?? 0) > 0 && /preview|product|dashboard|demo|screen|visual|image|video/.test(classText)) {
+    return true;
+  }
+  return elements.some((element) => {
+    const tag = (element.tagName ?? "").toLowerCase();
+    const className = (element.className ?? "").toLowerCase();
+    const ariaLabel = (element.ariaLabel ?? "").toLowerCase();
+    return (
+      ["img", "picture", "video", "canvas"].includes(tag) ||
+      /preview|product|dashboard|demo|screenshot|mockup|visual|media|video|hero-image/.test(className) ||
+      /preview|product|dashboard|demo|screenshot|mockup|video/.test(ariaLabel)
+    );
+  });
+}
+
+function hasHeroTrustSupport(
+  input: LocalUncodixifyInput,
+  elements: MatchedElement[],
+  classText: string
+): boolean {
+  const text = elements.map((element) => element.text).join(" ").toLowerCase();
+  return /trusted|customers|users|teams|companies|logo|logos|testimonial|rating|stars|review|reviews|no credit card|free trial|soc2|gdpr|fortune|used by|joined by/.test(
+    `${text} ${classText}`
+  );
+}
+
+function heroCtaNearHeading(headings: MatchedElement[], buttonLike: MatchedElement[]): boolean {
+  const strongestHeading = headings
+    .map((element) => ({ element, size: parsePx(element.style.fontSize) }))
+    .sort((a, b) => b.size - a.size)[0]?.element;
+  if (!strongestHeading) return true;
+  const headingCenterY = strongestHeading.rect.top + strongestHeading.rect.height / 2;
+  const headingCenterX = strongestHeading.rect.left + strongestHeading.rect.width / 2;
+  return buttonLike.some((button) => {
+    const buttonCenterY = button.rect.top + button.rect.height / 2;
+    const buttonCenterX = button.rect.left + button.rect.width / 2;
+    const verticalDistance = Math.abs(buttonCenterY - headingCenterY);
+    const horizontalDistance = Math.abs(buttonCenterX - headingCenterX);
+    return verticalDistance <= 320 && horizontalDistance <= 520;
+  });
+}
+
+function hasPerformanceHeavyHeroVisual(
+  input: LocalUncodixifyInput,
+  elements: MatchedElement[],
+  classText: string
+): boolean {
+  const hasVideoOrAnimationClass = /video|background-video|autoplay|lottie|canvas|animated|motion|parallax/.test(
+    classText
+  );
+  const hasLargeMediaElement = elements.some((element) => {
+    const tag = (element.tagName ?? "").toLowerCase();
+    if (!["video", "canvas", "img", "picture"].includes(tag)) return false;
+    const area = (element.rect.width ?? 0) * (element.rect.height ?? 0);
+    const captureArea = (input.screenshot?.width ?? 0) * (input.screenshot?.height ?? 0);
+    return captureArea > 0 && area / captureArea >= 0.45;
+  });
+  return hasVideoOrAnimationClass && (hasLargeMediaElement || (input.screenshot?.height ?? 0) >= 640);
 }
 
 type EqualCardsResult = { count: number };

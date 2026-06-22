@@ -189,6 +189,110 @@ export const uncodixifyRules: UncodixifyRule[] = [
     severity: "medium"
   },
   {
+    id: "hero-missing-clear-headline",
+    category: "copywriting",
+    title: "Hero lacks a clear headline",
+    codexPattern: "The first viewport has no readable, concise headline that explains the product or offer.",
+    whyItFeelsAI:
+      "Generated heroes often rely on decorative visuals or vague fragments instead of one clear value proposition.",
+    detectSignals: ["no h1/heading in hero", "vague headline", "headline not readable quickly"],
+    recommendation:
+      "Lead with one concise, specific headline that communicates the product value in under two seconds.",
+    betterDirection: "A clear H1/value proposition first, then supporting copy and CTA.",
+    severity: "high"
+  },
+  {
+    id: "hero-supporting-copy-too-long",
+    category: "copywriting",
+    title: "Hero supporting copy is too long",
+    codexPattern: "The hero uses a long paragraph or multiple text blocks before the primary action.",
+    whyItFeelsAI:
+      "AI often explains too much in the hero, increasing cognitive load before the user understands the offer.",
+    detectSignals: ["supporting copy over 25 words", "multiple long hero paragraphs", "text-heavy hero"],
+    recommendation:
+      "Compress hero supporting copy to one short paragraph, ideally under 25 words.",
+    betterDirection: "Short value clarification that points toward the CTA.",
+    severity: "medium"
+  },
+  {
+    id: "hero-missing-primary-cta",
+    category: "buttons",
+    title: "Hero has no primary CTA",
+    codexPattern: "The hero introduces the product but does not provide a clear next action above the fold.",
+    whyItFeelsAI:
+      "A generated hero can look complete visually while failing the conversion job of the section.",
+    detectSignals: ["no button/link CTA in hero", "primary action missing", "above-fold CTA absent"],
+    recommendation:
+      "Add one obvious primary CTA aligned with the most predictable user action.",
+    betterDirection: "One clear primary action above the fold, with optional subtle secondary action.",
+    severity: "high"
+  },
+  {
+    id: "hero-competing-ctas",
+    category: "buttons",
+    title: "Hero has competing CTAs",
+    codexPattern: "The hero presents several actions with similar visual weight.",
+    whyItFeelsAI:
+      "Generated layouts often add multiple buttons to look useful, but the choices compete and weaken conversion.",
+    detectSignals: ["three or more hero buttons", "primary and secondary CTA same weight", "too many hero actions"],
+    recommendation:
+      "Keep one dominant primary CTA and at most one quieter secondary CTA.",
+    betterDirection: "Primary CTA is visually strongest; secondary action is text/link or low-emphasis.",
+    severity: "medium"
+  },
+  {
+    id: "hero-missing-relevant-visual",
+    category: "layout",
+    title: "Hero visual is missing or not product-relevant",
+    codexPattern: "The hero has no meaningful product visual, or the visual appears decorative and disconnected.",
+    whyItFeelsAI:
+      "AI heroes frequently use abstract decoration instead of showing the product, outcome, or context users need.",
+    detectSignals: ["no image/svg/product preview", "decorative abstract visual", "visual does not support message"],
+    recommendation:
+      "Use a relevant product screenshot, demo, real image, proof panel, or remove the visual if it adds no meaning.",
+    betterDirection: "Visual proof that reinforces the headline and clarifies the offer.",
+    severity: "medium"
+  },
+  {
+    id: "hero-missing-trust-support",
+    category: "copywriting",
+    title: "Hero lacks trust support",
+    codexPattern: "The hero asks for a conversion without nearby proof, reassurance, or credibility signal.",
+    whyItFeelsAI:
+      "Generated heroes often jump from claim to CTA without the small support details that reduce hesitation.",
+    detectSignals: ["no logos/testimonials/metrics", "no reassurance near CTA", "no post-CTA trust note"],
+    recommendation:
+      "Add concise trust support near the CTA only when real proof exists: logos, metrics, testimonial, or reassurance.",
+    betterDirection: "Small proof or reassurance that supports the CTA without cluttering the hero.",
+    severity: "low"
+  },
+  {
+    id: "hero-poor-scan-flow",
+    category: "layout",
+    title: "Hero scan flow is unclear",
+    codexPattern: "Hero elements do not form a clear headline → copy → CTA → proof/visual reading path.",
+    whyItFeelsAI:
+      "AI can place hero pieces decoratively without preserving the natural scanning order users expect.",
+    detectSignals: ["disconnected hero elements", "CTA far from copy", "visual competes with headline"],
+    recommendation:
+      "Reorder and align the hero around a clear scan path: headline, supporting copy, primary CTA, then proof/visual.",
+    betterDirection: "One obvious visual path from value proposition to action.",
+    severity: "medium"
+  },
+  {
+    id: "hero-performance-heavy-visual",
+    category: "layout",
+    title: "Hero visual may be performance-heavy",
+    codexPattern: "The first viewport depends on a heavy background/video/animation before core content is useful.",
+    whyItFeelsAI:
+      "Generated hero concepts often over-index on spectacle while delaying the headline, CTA, or product meaning.",
+    detectSignals: ["large video background", "animation-heavy hero", "critical content hidden behind media load"],
+    recommendation:
+      "Prioritize immediate headline, supporting copy, and CTA; keep video/animation optimized and non-blocking.",
+    betterDirection: "Core hero content loads first; media supports rather than blocks comprehension.",
+    severity: "medium"
+  },
+  {
     id: "metric-card-grid-default",
     category: "cards",
     title: "Metric/KPI card grid as default",

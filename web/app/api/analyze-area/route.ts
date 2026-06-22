@@ -239,6 +239,14 @@ const UNCODIXIFY_RULE_IDS = [
   "uppercase-label-overuse",
   "fake-premium-copy",
   "hero-inside-dashboard",
+  "hero-missing-clear-headline",
+  "hero-supporting-copy-too-long",
+  "hero-missing-primary-cta",
+  "hero-competing-ctas",
+  "hero-missing-relevant-visual",
+  "hero-missing-trust-support",
+  "hero-poor-scan-flow",
+  "hero-performance-heavy-visual",
   "metric-card-grid-default",
   "fake-charts",
   "blue-cyan-ai-dashboard",
@@ -318,6 +326,7 @@ Check for:
 - generic dark SaaS composition
 - blue/cyan AI-dashboard colors
 - unnecessary decorative animation cues
+- hero-section issues: unclear headline, long supporting copy, missing/competing CTA, decorative or missing visual proof, missing trust support, poor scan flow, performance-heavy first viewport media
 
 Rules for the Uncodixify check:
 - Only report issues that are clearly visible in the screenshot or supported by the DOM/CSS data.
@@ -1070,6 +1079,7 @@ function extractLocalKeywords(payload: AnalyzeAreaRequest) {
   const base = [
     stringOrEmpty(detected.sectionType),
     stringOrEmpty(detected.layoutType),
+    ...(Array.isArray(detected.reasons) ? detected.reasons.map(stringOrEmpty) : []),
     counts.cardsEstimate ? "cards" : "",
     counts.buttons ? "button cta" : "",
     counts.inputs ? "form input lead-capture" : "",

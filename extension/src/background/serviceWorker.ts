@@ -1,4 +1,9 @@
 import {
+  GOOGLE_AUTH_OFFSCREEN_MESSAGE,
+  GOOGLE_AUTH_START_MESSAGE,
+  type GoogleAuthResult
+} from "../shared/googleAuthMessages";
+import {
   FULL_PREVIEW_STORAGE_KEY,
   LATEST_AI_RESULT_STORAGE_KEY,
   LATEST_CAPTURE_STORAGE_KEY,
@@ -17,6 +22,8 @@ import type {
 } from "../shared/types";
 
 let latestCapture: RectangleCapture | null = null;
+const OFFSCREEN_DOCUMENT_PATH = "/offscreen.html";
+let creatingOffscreenDocument: Promise<void> | null = null;
 
 chrome.runtime.onInstalled.addListener(() => {
   if (chrome.sidePanel?.setPanelBehavior) {
@@ -25,6 +32,22 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message?.type === GOOGLE_AUTH_START_MESSAGE) {
+    runGoogleAuth()
+      .then(sendResponse)
+      .catch((error: unknown) => {
+        sendResponse({
+          ok: false,
+          error: {
+            code: "background/auth-failed",
+            message: error instanceof Error ? error.message : String(error)
+          }
+        } satisfies GoogleAuthResult);
+      });
+
+    return true;
+  }
+
   if (!isPolishPilotMessage(message)) {
     return;
   }
@@ -68,6 +91,55 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 });
+
+async function runGoogleAuth(): Promise<GoogleAuthResult> {
+  await setupOffscreenDocument();
+  try {
+    return await chrome.runtime.sendMessage({
+      type: GOOGLE_AUTH_OFFSCREEN_MESSAGE
+    });
+  } finally {
+    await closeOffscreenDocument();
+  }
+}
+
+async function setupOffscreenDocument(): Promise<void> {
+  const offscreenUrl = chrome.runtime.getURL(OFFSCREEN_DOCUMENT_PATH);
+  const existingContexts = await chrome.runtime.getContexts({
+    contextTypes: [chrome.runtime.ContextType.OFFSCREEN_DOCUMENT],
+    documentUrls: [offscreenUrl]
+  });
+
+  if (existingContexts.length > 0) {
+    return;
+  }
+
+  if (!creatingOffscreenDocument) {
+    creatingOffscreenDocument = chrome.offscreen.createDocument({
+      url: OFFSCREEN_DOCUMENT_PATH,
+      reasons: [chrome.offscreen.Reason.DOM_SCRAPING],
+      justification: "Run Firebase Google sign-in in a hidden document."
+    });
+  }
+
+  try {
+    await creatingOffscreenDocument;
+  } finally {
+    creatingOffscreenDocument = null;
+  }
+}
+
+async function closeOffscreenDocument(): Promise<void> {
+  const offscreenUrl = chrome.runtime.getURL(OFFSCREEN_DOCUMENT_PATH);
+  const existingContexts = await chrome.runtime.getContexts({
+    contextTypes: [chrome.runtime.ContextType.OFFSCREEN_DOCUMENT],
+    documentUrls: [offscreenUrl]
+  });
+
+  if (existingContexts.length > 0) {
+    await chrome.offscreen.closeDocument();
+  }
+}
 
 async function handleRectangleSelection(
   message: RectangleSelectionCompleteMessage,

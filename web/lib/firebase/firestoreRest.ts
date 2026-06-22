@@ -1,5 +1,9 @@
 import { createSign } from "node:crypto";
-import { getAdminPrivateKey, getFirebaseProjectId } from "../auth/firebaseAdmin";
+import {
+  getAdminClientEmail,
+  getAdminPrivateKey,
+  getFirebaseProjectId
+} from "../auth/firebaseAdmin";
 
 type FirestoreValue =
   | { stringValue: string }
@@ -26,7 +30,7 @@ export async function getFirestoreDocument(
 
   if (response.status === 404) return null;
   if (!response.ok) {
-    throw new Error(`Firestore read failed: ${response.status}`);
+    throw new Error(await firestoreErrorMessage(response, "read"));
   }
   return (await response.json()) as FirestoreDocument;
 }
@@ -51,7 +55,7 @@ export async function patchFirestoreDocument(
   });
 
   if (!response.ok) {
-    throw new Error(`Firestore patch failed: ${response.status}`);
+    throw new Error(await firestoreErrorMessage(response, "patch"));
   }
   return (await response.json()) as FirestoreDocument;
 }
@@ -68,7 +72,7 @@ export async function createFirestoreDocument(
   });
 
   if (!response.ok && response.status !== 409) {
-    throw new Error(`Firestore create failed: ${response.status}`);
+    throw new Error(await firestoreErrorMessage(response, "create"));
   }
   if (response.status === 409) {
     const existing = await getFirestoreDocument(collection, documentId);
@@ -118,6 +122,21 @@ async function firestoreFetch(path: string, init: RequestInit): Promise<Response
   });
 }
 
+async function firestoreErrorMessage(response: Response, operation: string): Promise<string> {
+  const body = (await response.json().catch(() => null)) as
+    | { error?: { status?: string; message?: string } }
+    | null;
+  const status = body?.error?.status;
+  const message = body?.error?.message;
+  return [
+    `Firestore ${operation} failed: ${response.status}`,
+    status ? `status=${status}` : "",
+    message ? `message=${message}` : ""
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
 function baseUrl(): string {
   return `https://firestore.googleapis.com/v1/projects/${getFirebaseProjectId()}/databases/(default)/documents`;
 }
@@ -131,7 +150,7 @@ async function getAccessToken(): Promise<string> {
     return tokenCache.accessToken;
   }
 
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+  const clientEmail = getAdminClientEmail();
   const privateKey = getAdminPrivateKey();
   if (!clientEmail || !privateKey) {
     throw new Error("Firebase admin credentials are not configured.");

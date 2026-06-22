@@ -1,7 +1,7 @@
 import type { AIUnderstandingResult, DesignIntent, UIProblem } from "../shared/types";
 import { animationReferences, type AnimationReference } from "./animationReferences";
 import { keywordScore, normalizeKeywords } from "./keywordUtils";
-import { layoutPatterns, type LayoutPattern } from "./layoutPatterns";
+import { layoutPatterns, type LayoutPattern, type LayoutPatternId } from "./layoutPatterns";
 import { templateReferences, type TemplateReference } from "./templateReferences";
 
 export type HumanizerSuggestions = {
@@ -26,6 +26,20 @@ type Scored<T> = {
   score: number;
   matchedKeywords: string[];
 };
+type AnimationSectionType = AnimationReference["relatedSectionTypes"][number];
+
+const animationSectionTypes: AnimationSectionType[] = [
+  "hero",
+  "features",
+  "cards",
+  "pricing",
+  "cta",
+  "stats",
+  "form",
+  "dashboard",
+  "testimonials",
+  "unknown"
+];
 
 export function selectHumanizerSuggestions(args: {
   aiResult: AIUnderstandingResult;
@@ -46,20 +60,35 @@ export function selectHumanizerSuggestions(args: {
     .map((pattern) => scoreLayout(pattern, args.aiResult, inputKeywords))
     .filter((scored) => scored.score > 0)
     .sort(sortScored);
-  const selectedLayouts = dedupeById(scoredLayouts).slice(0, limits.layouts);
+  const selectedLayouts = ensureLayoutFallback(
+    dedupeById(scoredLayouts).slice(0, limits.layouts),
+    args.aiResult,
+    inputKeywords,
+    limits.layouts
+  );
   const selectedLayoutIds = selectedLayouts.map((scored) => scored.item.id);
 
   const scoredTemplates = templateReferences
     .map((reference) => scoreTemplate(reference, args.aiResult, inputKeywords, selectedLayoutIds))
     .filter((scored) => scored.score > 0)
     .sort(sortScored);
-  const selectedTemplates = dedupeById(scoredTemplates).slice(0, limits.templates);
+  const selectedTemplates = ensureTemplateFallback(
+    dedupeById(scoredTemplates).slice(0, limits.templates),
+    args.aiResult,
+    selectedLayoutIds,
+    limits.templates
+  );
 
   const scoredAnimations = animationReferences
     .map((reference) => scoreAnimation(reference, args.aiResult, inputKeywords))
     .filter((scored) => scored.score > 0)
     .sort(sortScored);
-  const selectedAnimations = dedupeById(scoredAnimations).slice(0, limits.animations);
+  const selectedAnimations = ensureAnimationFallback(
+    dedupeById(scoredAnimations).slice(0, limits.animations),
+    args.aiResult,
+    selectedLayoutIds,
+    limits.animations
+  );
 
   return {
     layoutPatterns: selectedLayouts.map((scored) => scored.item),
@@ -173,6 +202,236 @@ function scoreAnimation(
   if (aiResult.sectionType === "form" && reference.relatedSectionTypes.includes("form")) score += 5;
 
   return { item: reference, score, matchedKeywords };
+}
+
+function ensureLayoutFallback(
+  selected: Scored<LayoutPattern>[],
+  aiResult: AIUnderstandingResult,
+  inputKeywords: string[],
+  limit: number
+): Scored<LayoutPattern>[] {
+  if (selected.length >= Math.min(2, limit)) return selected;
+
+  const existing = new Set(selected.map((scored) => scored.item.id));
+  const fallbackIds = getFallbackLayoutIds(aiResult, inputKeywords).filter(
+    (id) => !existing.has(id)
+  );
+  const fallbackItems = fallbackIds
+    .map((id, index) => {
+      const pattern = layoutPatterns.find((item) => item.id === id);
+      if (!pattern) return null;
+
+      return fallbackScore(pattern, index);
+    })
+    .filter(Boolean) as Scored<LayoutPattern>[];
+
+  return [...selected, ...fallbackItems].slice(0, limit);
+}
+
+function ensureTemplateFallback(
+  selected: Scored<TemplateReference>[],
+  aiResult: AIUnderstandingResult,
+  selectedLayoutIds: LayoutPatternId[],
+  limit: number
+): Scored<TemplateReference>[] {
+  if (selected.length >= Math.min(2, limit)) return selected;
+
+  const existing = new Set(selected.map((scored) => scored.item.id));
+  const sectionCategory = templateCategoryForSection(aiResult.sectionType);
+  const selectedLayoutSet = new Set<string>(selectedLayoutIds);
+  const fallbackItems = templateReferences
+    .filter((reference) => !existing.has(reference.id))
+    .filter(
+      (reference) =>
+        reference.relatedPatternIds.some((id) => selectedLayoutSet.has(id)) ||
+        reference.category === sectionCategory ||
+        (aiResult.sectionType === "unknown" && reference.category === "features")
+    )
+    .slice(0, Math.max(0, limit - selected.length))
+    .map((reference, index) => fallbackScore(reference, index));
+
+  return [...selected, ...fallbackItems].slice(0, limit);
+}
+
+function ensureAnimationFallback(
+  selected: Scored<AnimationReference>[],
+  aiResult: AIUnderstandingResult,
+  selectedLayoutIds: LayoutPatternId[],
+  limit: number
+): Scored<AnimationReference>[] {
+  if (selected.length >= Math.min(1, limit)) return selected;
+
+  const selectedLayoutSet = new Set<string>(selectedLayoutIds);
+  const sectionType = toAnimationSectionType(aiResult.sectionType);
+  const fallbackItems = animationReferences
+    .filter(
+      (reference) =>
+        reference.relatedSectionTypes.includes(sectionType) ||
+        reference.relatedSectionTypes.includes("unknown") ||
+        reference.relatedPatternIds.some((id) => selectedLayoutSet.has(id))
+    )
+    .slice(0, Math.max(0, limit - selected.length))
+    .map((reference, index) => fallbackScore(reference, index));
+
+  return [...selected, ...fallbackItems].slice(0, limit);
+}
+
+function toAnimationSectionType(sectionType: AIUnderstandingResult["sectionType"]): AnimationSectionType {
+  return animationSectionTypes.includes(sectionType as AnimationSectionType)
+    ? (sectionType as AnimationSectionType)
+    : "unknown";
+}
+
+function fallbackScore<T extends { id: string }>(item: T, index: number): Scored<T> {
+  return {
+    item,
+    score: 0.9 - index / 100,
+    matchedKeywords: ["fallback"]
+  };
+}
+
+function getFallbackLayoutIds(
+  aiResult: AIUnderstandingResult,
+  inputKeywords: string[]
+): LayoutPatternId[] {
+  const sectionType = aiResult.sectionType;
+  const problems = new Set<UIProblem>(aiResult.uiProblems);
+  const keywords = new Set(inputKeywords);
+  const hasAnyKeyword = (values: string[]) => values.some((value) => keywords.has(value));
+
+  if (sectionType === "hero") {
+    if (hasAnyKeyword(["dashboard", "analytics", "workspace", "product-ui", "screen", "screenshot"])) {
+      return ["hero-dashboard-preview", "hero-product-preview", "split-hero", "hero-trust-bar"];
+    }
+    if (hasAnyKeyword(["email", "waitlist", "newsletter", "invite", "magic-link", "early-access"])) {
+      return ["hero-email-capture", "centered-hero", "split-auth-proof", "hero-trust-bar"];
+    }
+    if (hasAnyKeyword(["logo", "logos", "trusted", "customers", "integrations", "companies"])) {
+      return ["hero-logo-cloud", "hero-trust-bar", "hero-social-proof-strip", "split-hero"];
+    }
+    if (hasAnyKeyword(["video", "demo-video", "play", "watch", "walkthrough"])) {
+      return ["hero-video-demo", "demo-steps-hero", "hero-product-preview", "split-hero"];
+    }
+    if (hasAnyKeyword(["tab", "tabs", "mode", "modes", "segment", "segmented"])) {
+      return ["hero-tabs-preview", "feature-tabs", "hero-product-preview", "split-hero"];
+    }
+    if (hasAnyKeyword(["background", "image-background", "photo", "venue", "event"])) {
+      return ["hero-image-background", "hero-contained-card", "centered-hero", "split-hero"];
+    }
+    if (hasAnyKeyword(["contained", "card", "panel", "module"])) {
+      return ["hero-contained-card", "split-hero", "hero-product-preview", "centered-hero"];
+    }
+    if (hasAnyKeyword(["off-grid", "abstract", "clouds", "isometric", "asymmetric"])) {
+      return ["hero-off-grid-visual", "hero-product-preview", "split-hero", "before-after-hero"];
+    }
+    if (hasAnyKeyword(["before", "after", "compare", "comparison"])) {
+      return ["before-after-hero", "hero-product-preview", "split-hero", "hero-trust-bar"];
+    }
+    if (hasAnyKeyword(["step", "steps", "workflow", "process", "demo"])) {
+      return ["demo-steps-hero", "hero-product-preview", "split-hero", "centered-hero"];
+    }
+    return ["hero-product-preview", "split-hero", "centered-hero", "hero-trust-bar"];
+  }
+  if (sectionType === "pricing") {
+    if (hasAnyKeyword(["toggle", "annual", "monthly", "billing"])) {
+      return ["pricing-toggle", "pricing-emphasis", "plan-comparison-table", "two-tier-pricing-split"];
+    }
+    return ["pricing-emphasis", "plan-comparison-table", "two-tier-pricing-split", "pricing-faq-combo"];
+  }
+  if (sectionType === "form") {
+    if (hasAnyKeyword(["login", "signin", "sign-in", "signup", "auth", "email", "verification"])) {
+      return ["magic-link-panel", "split-auth-proof", "onboarding-checklist-form", "form-benefits-sidebar"];
+    }
+    return ["form-benefits-sidebar", "two-step-form-layout", "compact-lead-form", "form-faq-sidebar"];
+  }
+  if (sectionType === "stats") {
+    return ["analytics-overview", "metric-trend-grid", "stats-story-band", "metric-bento"];
+  }
+  if (sectionType === "cta") {
+    if (hasAnyKeyword(["demo", "preview", "product"])) {
+      return ["demo-panel-cta", "split-cta", "banner-cta", "cta-trust-notes"];
+    }
+    return ["split-cta", "banner-cta", "card-cta", "cta-trust-notes"];
+  }
+  if (sectionType === "dashboard" || sectionType === "settings") {
+    if (hasAnyKeyword(["table", "row", "rows", "list"])) {
+      return ["table-summary-rail", "activity-feed-sidebar", "analytics-overview", "settings-detail-pane"];
+    }
+    if (hasAnyKeyword(["kanban", "task", "tasks", "status", "pipeline"])) {
+      return ["kanban-board", "activity-feed-sidebar", "analytics-overview", "sidebar-app-shell"];
+    }
+    if (hasAnyKeyword(["settings", "profile", "account", "workspace"])) {
+      return ["settings-detail-pane", "profile-settings-form", "sidebar-app-shell", "table-summary-rail"];
+    }
+    return ["analytics-overview", "metric-trend-grid", "activity-feed-sidebar", "table-summary-rail"];
+  }
+  if (sectionType === "auth") {
+    return ["split-auth-proof", "magic-link-panel", "onboarding-checklist-form", "profile-settings-form"];
+  }
+  if (sectionType === "navigation") {
+    return ["sidebar-app-shell", "command-center-nav", "mega-menu-topbar", "footer-link-hub"];
+  }
+  if (sectionType === "footer") {
+    return ["footer-link-hub", "mega-menu-topbar", "command-center-nav", "resource-card-grid"];
+  }
+
+  if (hasAnyKeyword(["checkout", "cart", "order", "payment", "buy", "purchase"])) {
+    return ["checkout-summary-split", "product-detail-split", "product-card-grid", "comparison-spec-table"];
+  }
+  if (hasAnyKeyword(["product", "catalog", "marketplace", "shop", "ecommerce"])) {
+    return ["product-card-grid", "product-detail-split", "comparison-spec-table", "demo-panel-cta"];
+  }
+  if (hasAnyKeyword(["faq", "question", "questions", "answer", "answers"])) {
+    return ["faq-sidebar", "pricing-faq-combo", "form-faq-sidebar", "resource-card-grid"];
+  }
+  if (hasAnyKeyword(["compare", "comparison", "versus", "vs", "spec", "matrix"])) {
+    return ["comparison-matrix", "comparison-spec-table", "feature-comparison-blocks", "plan-comparison-table"];
+  }
+  if (hasAnyKeyword(["article", "blog", "docs", "guide", "resource", "resources", "changelog", "release"])) {
+    if (hasAnyKeyword(["changelog", "release", "timeline"])) {
+      return ["changelog-timeline", "resource-card-grid", "editorial-feature-stack", "faq-sidebar"];
+    }
+    return ["resource-card-grid", "editorial-feature-stack", "changelog-timeline", "faq-sidebar"];
+  }
+  if (hasAnyKeyword(["quote", "testimonial", "review", "customer", "case-study", "case"])) {
+    return ["quote-wall", "case-study-split", "featured-testimonial", "testimonial-wall"];
+  }
+
+  if (
+    sectionType === "features" ||
+    sectionType === "cards" ||
+    problems.has("cards_too_equal") ||
+    problems.has("too_repetitive") ||
+    problems.has("weak_hierarchy") ||
+    problems.has("flat_layout") ||
+    aiResult.layoutType === "equal_grid"
+  ) {
+    if (hasAnyKeyword(["tab", "tabs", "mode", "modes"])) {
+      return ["feature-tabs", "bento-grid", "featured-side-stack", "center-highlight"];
+    }
+    if (hasAnyKeyword(["integration", "integrations", "logo", "logos", "tools"])) {
+      return ["integration-logo-grid", "bento-grid", "featured-side-stack", "center-highlight"];
+    }
+    return ["bento-grid", "featured-side-stack", "center-highlight", "problem-solution-cards"];
+  }
+
+  return ["bento-grid", "analytics-overview", "resource-card-grid", "featured-side-stack"];
+}
+
+function templateCategoryForSection(sectionType: string): TemplateReference["category"] {
+  if (sectionType === "form") return "forms";
+  if (
+    sectionType === "hero" ||
+    sectionType === "features" ||
+    sectionType === "pricing" ||
+    sectionType === "cta" ||
+    sectionType === "cards" ||
+    sectionType === "dashboard"
+  ) {
+    return sectionType;
+  }
+
+  return "features";
 }
 
 function categoryMatches(sectionType: string, category: string) {

@@ -1,15 +1,14 @@
 import type {
   DetectionSummary,
   ElementCounts,
-  LayoutType,
   MatchedElement,
   RectangleSelectionPayload,
-  SectionType,
   SelectionRect,
   AIImagePreviewPayload,
   InPagePreviewPayload,
   StyleContext
 } from "../shared/types";
+import { detectSectionAndLayout, estimateCards } from "./sectionDetection";
 import { extractStyleTokens } from "./extractStyleTokens";
 import { extractUsedCssRules } from "./extractUsedCssRules";
 import type { StyleTokens } from "./extractStyleTokens";
@@ -1727,106 +1726,6 @@ function buildCounts(elements: MatchedElement[]): ElementCounts {
     cardsEstimate: estimateCards(elements),
     textLength
   };
-}
-
-function detectSectionAndLayout(
-  elements: MatchedElement[],
-  counts: ElementCounts
-): DetectionSummary {
-  const combinedText = elements.map((element) => element.text).join(" ").toLowerCase();
-  const reasons: string[] = [];
-  let sectionType: SectionType = "unknown";
-
-  if (counts.inputs >= 2) {
-    sectionType = "form";
-    reasons.push("multiple input controls detected");
-  } else if (/(price|pricing|\$|month|plan|pro|basic|starter|premium)/i.test(combinedText)) {
-    sectionType = "pricing";
-    reasons.push("pricing-related words or symbols detected");
-  } else if (/\b\d+(?:[%+]|\s?[km])\b/i.test(combinedText)) {
-    sectionType = "stats";
-    reasons.push("metric-like numbers detected");
-  } else if (counts.headings >= 1 && (counts.buttons + counts.links) >= 1) {
-    sectionType = "hero";
-    reasons.push("heading plus CTA-like controls detected");
-  } else if (counts.cardsEstimate >= 3) {
-    sectionType = "features";
-    reasons.push("repeated card-like blocks detected");
-  } else if ((counts.buttons + counts.links) >= 2) {
-    sectionType = "cta";
-    reasons.push("multiple action elements detected");
-  }
-
-  const layoutType = detectLayoutType(elements, reasons);
-  const confidence = Math.min(0.92, 0.35 + reasons.length * 0.16 + Math.min(elements.length, 20) / 100);
-
-  return {
-    sectionType,
-    layoutType,
-    confidence: Number(confidence.toFixed(2)),
-    reasons
-  };
-}
-
-function detectLayoutType(elements: MatchedElement[], reasons: string[]): LayoutType {
-  const blocks = elements
-    .filter((element) => element.rect.width >= 80 && element.rect.height >= 50)
-    .slice(0, 12);
-
-  if (blocks.length < 2) {
-    return "unknown";
-  }
-
-  const centersX = blocks.map((element) => element.rect.left + element.rect.width / 2);
-  const centersY = blocks.map((element) => element.rect.top + element.rect.height / 2);
-  const xSpread = Math.max(...centersX) - Math.min(...centersX);
-  const ySpread = Math.max(...centersY) - Math.min(...centersY);
-  const similarWidths = blocks.filter(
-    (element) => Math.abs(element.rect.width - blocks[0].rect.width) < blocks[0].rect.width * 0.25
-  ).length;
-  const topAligned = blocks.filter(
-    (element) => Math.abs(element.rect.top - blocks[0].rect.top) < 40
-  ).length;
-
-  if (blocks.length >= 3 && similarWidths >= 3 && topAligned >= 3) {
-    reasons.push("three or more similarly sized columns detected");
-    return "equal_grid";
-  }
-
-  if (blocks.length >= 2 && blocks.length <= 4 && topAligned >= 2 && xSpread > ySpread * 1.4) {
-    reasons.push("elements are mostly arranged horizontally");
-    return "horizontal_row";
-  }
-
-  if (blocks.length >= 2 && xSpread < ySpread * 0.55) {
-    reasons.push("elements are mostly stacked vertically");
-    return "vertical_stack";
-  }
-
-  if (blocks.length >= 2 && blocks.length <= 6 && xSpread > 180 && topAligned >= 2) {
-    reasons.push("two broad columns detected");
-    return "two_column";
-  }
-
-  return "unknown";
-}
-
-function estimateCards(elements: MatchedElement[]): number {
-  return elements.filter((element) => {
-    const className = element.className?.toLowerCase() ?? "";
-    const hasCardTag = ["article", "li"].includes(element.tagName);
-    const hasCardClass =
-      className.includes("card") ||
-      className.includes("feature") ||
-      className.includes("tile") ||
-      className.includes("item");
-    const hasCardShape =
-      element.rect.width >= 120 &&
-      element.rect.height >= 80 &&
-      element.style.borderRadius !== "0px";
-
-    return hasCardTag || hasCardClass || hasCardShape;
-  }).length;
 }
 
 function scoreElement(element: HTMLElement | SVGElement): number {

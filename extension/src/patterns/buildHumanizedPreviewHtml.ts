@@ -21,6 +21,39 @@ export type BuildHumanizedPreviewHtmlResult = {
   };
 };
 
+const metricPatternIds = new Set([
+  "metric-bento",
+  "hero-metric-support-stats",
+  "stats-highlight",
+  "analytics-overview",
+  "metric-trend-grid",
+  "stats-story-band"
+]);
+const comparisonPatternIds = new Set([
+  "plan-comparison-table",
+  "comparison-spec-table",
+  "comparison-matrix"
+]);
+const splitPatternIds = new Set([
+  "split-hero",
+  "split-cta",
+  "product-detail-split",
+  "checkout-summary-split",
+  "case-study-split",
+  "demo-panel-cta",
+  "before-after-hero",
+  "hero-dashboard-preview",
+  "hero-video-demo",
+  "hero-contained-card",
+  "hero-off-grid-visual"
+]);
+const formPatternIds = new Set([
+  "form-benefits-sidebar",
+  "split-auth-proof",
+  "onboarding-checklist-form",
+  "profile-settings-form"
+]);
+
 export function buildHumanizedPreviewHtml(
   input: BuildHumanizedPreviewHtmlInput
 ): BuildHumanizedPreviewHtmlResult {
@@ -120,9 +153,7 @@ function renderCard(
   }
 
   if (
-    patternId === "metric-bento" ||
-    patternId === "hero-metric-support-stats" ||
-    patternId === "stats-highlight"
+    metricPatternIds.has(patternId)
   ) {
     return renderStatCard(item, cardClasses, styleTokens);
   }
@@ -189,12 +220,24 @@ function patternGridClass(patternId: string) {
   if (patternId === "bento-grid") return "polishpilot-preview-bento-grid";
   if (patternId === "featured-side-stack") return "polishpilot-preview-featured-side-stack";
   if (patternId === "center-highlight") return "polishpilot-preview-center-highlight";
-  if (patternId === "workflow-feature-grid" || patternId === "step-flow") return "polishpilot-preview-step-grid";
-  if (patternId === "pricing-emphasis") return "polishpilot-preview-pricing-grid";
-  if (patternId === "split-hero" || patternId === "split-cta") return "polishpilot-preview-split-grid";
+  if (patternId === "workflow-feature-grid" || patternId === "step-flow" || patternId === "demo-steps-hero") return "polishpilot-preview-step-grid";
+  if (patternId === "pricing-emphasis" || patternId === "pricing-toggle") return "polishpilot-preview-pricing-grid";
+  if (comparisonPatternIds.has(patternId)) return "polishpilot-preview-comparison-grid";
+  if (splitPatternIds.has(patternId)) return "polishpilot-preview-split-grid";
   if (patternId === "hero-product-preview") return "polishpilot-preview-product-preview-grid";
-  if (patternId === "form-benefits-sidebar") return "polishpilot-preview-form-grid";
-  if (patternId === "metric-bento" || patternId === "hero-metric-support-stats") return "polishpilot-preview-metric-grid";
+  if (formPatternIds.has(patternId)) return "polishpilot-preview-form-grid";
+  if (metricPatternIds.has(patternId)) return "polishpilot-preview-metric-grid";
+  if (patternId === "activity-feed-sidebar" || patternId === "table-summary-rail" || patternId === "faq-sidebar") return "polishpilot-preview-sidebar-grid";
+  if (patternId === "kanban-board") return "polishpilot-preview-kanban-grid";
+  if (patternId === "settings-detail-pane" || patternId === "sidebar-app-shell") return "polishpilot-preview-app-shell-grid";
+  if (patternId === "magic-link-panel" || patternId === "card-cta" || patternId === "hero-email-capture" || patternId === "hero-image-background") return "polishpilot-preview-centered-panel-grid";
+  if (patternId === "command-center-nav" || patternId === "mega-menu-topbar") return "polishpilot-preview-nav-stack";
+  if (patternId === "footer-link-hub") return "polishpilot-preview-footer-grid";
+  if (patternId === "product-card-grid" || patternId === "resource-card-grid" || patternId === "quote-wall") return "polishpilot-preview-card-grid";
+  if (patternId === "changelog-timeline") return "polishpilot-preview-timeline-grid";
+  if (patternId === "feature-tabs" || patternId === "hero-tabs-preview") return "polishpilot-preview-tabs-grid";
+  if (patternId === "integration-logo-grid" || patternId === "hero-logo-cloud") return "polishpilot-preview-logo-grid";
+  if (patternId === "editorial-feature-stack") return "polishpilot-preview-editorial-stack";
   return "polishpilot-preview-generic-grid";
 }
 
@@ -207,7 +250,13 @@ function isFeaturedCard(index: number, patternId: string) {
       "center-highlight",
       "hero-product-preview",
       "metric-bento",
-      "hero-metric-support-stats"
+      "hero-metric-support-stats",
+      "analytics-overview",
+      "product-detail-split",
+      "before-after-hero",
+      "quote-wall",
+      "case-study-split",
+      "stats-story-band"
     ].includes(patternId)
   );
 }
@@ -444,11 +493,61 @@ function buildLayoutCss() {
 .polishpilot-preview-pricing-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
+.polishpilot-preview-comparison-grid {
+  grid-template-columns: 0.9fr repeat(3, minmax(0, 1fr));
+}
 .polishpilot-preview-split-grid,
 .polishpilot-preview-form-grid,
 .polishpilot-preview-product-preview-grid {
   grid-template-columns: 0.9fr 1.1fr;
   align-items: center;
+}
+.polishpilot-preview-sidebar-grid,
+.polishpilot-preview-app-shell-grid {
+  grid-template-columns: 1.35fr 0.75fr;
+}
+.polishpilot-preview-sidebar-grid .polishpilot-preview-card:first-child,
+.polishpilot-preview-app-shell-grid .polishpilot-preview-card:first-child {
+  grid-column: 1;
+  grid-row: span 2;
+}
+.polishpilot-preview-kanban-grid,
+.polishpilot-preview-card-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.polishpilot-preview-centered-panel-grid {
+  grid-template-columns: minmax(0, 0.72fr);
+  justify-content: center;
+}
+.polishpilot-preview-nav-stack,
+.polishpilot-preview-editorial-stack,
+.polishpilot-preview-timeline-grid,
+.polishpilot-preview-tabs-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+.polishpilot-preview-nav-stack .polishpilot-preview-card:first-child,
+.polishpilot-preview-tabs-grid .polishpilot-preview-card:first-child {
+  min-height: 72px;
+}
+.polishpilot-preview-footer-grid {
+  grid-template-columns: 1.25fr repeat(3, minmax(0, 0.8fr));
+}
+.polishpilot-preview-logo-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.polishpilot-preview-timeline-grid {
+  border-left: 2px solid var(--pp-accent-color, #10b981);
+  padding-left: 18px;
+}
+.polishpilot-preview-timeline-grid .polishpilot-preview-card::before {
+  content: "";
+  position: absolute;
+  left: -25px;
+  top: 22px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--pp-accent-color, #10b981);
 }
 .polishpilot-preview-generic-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -478,11 +577,25 @@ function buildLayoutCss() {
   .polishpilot-preview-form-grid,
   .polishpilot-preview-product-preview-grid,
   .polishpilot-preview-metric-grid,
+  .polishpilot-preview-comparison-grid,
+  .polishpilot-preview-sidebar-grid,
+  .polishpilot-preview-kanban-grid,
+  .polishpilot-preview-app-shell-grid,
+  .polishpilot-preview-centered-panel-grid,
+  .polishpilot-preview-nav-stack,
+  .polishpilot-preview-footer-grid,
+  .polishpilot-preview-card-grid,
+  .polishpilot-preview-timeline-grid,
+  .polishpilot-preview-tabs-grid,
+  .polishpilot-preview-logo-grid,
+  .polishpilot-preview-editorial-stack,
   .polishpilot-preview-generic-grid {
     grid-template-columns: 1fr;
   }
   .polishpilot-preview-bento-grid .polishpilot-preview-card-featured,
-  .polishpilot-preview-center-highlight .polishpilot-preview-card:first-child {
+  .polishpilot-preview-center-highlight .polishpilot-preview-card:first-child,
+  .polishpilot-preview-sidebar-grid .polishpilot-preview-card:first-child,
+  .polishpilot-preview-app-shell-grid .polishpilot-preview-card:first-child {
     grid-column: auto;
     grid-row: auto;
     max-width: none;

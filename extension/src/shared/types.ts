@@ -120,10 +120,7 @@ export type UIProblem =
   | "missing_microinteraction"
   | "unknown";
 
-export type SectionType = Extract<
-  UIBlockCategory,
-  "hero" | "features" | "cards" | "pricing" | "form" | "stats" | "cta" | "unknown"
->;
+export type SectionType = UIBlockCategory;
 
 export type LayoutType = Extract<
   UILayoutType,

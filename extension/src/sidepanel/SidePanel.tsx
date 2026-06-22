@@ -24,7 +24,6 @@ import {
   getGeneratedPreviews
 } from "../shared/generatedPreviewStore";
 import type { GeneratedPreviewImage } from "../shared/generatedPreviewTypes";
-import { PatternCard } from "../components/PatternCard";
 import { AccountPanel } from "../components/AccountPanel";
 import { getAuthHeaders } from "../shared/authService";
 import { UncodixifyCheck } from "../components/UncodixifyCheck";
@@ -188,7 +187,7 @@ export function SidePanel() {
     useState<LayoutPatternId | null>(null);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const [selectedAnimationId, setSelectedAnimationId] = useState<string | null>(null);
-  const [copiedPatternId, setCopiedPatternId] = useState<LayoutPatternId | null>(null);
+  const [copiedMainPrompt, setCopiedMainPrompt] = useState(false);
   const [pagePreviewStatus, setPagePreviewStatus] = useState("");
   const [lastAnalyzedCaptureId, setLastAnalyzedCaptureId] = useState<string | null>(
     null
@@ -702,7 +701,7 @@ export function SidePanel() {
     await chrome.tabs.create({ url: targetUrl });
   }
 
-  async function copyPatternPrompt(pattern: LayoutPattern) {
+  async function copyCursorPrompt() {
     const prompt = cursorPromptText;
     logPromptSafely("cursor", prompt, {
       designDirectionSelected,
@@ -711,9 +710,9 @@ export function SidePanel() {
       hasAnimation: Boolean(selectedAnimation)
     });
     await navigator.clipboard.writeText(prompt);
-    setCopiedPatternId(pattern.id);
+    setCopiedMainPrompt(true);
     window.setTimeout(() => {
-      setCopiedPatternId((current) => (current === pattern.id ? null : current));
+      setCopiedMainPrompt(false);
     }, 1800);
   }
 
@@ -1019,7 +1018,7 @@ export function SidePanel() {
     setSelectedTemplateId(null);
     setSelectedAnimationId(null);
     setExcludedUncodixRuleIds([]);
-    setCopiedPatternId(null);
+    setCopiedMainPrompt(false);
     setAIPreviewStatus("idle");
     setAIPreviewError("");
     setAIPreviewDebug({});
@@ -1262,8 +1261,9 @@ export function SidePanel() {
   }
 
   const includedFixCount = includedUncodixRuleIds.length;
+  const canCopyCursorPrompt = Boolean(capture || effectiveAIResult || includedFixCount);
   const copyPromptLabel =
-    selectedPattern && copiedPatternId === selectedPattern.id
+    copiedMainPrompt
       ? "Copied"
       : includedFixCount
         ? `Copy Prompt (${includedFixCount} ${includedFixCount === 1 ? "fix" : "fixes"})`
@@ -1436,10 +1436,17 @@ export function SidePanel() {
       <UncodixifyCheck
         result={uncodixifyResult}
         mode={mode}
-        variant="summary"
+        variant={mode === "developer" ? "full" : "summary"}
         geminiRaw={effectiveAIResult?.uncodixify ?? null}
         includedRuleIds={includedUncodixRuleIds}
         onToggleRule={toggleUncodixRule}
+      />
+
+      <LayoutIdeasPanel
+        patterns={suggestedPatterns}
+        selectedPatternId={selectedPatternId}
+        onOpenAll={() => void openDesignIdeasWindow()}
+        onSelect={(pattern) => void selectPattern(pattern)}
       />
 
       <section className="dh-card mt-4 p-4">
@@ -1447,7 +1454,7 @@ export function SidePanel() {
         <div className="mt-3 grid gap-2">
           <button
             className="dh-button-secondary w-full px-3 py-3 text-sm"
-            disabled={!effectiveAIResult}
+            disabled={!uncodixifyResult}
             onClick={() => void openRecommendationsWindow()}
             type="button"
           >
@@ -1455,7 +1462,7 @@ export function SidePanel() {
           </button>
           <button
             className="dh-button-secondary w-full px-3 py-3 text-sm"
-            disabled={!effectiveAIResult}
+            disabled={!suggestedPatterns.length}
             onClick={() => void openDesignIdeasWindow()}
             type="button"
           >
@@ -1471,8 +1478,8 @@ export function SidePanel() {
           </button>
           <button
             className="dh-button-primary w-full px-3 py-3.5 text-base"
-            disabled={!selectedPattern}
-            onClick={() => (selectedPattern ? void copyPatternPrompt(selectedPattern) : undefined)}
+            disabled={!canCopyCursorPrompt}
+            onClick={() => void copyCursorPrompt()}
             type="button"
           >
             {copyPromptLabel}
@@ -2058,6 +2065,95 @@ function Metric({ label, value }: { label: string; value: number | string }) {
   );
 }
 
+function LayoutIdeasPanel({
+  patterns,
+  selectedPatternId,
+  onOpenAll,
+  onSelect
+}: {
+  patterns: LayoutPattern[];
+  selectedPatternId: LayoutPatternId | null;
+  onOpenAll: () => void;
+  onSelect: (pattern: LayoutPattern) => void;
+}) {
+  const visiblePatterns = patterns.slice(0, 3);
+
+  return (
+    <section className="dh-card mt-4 p-4">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h2 className="text-lg font-black text-pilot-text">Layout Ideas</h2>
+          <p className="mt-1 text-sm leading-6 text-pilot-muted">
+            Pick a structure to include in the Cursor prompt.
+          </p>
+        </div>
+        <span className="dh-chip">{patterns.length ? `${patterns.length} ideas` : "Waiting"}</span>
+      </div>
+
+      {visiblePatterns.length ? (
+        <div className="mt-3 space-y-2">
+          {visiblePatterns.map((pattern) => {
+            const selected = selectedPatternId === pattern.id;
+
+            return (
+              <article
+                className={`rounded-lg border p-3 transition ${
+                  selected
+                    ? "border-pilot-primary/80 bg-pilot-primary/10"
+                    : "border-pilot-border bg-pilot-card/45"
+                }`}
+                key={pattern.id}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <h3 className="text-sm font-black text-pilot-text">{pattern.name}</h3>
+                    <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.08em] text-pilot-primary/80">
+                      {pattern.category}
+                    </p>
+                  </div>
+                  {selected ? (
+                    <span className="shrink-0 rounded-full border border-pilot-primary/40 bg-pilot-primary/15 px-2 py-0.5 text-[10px] font-semibold text-pilot-primaryDeep">
+                      Selected
+                    </span>
+                  ) : null}
+                </div>
+                <p className="mt-2 line-clamp-2 text-xs leading-5 text-pilot-muted">
+                  {pattern.problemSolved[0] ?? pattern.bestFor}
+                </p>
+                <button
+                  className={`mt-3 w-full rounded-lg px-2.5 py-2 text-xs font-semibold transition ${
+                    selected
+                      ? "bg-pilot-primary text-white hover:bg-pilot-primaryDeep"
+                      : "bg-pilot-card text-pilot-text hover:bg-pilot-card"
+                  }`}
+                  onClick={() => onSelect(pattern)}
+                  type="button"
+                >
+                  {selected ? "Selected for prompt" : "Use layout"}
+                </button>
+              </article>
+            );
+          })}
+
+          {patterns.length > visiblePatterns.length ? (
+            <button
+              className="dh-button-secondary w-full px-3 py-2.5 text-sm"
+              onClick={onOpenAll}
+              type="button"
+            >
+              Open all layout ideas
+            </button>
+          ) : null}
+        </div>
+      ) : (
+        <p className="mt-3 rounded-lg border border-pilot-border bg-pilot-card/45 p-3 text-sm leading-6 text-pilot-muted">
+          Select an area to generate layout ideas.
+        </p>
+      )}
+    </section>
+  );
+}
+
 function TemplateReferenceCard({
   mode,
   reference,
@@ -2500,6 +2596,7 @@ function buildLocalKeywords(capture: RectangleCapture) {
   const rawKeywords = [
     capture.detected.sectionType,
     capture.detected.layoutType,
+    ...capture.detected.reasons,
     capture.counts.cardsEstimate ? "cards" : "",
     capture.counts.buttons ? "button cta" : "",
     capture.counts.inputs ? "form input lead-capture" : "",
