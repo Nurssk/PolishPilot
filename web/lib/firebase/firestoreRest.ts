@@ -81,6 +81,74 @@ export async function createFirestoreDocument(
   return (await response.json()) as FirestoreDocument;
 }
 
+export async function createFirestoreAutoIdDocument(
+  collection: string,
+  fields: Record<string, FirestoreValue>
+): Promise<FirestoreDocument> {
+  const response = await firestoreFetch(`/${encodeURIComponent(collection)}`, {
+    method: "POST",
+    body: JSON.stringify({ fields })
+  });
+
+  if (!response.ok) {
+    throw new Error(await firestoreErrorMessage(response, "create"));
+  }
+  return (await response.json()) as FirestoreDocument;
+}
+
+export async function deleteFirestoreDocument(
+  collection: string,
+  documentId: string
+): Promise<void> {
+  const response = await firestoreFetch(documentPath(collection, documentId), {
+    method: "DELETE"
+  });
+
+  if (!response.ok && response.status !== 404) {
+    throw new Error(await firestoreErrorMessage(response, "delete"));
+  }
+}
+
+export async function queryFirestoreDocuments(
+  collection: string,
+  filters: Record<string, FirestoreValue>
+): Promise<FirestoreDocument[]> {
+  const filterEntries = Object.entries(filters);
+  const queryFilters = filterEntries.map(([fieldPath, value]) => ({
+    fieldFilter: {
+      field: { fieldPath },
+      op: "EQUAL",
+      value
+    }
+  }));
+
+  const response = await firestoreFetch(":runQuery", {
+    method: "POST",
+    body: JSON.stringify({
+      structuredQuery: {
+        from: [{ collectionId: collection }],
+        ...(queryFilters.length === 1
+          ? { where: queryFilters[0] }
+          : {
+              where: {
+                compositeFilter: {
+                  op: "AND",
+                  filters: queryFilters
+                }
+              }
+            })
+      }
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error(await firestoreErrorMessage(response, "query"));
+  }
+
+  const rows = (await response.json()) as Array<{ document?: FirestoreDocument }>;
+  return rows.map((row) => row.document).filter((document): document is FirestoreDocument => Boolean(document));
+}
+
 export function stringField(value: string): FirestoreValue {
   return { stringValue: value };
 }

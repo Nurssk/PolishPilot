@@ -1,9 +1,9 @@
-import { ExtensionAuthPage } from "./ExtensionAuthPage";
+import { redirect } from "next/navigation";
 
 export const metadata = {
-  title: "PolishPilot Extension Auth"
+  title: "Authorize Extension"
 };
 
 export default function Page() {
-  return <ExtensionAuthPage />;
+  redirect("/extension/authorize");
 }
