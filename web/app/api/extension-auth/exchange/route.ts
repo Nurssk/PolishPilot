@@ -34,9 +34,25 @@ export async function POST(request: Request) {
     );
   }
 
+  let token: string;
+  try {
+    token = createAppSessionToken(result.email);
+  } catch {
+    return json(
+      {
+        ok: false,
+        error: {
+          code: "TOKEN_CREATE_FAILED",
+          message: "Could not create an extension session. Try again."
+        }
+      },
+      500
+    );
+  }
+
   return json(
     {
-      token: createAppSessionToken(result.email),
+      token,
       tokenType: "Bearer",
       expiresInSeconds: SESSION_TTL_SECONDS,
       email: result.email

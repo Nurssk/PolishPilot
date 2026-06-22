@@ -137,6 +137,9 @@ function inputClassName(compact: boolean): string {
 }
 
 function messageFor(caught: unknown): string {
-  const code: AuthErrorCode = caught instanceof AuthError ? caught.code : "UNKNOWN";
+  if (caught instanceof AuthError) {
+    return caught.message || FRIENDLY_MESSAGE[caught.code];
+  }
+  const code: AuthErrorCode = "UNKNOWN";
   return FRIENDLY_MESSAGE[code];
 }

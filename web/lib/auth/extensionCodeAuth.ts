@@ -1,7 +1,6 @@
 import { randomInt, timingSafeEqual } from "node:crypto";
 import {
   createFirestoreAutoIdDocument,
-  deleteFirestoreDocument,
   queryFirestoreDocuments,
   readString,
   stringField
@@ -22,7 +21,7 @@ export type ExtensionCodeExchangeResult =
   | {
       ok: false;
       status: number;
-      code: "INVALID_EMAIL" | "INVALID_CODE" | "CODE_EXPIRED" | "CODE_USED";
+      code: "INVALID_EMAIL" | "INVALID_CODE";
       message: string;
     };
 
@@ -37,8 +36,6 @@ export async function createExtensionAuthCode(email: string): Promise<ExtensionA
   if (!normalizedEmail) {
     throw new Error("Cannot create an extension code without a valid email.");
   }
-
-  await deleteExistingCodesForEmail(normalizedEmail);
 
   const code = generateExtensionCode();
   await createFirestoreAutoIdDocument(EXTENSION_CODES_COLLECTION, {
@@ -91,31 +88,7 @@ export async function exchangeExtensionAuthCode(
     return invalidCode();
   }
 
-  if (isExpired(matchingDocument.createTime)) {
-    await deleteDocumentByName(matchingDocument.name);
-    return {
-      ok: false,
-      status: 410,
-      code: "CODE_EXPIRED",
-      message: "This code expired. Generate a new code on the website."
-    };
-  }
-
-  await deleteDocumentByName(matchingDocument.name);
   return { ok: true, email };
-}
-
-async function deleteExistingCodesForEmail(email: string): Promise<void> {
-  const documents = await queryFirestoreDocuments(EXTENSION_CODES_COLLECTION, {
-    email: stringField(email)
-  });
-  await Promise.all(documents.map((document) => deleteDocumentByName(document.name)));
-}
-
-async function deleteDocumentByName(name: string): Promise<void> {
-  const documentId = name.split("/").pop();
-  if (!documentId) return;
-  await deleteFirestoreDocument(EXTENSION_CODES_COLLECTION, documentId);
 }
 
 function invalidCode(): ExtensionCodeExchangeResult {
@@ -133,11 +106,6 @@ function generateExtensionCode(): string {
     code += CODE_ALPHABET[randomInt(CODE_ALPHABET.length)];
   }
   return code;
-}
-
-function isExpired(createTime: string | undefined): boolean {
-  if (!createTime) return false;
-  return Date.parse(createTime) + EXTENSION_CODE_TTL_MS <= Date.now();
 }
 
 function safeEqual(left: string, right: string): boolean {
