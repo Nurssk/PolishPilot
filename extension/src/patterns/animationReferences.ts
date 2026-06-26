@@ -1,4 +1,21 @@
-export type AnimationSource = "reactbits";
+import { watermelonAnimationReferences } from "./watermelonAnimationReferences";
+import { motionPrimitivesAnimationReferences } from "./motionPrimitivesAnimationReferences";
+import { animateUiAnimationReferences } from "./animateUiAnimationReferences";
+import { magicUiAnimationReferences } from "./magicUiAnimationReferences";
+import { aceternityAnimationReferences } from "./aceternityAnimationReferences";
+import { motionGuidelineReferences } from "./motionGuidelineReferences";
+
+export type AnimationSource =
+  | "reactbits"
+  | "watermelon-ui"
+  | "motion-primitives"
+  | "animate-ui"
+  | "magic-ui"
+  | "aceternity-ui"
+  | "carbon-motion"
+  | "material-motion"
+  | "apple-hig"
+  | "mdn-web-docs";
 
 export type AnimationCategory =
   | "text"
@@ -49,7 +66,7 @@ export type AnimationReference = {
   scrapedAt: string;
 };
 
-export const animationReferences: AnimationReference[] = [
+const reactbitsAnimationReferences: AnimationReference[] = [
   {
     "id": "reactbits-animations-animated-content",
     "source": "reactbits",
@@ -3509,4 +3526,14 @@ export const animationReferences: AnimationReference[] = [
     "usageNote": "Use as animation inspiration only. Respect ReactBits license and do not copy code unless allowed.",
     "scrapedAt": "2026-06-06T17:29:57.590Z"
   }
+];
+
+export const animationReferences: AnimationReference[] = [
+  ...reactbitsAnimationReferences,
+  ...watermelonAnimationReferences,
+  ...motionPrimitivesAnimationReferences,
+  ...animateUiAnimationReferences,
+  ...magicUiAnimationReferences,
+  ...aceternityAnimationReferences,
+  ...motionGuidelineReferences
 ];

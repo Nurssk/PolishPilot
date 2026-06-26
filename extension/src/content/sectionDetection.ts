@@ -3,7 +3,8 @@ import type {
   ElementCounts,
   LayoutType,
   MatchedElement,
-  SectionType
+  SectionType,
+  SourceSectionPart
 } from "../shared/types";
 
 type SectionCandidate = {
@@ -18,6 +19,28 @@ type HeroSignalResult = {
   variant?: string;
 };
 
+type SourceSectionDetectionContext = Pick<
+  SourceSectionPart,
+  | "tagName"
+  | "id"
+  | "className"
+  | "role"
+  | "ariaLabel"
+  | "textSummary"
+  | "selectionOverlap"
+  | "counts"
+  | "headingSnippets"
+  | "ctaSnippets"
+  | "mediaSnippets"
+  | "childElementCount"
+  | "domPath"
+>;
+
+type DetectionOptions = {
+  selectedSourceSection?: SourceSectionDetectionContext | null;
+  sourceSections?: SourceSectionDetectionContext[];
+};
+
 const HERO_SOURCE_IDENTITY_RE =
   /hero|landing|cta|banner|jumbotron|above-fold|headline|intro|masthead|splash/i;
 const CTA_TEXT_RE = /start|get|try|watch|demo|book|join|sign|learn|contact|download|buy|subscribe/i;
@@ -26,17 +49,26 @@ const TRUST_TEXT_RE =
 
 export function detectSectionAndLayout(
   elements: MatchedElement[],
-  counts: ElementCounts
+  counts: ElementCounts,
+  options: DetectionOptions = {}
 ): DetectionSummary {
   const candidates = [
+    options.selectedSourceSection
+      ? scoreSourceSection(options.selectedSourceSection, elements, counts)
+      : null,
     scoreHeroSection(elements, counts),
     scorePricingSection(elements, counts),
     scoreStatsSection(elements, counts),
     scoreFormSection(elements, counts),
     scoreNavigationSection(elements, counts),
     scoreFeaturesSection(elements, counts),
+    scoreTestimonialsSection(elements, counts),
+    scoreFooterSection(elements, counts),
+    scoreDashboardSection(elements, counts),
+    scoreAuthSection(elements, counts),
     scoreCtaSection(elements, counts)
-  ].sort((a, b) => b.score - a.score);
+  ].filter((candidate): candidate is SectionCandidate => Boolean(candidate))
+    .sort((a, b) => b.score - a.score);
 
   const best = candidates[0] ?? { sectionType: "unknown", score: 0, reasons: [] };
   const sectionType = best.score >= 35 ? best.sectionType : "unknown";
@@ -54,22 +86,212 @@ export function detectSectionAndLayout(
   };
 }
 
+function scoreSourceSection(
+  source: SourceSectionDetectionContext,
+  elements: MatchedElement[],
+  fallbackCounts: ElementCounts
+): SectionCandidate {
+  const counts = source.counts ?? fallbackCounts;
+  const identity = [
+    source.tagName,
+    source.id,
+    source.className,
+    source.role,
+    source.ariaLabel,
+    source.domPath
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+  const text = [source.textSummary, combinedText(elements)].join(" ").toLowerCase();
+
+  if (
+    (source.tagName === "nav" || /\b(nav|navbar|navigation|menu|topbar)\b/i.test(identity)) &&
+    counts.links >= 2 &&
+    counts.textLength < 420
+  ) {
+    return {
+      sectionType: "navigation",
+      score: 92,
+      reasons: ["explicit navigation source container detected"]
+    };
+  }
+
+  if (source.tagName === "footer" || /\bfooter\b|site-footer/i.test(identity)) {
+    return {
+      sectionType: "footer",
+      score: 88,
+      reasons: ["explicit footer source container detected"]
+    };
+  }
+
+  if (source.tagName === "form" && counts.inputs >= 1) {
+    return {
+      sectionType: "form",
+      score: 88,
+      reasons: ["explicit form source container detected"]
+    };
+  }
+
+  const candidates: SectionCandidate[] = [
+    scoreSourceIdentity("navigation", identity, text, [
+      { re: /\b(nav|navbar|navigation|menu|topbar|header)\b/i, points: 54, reason: "source container is navigation/header-like" },
+      { re: /\b(header)\b/i, points: 30, reason: "header source tag detected" }
+    ], counts),
+    scoreSourceIdentity("footer", identity, text, [
+      { re: /\b(footer|site-footer)\b/i, points: 58, reason: "source container is footer-like" }
+    ], counts),
+    scoreSourceIdentity("auth", identity, text, [
+      { re: /\b(auth|login|sign-in|signin|sign-up|signup|password)\b/i, points: 58, reason: "source identity indicates auth flow" }
+    ], counts),
+    scoreSourceIdentity("form", identity, text, [
+      { re: /\b(form|contact|lead|newsletter|waitlist)\b/i, points: 54, reason: "source container is form/lead-capture-like" }
+    ], counts),
+    scoreSourceIdentity("pricing", identity, text, [
+      { re: /\b(pricing|price|plans?|billing|subscription)\b/i, points: 60, reason: "source identity indicates pricing" }
+    ], counts),
+    scoreSourceIdentity("testimonials", identity, text, [
+      { re: /\b(testimonials?|reviews?|quotes?|customers?|social-proof)\b/i, points: 58, reason: "source identity indicates testimonials/social proof" }
+    ], counts),
+    scoreSourceIdentity("stats", identity, text, [
+      { re: /\b(stats?|metrics?|kpi|numbers?|results?)\b/i, points: 56, reason: "source identity indicates stats/metrics" }
+    ], counts),
+    scoreSourceIdentity("dashboard", identity, text, [
+      { re: /\b(dashboard|analytics|metrics|widgets?|chart|kpi)\b/i, points: 54, reason: "source identity indicates dashboard/metrics" }
+    ], counts),
+    scoreSourceIdentity("features", identity, text, [
+      { re: /\b(features?|benefits?|cards?|grid|integrations?|workflow|how-it-works)\b/i, points: 54, reason: "source identity indicates feature/card section" }
+    ], counts),
+    scoreSourceIdentity("cta", identity, text, [
+      { re: /\b(cta|call-to-action|banner)\b/i, points: 52, reason: "source identity indicates CTA section" }
+    ], counts),
+    scoreSourceIdentity("hero", identity, text, [
+      { re: HERO_SOURCE_IDENTITY_RE, points: 64, reason: "source identity indicates hero/landing section" }
+    ], counts)
+  ];
+
+  const best = candidates.sort((a, b) => b.score - a.score)[0] ?? {
+    sectionType: "unknown",
+    score: 0,
+    reasons: []
+  };
+
+  if (source.selectionOverlap >= 0.55) {
+    best.score += 10;
+    best.reasons.push("source section strongly overlaps selected rectangle");
+  } else if (source.selectionOverlap >= 0.25) {
+    best.score += 5;
+    best.reasons.push("source section partially overlaps selected rectangle");
+  }
+
+  if (source.headingSnippets.length) {
+    best.score += 6;
+    best.reasons.push("source section includes heading text");
+  }
+  if (source.ctaSnippets.length && ["hero", "cta", "pricing", "form", "auth"].includes(best.sectionType)) {
+    best.score += 7;
+    best.reasons.push("source section includes CTA/action text");
+  }
+  if (source.mediaSnippets.length && ["hero", "features", "dashboard"].includes(best.sectionType)) {
+    best.score += 5;
+    best.reasons.push("source section includes media/visual nodes");
+  }
+
+  return best;
+}
+
+function scoreSourceIdentity(
+  sectionType: SectionType,
+  identity: string,
+  text: string,
+  rules: Array<{ re: RegExp; points: number; reason: string }>,
+  counts: ElementCounts
+): SectionCandidate {
+  let score = 0;
+  const reasons: string[] = [];
+
+  for (const rule of rules) {
+    if (rule.re.test(identity) || rule.re.test(text)) {
+      score += rule.points;
+      reasons.push(rule.reason);
+      break;
+    }
+  }
+
+  if (sectionType === "pricing" && /(price|pricing|\$|month|year|plan|subscription)/i.test(text)) {
+    score += 18;
+    reasons.push("source text contains pricing language");
+  }
+  if (sectionType === "features" && counts.cardsEstimate >= 3) {
+    score += 12;
+    reasons.push("source section has repeated card-like children");
+  }
+  if (sectionType === "form" && counts.inputs >= 1) {
+    score += 22;
+    reasons.push("source section contains form inputs");
+  }
+  if (sectionType === "auth" && counts.inputs >= 1) {
+    score += 18;
+    reasons.push("source section contains auth inputs");
+  }
+  if (sectionType === "navigation" && counts.links >= 3 && counts.textLength < 320) {
+    score += 16;
+    reasons.push("source section is a low-density link cluster");
+  }
+  if (sectionType === "footer" && counts.links >= 3) {
+    score += 12;
+    reasons.push("source footer contains link groups");
+  }
+  if (sectionType === "testimonials" && TRUST_TEXT_RE.test(text)) {
+    score += 18;
+    reasons.push("source text contains review/trust language");
+  }
+  if (sectionType === "stats" && /\b\d+(?:[%+]|\s?[km])\b/i.test(text)) {
+    score += 18;
+    reasons.push("source text contains metric values");
+  }
+  if (sectionType === "cta" && CTA_TEXT_RE.test(text) && counts.totalElements <= 20) {
+    score += 16;
+    reasons.push("source text contains CTA language");
+  }
+
+  return { sectionType, score, reasons };
+}
+
 export function estimateCards(elements: MatchedElement[]): number {
   return elements.filter((element) => {
     const className = element.className?.toLowerCase() ?? "";
+    const identity = [
+      element.id,
+      className,
+      element.role,
+      element.ariaLabel
+    ]
+      .filter(Boolean)
+      .join(" ");
     const hasCardTag = ["article", "li"].includes(element.tagName);
     const hasCardClass =
-      className.includes("card") ||
-      className.includes("feature") ||
-      className.includes("tile") ||
-      className.includes("item");
+      /\b(card|feature|tile|item|step|plan|price|testimonial|review|metric|stat|panel|box|cell|widget)\b/i.test(identity);
+    const hasSurface =
+      hasVisibleSurface(element.style.backgroundColor) ||
+      hasVisibleSurface(element.style.borderColor) ||
+      element.style.boxShadow !== "none" ||
+      element.style.borderRadius !== "0px";
     const hasCardShape =
       element.rect.width >= 120 &&
       element.rect.height >= 80 &&
-      element.style.borderRadius !== "0px";
+      element.rect.width <= 760 &&
+      element.rect.height <= 760 &&
+      hasSurface;
 
     return hasCardTag || hasCardClass || hasCardShape;
   }).length;
+}
+
+function hasVisibleSurface(value: string | undefined): boolean {
+  if (!value || value === "transparent") return false;
+  if (/rgba?\(\s*0\s*,\s*0\s*,\s*0\s*,\s*0\s*\)/i.test(value)) return false;
+  return value !== "none";
 }
 
 function scoreHeroSection(
@@ -230,6 +452,79 @@ function scoreFeaturesSection(elements: MatchedElement[], counts: ElementCounts)
   }
 
   return { sectionType: "features", score, reasons };
+}
+
+function scoreTestimonialsSection(elements: MatchedElement[], counts: ElementCounts): SectionCandidate {
+  const text = combinedText(elements);
+  const identity = combinedIdentity(elements);
+  const reasons: string[] = [];
+  let score = 0;
+
+  if (/\b(testimonials?|reviews?|quotes?|customers?|rating|stars?|trusted|loved by)\b/i.test(`${text} ${identity}`)) {
+    score += 44;
+    reasons.push("testimonial/review source text detected");
+  }
+  if (counts.cardsEstimate >= 2 && /(said|says|review|customer|founder|ceo|rating)/i.test(text)) {
+    score += 14;
+    reasons.push("repeated testimonial-like cards detected");
+  }
+
+  return { sectionType: "testimonials", score, reasons };
+}
+
+function scoreFooterSection(elements: MatchedElement[], counts: ElementCounts): SectionCandidate {
+  const identity = combinedIdentity(elements);
+  const text = combinedText(elements);
+  const linkDense = counts.links >= 3 && counts.textLength < 700;
+  const reasons: string[] = [];
+  let score = 0;
+
+  if (/\bfooter\b|site-footer|copyright|privacy|terms/i.test(`${identity} ${text}`)) {
+    score += 48;
+    reasons.push("footer-like source identity or text detected");
+  }
+  if (linkDense && /privacy|terms|contact|company|resources|docs/i.test(text)) {
+    score += 10;
+    reasons.push("footer-like link group detected");
+  }
+
+  return { sectionType: "footer", score, reasons };
+}
+
+function scoreDashboardSection(elements: MatchedElement[], counts: ElementCounts): SectionCandidate {
+  const text = combinedText(elements);
+  const identity = combinedIdentity(elements);
+  const reasons: string[] = [];
+  let score = 0;
+
+  if (/(dashboard|analytics|chart|widget|kpi|revenue|pipeline|activity|table)/i.test(`${text} ${identity}`)) {
+    score += 38;
+    reasons.push("dashboard/analytics language detected");
+  }
+  if (counts.cardsEstimate >= 3 && /\b\d+(?:[%+]|\s?[km])\b/i.test(text)) {
+    score += 16;
+    reasons.push("dashboard-like metric widget group detected");
+  }
+
+  return { sectionType: "dashboard", score, reasons };
+}
+
+function scoreAuthSection(elements: MatchedElement[], counts: ElementCounts): SectionCandidate {
+  const text = combinedText(elements);
+  const identity = combinedIdentity(elements);
+  const reasons: string[] = [];
+  let score = 0;
+
+  if (/(auth|login|log in|sign in|signin|sign up|signup|password|magic link)/i.test(`${text} ${identity}`)) {
+    score += 46;
+    reasons.push("auth/login source text detected");
+  }
+  if (counts.inputs >= 1 && /(password|email|account)/i.test(text)) {
+    score += 16;
+    reasons.push("auth input controls detected");
+  }
+
+  return { sectionType: "auth", score, reasons };
 }
 
 function scoreCtaSection(elements: MatchedElement[], counts: ElementCounts): SectionCandidate {
@@ -478,6 +773,17 @@ function boundsOf(elements: MatchedElement[]): Bounds {
 
 function combinedText(elements: MatchedElement[]): string {
   return elements.map((element) => element.text).join(" ").toLowerCase();
+}
+
+function combinedIdentity(elements: MatchedElement[]): string {
+  return elements
+    .map((element) =>
+      [element.tagName, element.id, element.className, element.role, element.ariaLabel]
+        .filter(Boolean)
+        .join(" ")
+    )
+    .join(" ")
+    .toLowerCase();
 }
 
 function parsePx(value: string | undefined): number {

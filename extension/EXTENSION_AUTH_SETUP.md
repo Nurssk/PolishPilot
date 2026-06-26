@@ -11,7 +11,7 @@ Google popup, `chrome.identity`, or `chrome.offscreen` inside the extension.
 3. Website redirects to `/extension/code` and shows a 6-character code.
 4. User copies the code into the extension with their email.
 5. Extension exchanges the email/code at:
-   `https://www.beuniq.design/api/extension-auth/exchange`
+   `https://polish-pilot.vercel.app/api/extension-auth/exchange`
 6. Extension stores the returned bearer token in `chrome.storage.local`.
 7. Extension sends the token on API requests:
    `Authorization: Bearer <token>`

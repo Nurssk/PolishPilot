@@ -1,7 +1,7 @@
 // Fixture tests for local section identification.
 // Run with: npx tsx extension/src/content/sectionDetection.test.ts
 import assert from "node:assert/strict";
-import type { ElementCounts, MatchedElement } from "../shared/types";
+import type { ElementCounts, MatchedElement, SourceSectionPart } from "../shared/types";
 import { detectSectionAndLayout, estimateCards } from "./sectionDetection";
 
 const tests: Array<[string, () => void]> = [];
@@ -115,6 +115,117 @@ test("short CTA-only block classifies as cta", () => {
   assert.equal(result.sectionType, "cta");
 });
 
+test("source div identity classifies pricing before generic cards", () => {
+  const elements = [
+    el("div", "Starter", rect(40, 100, 220, 180), { className: "plan-card" }),
+    el("div", "$19 / month", rect(60, 150, 160, 42), { className: "price" }),
+    el("div", "Pro", rect(290, 100, 220, 180), { className: "plan-card" }),
+    el("div", "$49 / month", rect(310, 150, 160, 42), { className: "price" }),
+    el("div", "Business", rect(540, 100, 220, 180), { className: "plan-card" }),
+    el("button", "Start trial", rect(565, 225, 120, 40), { className: "button" })
+  ];
+  const elementCounts = counts(elements);
+
+  const result = detectSectionAndLayout(elements, elementCounts, {
+    selectedSourceSection: source("div", "pricing-plans", "Choose a plan that fits your team", elementCounts)
+  });
+
+  assert.equal(result.sectionType, "pricing");
+});
+
+test("source div identity classifies feature grid", () => {
+  const elements = [
+    el("div", "Fast setup", rect(40, 100, 200, 120), { className: "feature-card" }),
+    el("div", "Reusable templates", rect(270, 100, 200, 120), { className: "feature-card" }),
+    el("div", "Workflow automation", rect(500, 100, 200, 120), { className: "feature-card" })
+  ];
+  const elementCounts = counts(elements);
+
+  const result = detectSectionAndLayout(elements, elementCounts, {
+    selectedSourceSection: source("div", "features-grid", "Features built for product teams", elementCounts)
+  });
+
+  assert.equal(result.sectionType, "features");
+});
+
+test("source div identity classifies testimonials", () => {
+  const elements = [
+    el("div", "This saved our launch week.", rect(40, 100, 260, 130), { className: "quote-card" }),
+    el("div", "Customers love the workflow.", rect(330, 100, 260, 130), { className: "quote-card" })
+  ];
+  const elementCounts = counts(elements);
+
+  const result = detectSectionAndLayout(elements, elementCounts, {
+    selectedSourceSection: source("div", "testimonial-wall", "Customer reviews and testimonials", elementCounts)
+  });
+
+  assert.equal(result.sectionType, "testimonials");
+});
+
+test("source form tag classifies form", () => {
+  const elements = [
+    el("input", "", rect(40, 100, 280, 40)),
+    el("input", "", rect(40, 154, 280, 40)),
+    el("button", "Join waitlist", rect(40, 208, 150, 44))
+  ];
+  const elementCounts = counts(elements);
+
+  const result = detectSectionAndLayout(elements, elementCounts, {
+    selectedSourceSection: source("form", "waitlist-form", "Join the waitlist with your email", elementCounts)
+  });
+
+  assert.equal(result.sectionType, "form");
+});
+
+test("source nav and footer avoid hero/card recommendations", () => {
+  const navElements = [
+    el("a", "Product", rect(40, 20, 80, 32)),
+    el("a", "Pricing", rect(140, 20, 80, 32)),
+    el("a", "Docs", rect(240, 20, 60, 32)),
+    el("a", "Login", rect(320, 20, 70, 32))
+  ];
+  const footerElements = [
+    el("a", "Privacy", rect(40, 500, 80, 32)),
+    el("a", "Terms", rect(140, 500, 70, 32)),
+    el("a", "Contact", rect(230, 500, 80, 32)),
+    el("p", "Copyright 2026", rect(40, 550, 180, 24))
+  ];
+  const navCounts = counts(navElements);
+  const footerCounts = counts(footerElements);
+
+  assert.equal(
+    detectSectionAndLayout(navElements, navCounts, {
+      selectedSourceSection: source("nav", "site-nav", "Product Pricing Docs Login", navCounts)
+    }).sectionType,
+    "navigation"
+  );
+  assert.equal(
+    detectSectionAndLayout(footerElements, footerCounts, {
+      selectedSourceSection: source("footer", "site-footer", "Privacy Terms Contact Copyright", footerCounts)
+    }).sectionType,
+    "footer"
+  );
+});
+
+test("selected source child wins inside mixed landing page", () => {
+  const elements = [
+    el("div", "Fast setup", rect(40, 720, 200, 120), { className: "feature-card" }),
+    el("div", "Smart routing", rect(270, 720, 200, 120), { className: "feature-card" }),
+    el("div", "Reusable prompts", rect(500, 720, 200, 120), { className: "feature-card" })
+  ];
+  const elementCounts = counts(elements);
+
+  const result = detectSectionAndLayout(elements, elementCounts, {
+    selectedSourceSection: source("div", "features-section", "Everything after the hero: features and benefits", elementCounts),
+    sourceSections: [
+      source("section", "hero", "Launch faster with AI Get started", elementCounts),
+      source("div", "features-section", "Everything after the hero: features and benefits", elementCounts)
+    ]
+  });
+
+  assert.equal(result.sectionType, "features");
+});
+
 function counts(elements: MatchedElement[]): ElementCounts {
   return {
     totalElements: elements.length,
@@ -126,6 +237,36 @@ function counts(elements: MatchedElement[]): ElementCounts {
     inputs: elements.filter((element) => ["input", "textarea", "select"].includes(element.tagName)).length,
     cardsEstimate: estimateCards(elements),
     textLength: elements.reduce((sum, element) => sum + element.text.length, 0)
+  };
+}
+
+function source(
+  tagName: string,
+  className: string,
+  textSummary: string,
+  elementCounts: ElementCounts
+): SourceSectionPart {
+  return {
+    domPath: `${tagName}.${className}`,
+    tagName,
+    id: null,
+    className,
+    role: null,
+    ariaLabel: null,
+    textSummary,
+    childElementCount: elementCounts.totalElements,
+    rect: rect(0, 0, 800, 360),
+    selectionOverlap: 0.9,
+    counts: elementCounts,
+    headingSnippets: textSummary ? [textSummary] : [],
+    ctaSnippets: /start|get|join|contact|trial|login/i.test(textSummary) ? [textSummary] : [],
+    mediaSnippets: [],
+    htmlPreview: `<${tagName} class="${className}">${textSummary}</${tagName}>`,
+    sectionType: "unknown",
+    layoutType: "unknown",
+    confidence: 0.5,
+    score: 0,
+    reasons: []
   };
 }
 

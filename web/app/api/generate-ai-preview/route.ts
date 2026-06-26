@@ -5,6 +5,8 @@ import {
 } from "../../../lib/ai/gemini/selectImageModel";
 import {
   buildImagePreviewPrompt,
+  buildImagePreviewSolutionPrompt,
+  type AIPreviewSolutionBrief,
   type GenerateAIPreviewRequest,
 } from "../../../lib/ai/prompts/buildImagePreviewPrompt";
 
@@ -12,7 +14,6 @@ export const runtime = "nodejs";
 
 type GenerateAIPreviewErrorCode =
   | "MISSING_SCREENSHOT"
-  | "MISSING_PATTERN"
   | "MISSING_GEMINI_API_KEY"
   | "GEMINI_IMAGE_MODEL_UNAVAILABLE"
   | "GEMINI_IMAGE_QUOTA_EXHAUSTED"
@@ -26,6 +27,8 @@ const corsHeaders = {
 };
 
 const GEMINI_TIMEOUT_MS = 60_000;
+const GEMINI_SOLUTION_TIMEOUT_MS = 12_000;
+const DEFAULT_SOLUTION_MODELS = ["gemini-2.5-flash", "gemini-2.0-flash"] as const;
 
 type RouteDebug = {
   screenshotExists?: boolean;
@@ -45,6 +48,20 @@ type RouteDebug = {
   callMode?: "gemini-image-edit" | "imagen-text-to-image";
   responseTopLevelKeys?: string[];
   imageInlineDataFound?: boolean;
+  recommendationCounts?: {
+    designChecks: number;
+    layoutIdeas: number;
+    templateReferences: number;
+    animationReferences: number;
+    uncodixifyRecommendations: number;
+  };
+  solutionStatus?: "success" | "error" | "skipped";
+  solutionModel?: string;
+  solutionDurationMs?: number;
+  solutionPromptChars?: number;
+  solutionTextEditCount?: number;
+  solutionSummary?: string;
+  solutionError?: string;
   durationMs?: number;
 };
 
@@ -120,13 +137,6 @@ export async function POST(request: Request) {
       }, debug);
     }
 
-    if (!body.selectedPattern || typeof body.selectedPattern.name !== "string") {
-      return errorResponse(requestId, startedAt, 400, {
-        code: "MISSING_PATTERN",
-        message: "No selectedPattern was provided.",
-      }, debug);
-    }
-
     const templateMode = body.templateMode ?? "text-only";
     const normalizedTemplateImage =
       typeof body.templateImageBase64 === "string"
@@ -136,31 +146,59 @@ export async function POST(request: Request) {
 
     debug.templateMode = templateMode;
     debug.hasTemplateImage = hasTemplateImage;
+    debug.recommendationCounts = {
+      designChecks: countArray(body.recommendationContext?.designChecks),
+      layoutIdeas: countArray(body.recommendationContext?.layoutIdeas),
+      templateReferences: countArray(body.recommendationContext?.templateReferences),
+      animationReferences: countArray(body.recommendationContext?.animationReferences),
+      uncodixifyRecommendations: countArray(body.uncodixify?.recommendations),
+    };
 
     const payload: GenerateAIPreviewRequest = {
       screenshotBase64,
       url: typeof body.url === "string" ? body.url : undefined,
       title: typeof body.title === "string" ? body.title : undefined,
       aiResult: body.aiResult,
-      selectedPattern: body.selectedPattern,
+      selectedPattern:
+        body.selectedPattern && typeof body.selectedPattern.name === "string"
+          ? body.selectedPattern
+          : undefined,
+      selectedTemplateReference: body.selectedTemplateReference,
+      selectedAnimationReference: body.selectedAnimationReference,
+      recommendationContext: body.recommendationContext,
       previewContent: body.previewContent,
       styleContext: body.styleContext,
       templateMode,
       templateImageBase64: body.templateImageBase64,
       uncodixify: body.uncodixify,
     };
-    const promptUsed = buildImagePreviewPrompt(payload);
+    const ai = new GoogleGenAI({ apiKey });
+    const previewSolution = await generatePreviewSolution({
+      ai,
+      normalizedScreenshot,
+      payload,
+      requestId,
+      debug,
+    });
+    const payloadWithSolution: GenerateAIPreviewRequest = {
+      ...payload,
+      previewSolution: previewSolution ?? undefined,
+    };
+    const promptUsed = buildImagePreviewPrompt(payloadWithSolution);
     if (process.env.NODE_ENV !== "production") {
       // Safe summary only — no screenshot base64, no keys.
       console.log("[AI Preview] prompt summary", {
         requestId,
         promptChars: promptUsed.length,
         hasUncodixifyRecommendations: Boolean(payload.uncodixify?.recommendations?.length),
+        recommendationCounts: debug.recommendationCounts,
+        solutionStatus: debug.solutionStatus,
+        solutionModel: debug.solutionModel,
+        solutionTextEditCount: debug.solutionTextEditCount,
         hasTemplate: Boolean(payload.selectedTemplateReference),
         hasAnimation: Boolean(payload.selectedAnimationReference)
       });
     }
-    const ai = new GoogleGenAI({ apiKey });
     const selected = await selectImageModel(ai, process.env.GEMINI_IMAGE_MODEL);
 
     debug.availableImageModels = selected.availableImageModels;
@@ -181,6 +219,11 @@ export async function POST(request: Request) {
       sdkModelName: debug.sdkModelName,
       orderedModelCandidates: selected.orderedModelCandidates,
       modelSelectionWarning: selected.warning,
+      recommendationCounts: debug.recommendationCounts,
+      solutionStatus: debug.solutionStatus,
+      solutionModel: debug.solutionModel,
+      solutionDurationMs: debug.solutionDurationMs,
+      solutionTextEditCount: debug.solutionTextEditCount,
     });
 
     if (selected.availableImageModels.length === 0 || !selected.modelName) {
@@ -258,6 +301,107 @@ export async function POST(request: Request) {
       details: safeErrorMessage(error),
     }, debug);
   }
+}
+
+async function generatePreviewSolution({
+  ai,
+  normalizedScreenshot,
+  payload,
+  requestId,
+  debug,
+}: {
+  ai: GoogleGenAI;
+  normalizedScreenshot: string;
+  payload: GenerateAIPreviewRequest;
+  requestId: string;
+  debug: RouteDebug;
+}): Promise<AIPreviewSolutionBrief | null> {
+  const prompt = buildImagePreviewSolutionPrompt(payload);
+  const startedAt = Date.now();
+  const models = previewSolutionModels();
+
+  debug.solutionStatus = "skipped";
+  debug.solutionPromptChars = prompt.length;
+
+  for (const model of models) {
+    try {
+      debug.solutionStatus = "error";
+      debug.solutionModel = model;
+
+      console.log("[AI Preview] solution prepass start", {
+        requestId,
+        model,
+        promptChars: prompt.length,
+      });
+
+      const response = await withTimeout(
+        ai.models.generateContent({
+          model,
+          contents: [
+            {
+              inlineData: {
+                mimeType: "image/png",
+                data: normalizedScreenshot,
+              },
+            },
+            {
+              text: prompt,
+            },
+          ],
+          config: {
+            responseMimeType: "application/json",
+            temperature: 0.2,
+            maxOutputTokens: 2048,
+          },
+        }),
+        GEMINI_SOLUTION_TIMEOUT_MS
+      );
+
+      const text = response.text;
+
+      if (!text) {
+        throw new Error(`Gemini solution model ${model} returned no text.`);
+      }
+
+      const parsed = parseJsonFromText(text);
+      const solution = sanitizePreviewSolution(parsed);
+
+      debug.solutionStatus = "success";
+      debug.solutionDurationMs = Date.now() - startedAt;
+      debug.solutionSummary = solution.summary;
+      debug.solutionTextEditCount = solution.textEdits?.length ?? 0;
+      debug.solutionError = undefined;
+
+      console.log("[AI Preview] solution prepass complete", {
+        requestId,
+        model,
+        durationMs: debug.solutionDurationMs,
+        textEdits: debug.solutionTextEditCount,
+      });
+
+      return solution;
+    } catch (error) {
+      debug.solutionError = safeErrorMessage(error);
+      debug.solutionDurationMs = Date.now() - startedAt;
+
+      console.warn("[AI Preview] solution prepass failed", {
+        requestId,
+        model,
+        error: debug.solutionError,
+      });
+
+      if (isModelAvailabilityError(error)) {
+        continue;
+      }
+
+      return null;
+    }
+  }
+
+  debug.solutionStatus = "error";
+  debug.solutionError = debug.solutionError ?? "No Gemini solution model was available.";
+  debug.solutionDurationMs = Date.now() - startedAt;
+  return null;
 }
 
 async function generatePreviewImage({
@@ -435,6 +579,15 @@ async function generatePreviewImage({
   });
 }
 
+function previewSolutionModels() {
+  return [
+    process.env.GEMINI_PREVIEW_SOLUTION_MODEL,
+    ...DEFAULT_SOLUTION_MODELS,
+  ].filter((model, index, array): model is string =>
+    Boolean(model && array.indexOf(model) === index)
+  );
+}
+
 function extractImageBase64FromGeminiResponse(response: unknown) {
   const found = findImageBase64(response);
 
@@ -540,6 +693,135 @@ function minDefined(current: number | undefined, next: number | undefined) {
   return Math.min(current, next);
 }
 
+function parseJsonFromText(text: string): unknown {
+  const cleaned = text
+    .trim()
+    .replace(/^```json\s*/i, "")
+    .replace(/^```\s*/i, "")
+    .replace(/\s*```$/i, "");
+  const candidates = [
+    cleaned,
+    extractBalancedJson(cleaned, "{", "}"),
+    extractBalancedJson(cleaned, "[", "]"),
+  ].filter((candidate): candidate is string => Boolean(candidate));
+
+  for (const candidate of candidates) {
+    try {
+      return JSON.parse(candidate);
+    } catch {
+      // Try next candidate.
+    }
+  }
+
+  throw new Error("Gemini solution prepass returned invalid JSON.");
+}
+
+function extractBalancedJson(text: string, open: "{" | "[", close: "}" | "]") {
+  const start = text.indexOf(open);
+
+  if (start < 0) {
+    return null;
+  }
+
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+
+  for (let index = start; index < text.length; index += 1) {
+    const char = text[index];
+
+    if (escaped) {
+      escaped = false;
+      continue;
+    }
+
+    if (char === "\\") {
+      escaped = true;
+      continue;
+    }
+
+    if (char === "\"") {
+      inString = !inString;
+      continue;
+    }
+
+    if (inString) {
+      continue;
+    }
+
+    if (char === open) {
+      depth += 1;
+    } else if (char === close) {
+      depth -= 1;
+
+      if (depth === 0) {
+        return text.slice(start, index + 1);
+      }
+    }
+  }
+
+  return null;
+}
+
+function sanitizePreviewSolution(value: unknown): AIPreviewSolutionBrief {
+  const record = isRecord(value) ? value : {};
+  const textEdits = Array.isArray(record.textEdits)
+    ? record.textEdits
+        .filter(isRecord)
+        .map((edit) => ({
+          original: shortString(edit.original, 220),
+          revised: shortString(edit.revised, 220),
+          reason: shortString(edit.reason, 180),
+        }))
+        .filter((edit) => edit.original || edit.revised || edit.reason)
+        .slice(0, 8)
+    : [];
+
+  return {
+    summary: shortString(record.summary, 240),
+    priorityFixes: shortStringArray(record.priorityFixes, 6, 180),
+    visualDirection: shortString(record.visualDirection, 500),
+    layoutDirection: shortString(record.layoutDirection, 360),
+    copyDirection: shortString(record.copyDirection, 360),
+    textEdits,
+    imagePromptNotes: shortStringArray(record.imagePromptNotes, 8, 180),
+  };
+}
+
+function shortString(value: unknown, maxLength: number) {
+  if (typeof value !== "string") {
+    return undefined;
+  }
+
+  const clean = value.replace(/\s+/g, " ").trim();
+
+  if (!clean) {
+    return undefined;
+  }
+
+  return clean.length > maxLength ? `${clean.slice(0, maxLength - 3)}...` : clean;
+}
+
+function shortStringArray(value: unknown, maxItems: number, maxLength: number) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .map((item) => shortString(item, maxLength))
+    .filter((item): item is string => Boolean(item))
+    .slice(0, maxItems);
+}
+
+function isModelAvailabilityError(error: unknown) {
+  const message = safeErrorMessage(error);
+  return /not found|not available|unsupported|permission|model/i.test(message);
+}
+
+function countArray(value: unknown) {
+  return Array.isArray(value) ? value.length : 0;
+}
+
 function normalizeBase64Image(input: string | undefined) {
   return input?.replace(/^data:image\/\w+;base64,/, "").trim() ?? "";
 }
@@ -549,7 +831,7 @@ function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
     promise,
     new Promise<T>((_, reject) => {
       setTimeout(
-        () => reject(new Error(`Gemini image request timed out after ${timeoutMs}ms.`)),
+        () => reject(new Error(`Gemini request timed out after ${timeoutMs}ms.`)),
         timeoutMs
       );
     }),

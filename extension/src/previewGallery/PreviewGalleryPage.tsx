@@ -131,7 +131,7 @@ function PreviewCard({
         </p>
         {typeof preview.uncodixifyScore === "number" ? (
           <p className="mt-1 truncate text-[11px] text-pilot-soft">
-            Uncodixify: {preview.uncodixifyScore}/100 human-designed
+            AI Detect: {aiDetectFromCleanScore(preview.uncodixifyScore)}/100
           </p>
         ) : null}
       </div>
@@ -160,6 +160,10 @@ function PreviewCard({
       </div>
     </article>
   );
+}
+
+function aiDetectFromCleanScore(score: number) {
+  return Math.max(0, Math.min(100, 100 - Math.round(score)));
 }
 
 function EmptyState({ message }: { message: string }) {

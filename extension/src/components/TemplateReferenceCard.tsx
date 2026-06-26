@@ -20,16 +20,20 @@ export function TemplateReferenceCard({
 
   return (
     <article
-      className={`rounded-lg border p-4 transition ${
+      className={`relative rounded-xl border p-3 shadow-pilot transition ${
         selected
-          ? "border-pilot-borderStrong bg-pilot-primary/10"
+          ? "border-pilot-borderStrong bg-pilot-card"
           : "border-pilot-border bg-pilot-card hover:border-pilot-borderStrong"
       }`}
     >
+      <ReferenceWireframe active={selected} />
+      {selected ? (
+        <div className="pointer-events-none absolute inset-0 rounded-xl border-2 border-pilot-primary" />
+      ) : null}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="text-base font-black text-pilot-text">{reference.title}</h3>
-          <p className="mt-1 text-xs font-bold uppercase tracking-[0.08em] text-pilot-primaryDeep">
+          <p className="mt-1 text-xs font-bold uppercase tracking-[0.08em] text-pilot-muted">
             {reference.source} · {reference.category}
           </p>
         </div>
@@ -72,16 +76,39 @@ export function TemplateReferenceCard({
           onClick={onSelect}
           type="button"
         >
-          {selected ? "Attached" : "Apply as inspiration"}
+          {selected ? "Attached" : "Use template"}
         </button>
         <button
           className="rounded-lg border border-pilot-border px-2.5 py-2.5 text-center text-sm font-semibold text-pilot-text transition hover:border-pilot-borderStrong hover:bg-pilot-primary/10"
           onClick={onOpen}
           type="button"
         >
-          {isBroken ? "Open fallback" : "Open link"}
+          {isBroken ? "Open fallback" : "Open reference"}
         </button>
       </div>
     </article>
+  );
+}
+
+function ReferenceWireframe({ active }: { active: boolean }) {
+  return (
+    <div
+      className={`mb-3 grid h-24 grid-cols-[0.9fr_1.1fr] gap-2 rounded-lg border p-2 ${
+        active
+          ? "border-pilot-primary/40 bg-pilot-primary/10"
+          : "border-pilot-border bg-pilot-surface"
+      }`}
+    >
+      <div className="space-y-2 rounded-md border border-pilot-border bg-pilot-card p-2">
+        <div className="h-2 w-12 rounded bg-pilot-muted/35" />
+        <div className="h-2 rounded bg-pilot-muted/20" />
+        <div className="h-2 w-2/3 rounded bg-pilot-muted/20" />
+      </div>
+      <div className="grid grid-cols-2 gap-1.5">
+        <div className="rounded-md border border-pilot-border bg-pilot-card" />
+        <div className="rounded-md border border-pilot-border bg-pilot-card" />
+        <div className="col-span-2 rounded-md border border-pilot-border bg-pilot-card" />
+      </div>
+    </div>
   );
 }

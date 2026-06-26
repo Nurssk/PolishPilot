@@ -172,7 +172,7 @@ export function PreviewImagePage() {
                     value={[preview.provider, preview.model].filter(Boolean).join(" · ") || "unknown"}
                   />
                   {typeof preview.uncodixifyScore === "number" ? (
-                    <Metric label="Score" value={`${preview.uncodixifyScore}/100`} />
+                    <Metric label="AI Detect" value={`${aiDetectFromCleanScore(preview.uncodixifyScore)}/100`} />
                   ) : null}
                 </div>
                 {preview.sourceTitle || preview.sourceUrl ? (
@@ -224,6 +224,10 @@ function Metric({ label, value }: { label: string; value: string }) {
       <p className="mt-1 break-words text-sm font-bold text-pilot-text">{value}</p>
     </div>
   );
+}
+
+function aiDetectFromCleanScore(score: number) {
+  return Math.max(0, Math.min(100, 100 - Math.round(score)));
 }
 
 function EmptyState({ message }: { message: string }) {

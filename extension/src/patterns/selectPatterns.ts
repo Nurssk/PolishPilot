@@ -82,7 +82,11 @@ export function selectPatterns(args: {
     ]);
   }
 
-  return pickPatterns(["bento-grid", "center-highlight", "split-cta", "hero-product-preview"]);
+  if (sectionType === "unknown") {
+    return pickPatterns(["bento-grid", "center-highlight", "resource-card-grid", "analytics-overview"]);
+  }
+
+  return pickPatterns(["bento-grid", "center-highlight", "split-cta", "resource-card-grid"]);
 }
 
 function pickPatterns(ids: LayoutPatternId[]) {

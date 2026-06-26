@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+body{margin:0;background:#E9E5DC;}
+@media print{ body{background:#fff;} .page{box-shadow:none !important;margin:0 !important;} }
+</style>
+</helmet>
+<div style="background:#E9E5DC;min-height:100vh;padding:32px 20px;font-family:'Hanken Grotesk',ui-sans-serif,system-ui,sans-serif;color:#211E18;-webkit-font-smoothing:antialiased;">
+<div style="max-width:880px;margin:0 auto;display:flex;flex-direction:column;gap:24px;">
+
+  <div class="page" style="background:#FCFBF8;border:1px solid #E6E0D4;border-radius:14px;padding:44px 48px;box-shadow:0 1px 3px rgba(30,26,18,0.07);">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:26px;">
+      <div style="width:34px;height:34px;border-radius:9px;background:#1B1915;display:flex;align-items:center;justify-content:center;color:#F7F4EE;flex:none;font-size:17px;font-weight:700;letter-spacing:-0.04em;">B</div>
+      <div><div style="font-size:13px;font-weight:600;letter-spacing:.02em;color:#6E685D;">BEUNIQUE · BROWSER EXTENSION</div></div>
+    </div>
+    <h1 style="margin:0 0 10px;font-size:34px;font-weight:700;letter-spacing:-0.025em;line-height:1.1;">Workspace UI — Design Specification</h1>
+    <p style="margin:0 0 22px;font-size:15px;line-height:1.6;color:#6E685D;max-width:60ch;">An implementation-ready spec for the extension's three working tabs — Recommendations, Layout Ideas, and Animations. Compact, action-oriented, and built for an in-browser design-analysis workspace. No marketing surfaces.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <span style="font-size:12px;font-weight:500;color:#211E18;background:#ECE7DD;border:1px solid #E6E0D4;padding:5px 12px;border-radius:8px;">Full-tab workspace</span>
+      <span style="font-size:12px;font-weight:500;color:#211E18;background:#ECE7DD;border:1px solid #E6E0D4;padding:5px 12px;border-radius:8px;">Left sidebar nav</span>
+      <span style="font-size:12px;font-weight:500;color:#211E18;background:#ECE7DD;border:1px solid #E6E0D4;padding:5px 12px;border-radius:8px;">Light + dark</span>
+      <span style="font-size:12px;font-weight:500;color:#211E18;background:#ECE7DD;border:1px solid #E6E0D4;padding:5px 12px;border-radius:8px;">Single-select direction · multi-select fixes</span>
+    </div>
+    <div style="margin-top:26px;padding-top:22px;border-top:1px solid #E6E0D4;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;">
+      <div><div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9C9588;margin-bottom:5px;">Principle</div><div style="font-size:13px;line-height:1.5;color:#211E18;">Show what was detected, what to fix, and which direction to choose — in that order.</div></div>
+      <div><div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9C9588;margin-bottom:5px;">Density</div><div style="font-size:13px;line-height:1.5;color:#211E18;">Dense but readable. No oversized type, no decorative blobs, gradients, or glass.</div></div>
+      <div><div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9C9588;margin-bottom:5px;">Output</div><div style="font-size:13px;line-height:1.5;color:#211E18;">Every selection assembles one copyable prompt. Never expose raw debug data.</div></div>
+    </div>
+  </div>
+
+  <div class="page" style="background:#FCFBF8;border:1px solid #E6E0D4;border-radius:14px;padding:40px 48px;box-shadow:0 1px 3px rgba(30,26,18,0.07);">
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;color:#9C9588;margin-bottom:4px;">01</div>
+    <h2 style="margin:0 0 18px;font-size:22px;font-weight:600;letter-spacing:-0.015em;">Global structure</h2>
+    <div style="display:flex;gap:10px;border:1px solid #E6E0D4;border-radius:11px;padding:12px;background:#F4F1EA;margin-bottom:22px;">
+      <div style="width:148px;flex:none;border:1px solid #D7CFC0;border-radius:8px;background:#FCFBF8;padding:9px;display:flex;flex-direction:column;gap:6px;">
+        <div style="font-size:10px;font-weight:700;color:#9C9588;letter-spacing:.04em;">SIDEBAR · 256px</div>
+        <div style="height:8px;background:#211E18;opacity:.85;border-radius:3px;width:60%;"></div>
+        <div style="height:7px;background:#9C9588;opacity:.5;border-radius:3px;"></div>
+        <div style="height:7px;background:#9C9588;opacity:.3;border-radius:3px;"></div>
+        <div style="height:7px;background:#9C9588;opacity:.3;border-radius:3px;"></div>
+        <div style="height:26px;background:#9C9588;opacity:.18;border-radius:5px;margin-top:4px;"></div>
+        <div style="flex:1;"></div>
+        <div style="height:14px;background:#9C9588;opacity:.25;border-radius:4px;"></div>
+      </div>
+      <div style="flex:1;border:1px solid #D7CFC0;border-radius:8px;background:#FCFBF8;padding:9px;display:flex;flex-direction:column;gap:6px;min-height:150px;">
+        <div style="font-size:10px;font-weight:700;color:#9C9588;letter-spacing:.04em;">MAIN · scroll region</div>
+        <div style="height:11px;background:#211E18;opacity:.8;border-radius:3px;width:38%;"></div>
+        <div style="height:34px;background:#9C9588;opacity:.16;border-radius:6px;"></div>
+        <div style="height:30px;background:#9C9588;opacity:.12;border-radius:6px;"></div>
+        <div style="height:30px;background:#9C9588;opacity:.12;border-radius:6px;"></div>
+        <div style="flex:1;"></div>
+        <div style="height:20px;background:#211E18;opacity:.12;border-radius:5px;border:1px dashed #9C9588;"></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+      <div>
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px;">Sidebar (fixed, 256px)</div>
+        <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.7;color:#6E685D;">
+          <li>Wordmark + product label</li>
+          <li>Three nav items: Recommendations (with count badge), Layout Ideas, Animations</li>
+          <li>Analyzed-page context card: favicon, app name, URL, status dot</li>
+          <li>Footer: Re-analyze button + Light/Dark segmented toggle</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px;">Main column (flexible)</div>
+        <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.7;color:#6E685D;">
+          <li>Scrollable content region, 1080px max-width, centered</li>
+          <li>Per-tab header (title + state + page context)</li>
+          <li>Optional prompt-preview drawer (collapsible)</li>
+          <li>Persistent selection bar pinned to the bottom — survives tab and filter changes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" style="background:#FCFBF8;border:1px solid #E6E0D4;border-radius:14px;padding:40px 48px;box-shadow:0 1px 3px rgba(30,26,18,0.07);">
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;color:#9C9588;margin-bottom:4px;">02</div>
+    <h2 style="margin:0 0 18px;font-size:22px;font-weight:600;letter-spacing:-0.015em;">Visual tokens</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9C9588;margin-bottom:11px;">Color — light</div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <div style="display:flex;align-items:center;gap:10px;"><span style="width:26px;height:26px;border-radius:6px;background:#F4F1EA;border:1px solid #D7CFC0;flex:none;"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#211E18;">#F4F1EA</span><span style="font-size:12px;color:#9C9588;">Background</span></div>
+          <div style="display:flex;align-items:center;gap:10px;"><span style="width:26px;height:26px;border-radius:6px;background:#FCFBF8;border:1px solid #D7CFC0;flex:none;"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#211E18;">#FCFBF8</span><span style="font-size:12px;color:#9C9588;">Card</span></div>
+          <div style="display:flex;align-items:center;gap:10px;"><span style="width:26px;height:26px;border-radius:6px;background:#E6E0D4;border:1px solid #D7CFC0;flex:none;"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#211E18;">#E6E0D4</span><span style="font-size:12px;color:#9C9588;">Border</span></div>
+          <div style="display:flex;align-items:center;gap:10px;"><span style="width:26px;height:26px;border-radius:6px;background:#1B1915;flex:none;"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#211E18;">#1B1915</span><span style="font-size:12px;color:#9C9588;">Ink / primary</span></div>
+          <div style="display:flex;align-items:center;gap:10px;"><span style="width:26px;height:26px;border-radius:6px;background:#6E685D;flex:none;"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#211E18;">#6E685D</span><span style="font-size:12px;color:#9C9588;">Muted text</span></div>
+        </div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9C9588;margin:16px 0 11px;">Severity</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:#F2E2DE;color:#AF4239;">● High</span>
+          <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:#F0E8D4;color:#A57B2A;">● Medium</span>
+          <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:#E1EAEC;color:#5C7A8A;">● Low</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9C9588;margin-bottom:11px;">Type</div>
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <div style="display:flex;align-items:baseline;gap:10px;"><span style="font-size:21px;font-weight:600;letter-spacing:-0.02em;">Page title</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9C9588;">21 / 600</span></div>
+          <div style="display:flex;align-items:baseline;gap:10px;"><span style="font-size:14px;font-weight:600;">Card title</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9C9588;">14 / 600</span></div>
+          <div style="display:flex;align-items:baseline;gap:10px;"><span style="font-size:13px;color:#6E685D;">Body / fix text</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9C9588;">13 / 400</span></div>
+          <div style="display:flex;align-items:baseline;gap:10px;"><span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9C9588;">Group label</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9C9588;">11 / 700 caps</span></div>
+          <div style="display:flex;align-items:baseline;gap:10px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#6E685D;">.element-tag</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9C9588;">Mono 11</span></div>
+        </div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9C9588;margin:18px 0 11px;">Geometry</div>
+        <div style="font-size:13px;line-height:1.7;color:#6E685D;">
+          Cards <b style="color:#211E18;">12–14px</b> radius · chips/buttons <b style="color:#211E18;">8–9px</b> · pills 20px<br>
+          Card padding <b style="color:#211E18;">15px</b> (compact 12px) · grid gap 12–14px<br>
+          Shadow: <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;">0 1px 2px rgba(30,26,18,.05)</span> — barely there<br>
+          Fonts: <b style="color:#211E18;">Hanken Grotesk</b> UI · <b style="color:#211E18;">IBM Plex Mono</b> code
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" style="background:#FCFBF8;border:1px solid #E6E0D4;border-radius:14px;padding:40px 48px;box-shadow:0 1px 3px rgba(30,26,18,0.07);">
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;color:#9C9588;margin-bottom:4px;">03</div>
+    <h2 style="margin:0 0 6px;font-size:22px;font-weight:600;letter-spacing:-0.015em;">Recommendations</h2>
+    <p style="margin:0 0 20px;font-size:13.5px;line-height:1.6;color:#6E685D;max-width:64ch;">Header → summary band → grouped recommendation cards. The summary answers "how bad and where," the cards answer "what and how to fix."</p>
+
+    <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Summary band</div>
+    <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap;border:1px solid #E6E0D4;background:#F4F1EA;border-radius:12px;padding:14px 18px;margin-bottom:22px;">
+      <div style="display:flex;align-items:center;gap:11px;"><div style="width:44px;height:44px;border-radius:50%;border:4px solid #211E18;border-right-color:#D7CFC0;border-bottom-color:#D7CFC0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex:none;">72</div><div><div style="font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#9C9588;">Design score</div></div></div>
+      <div style="width:1px;height:34px;background:#E6E0D4;"></div>
+      <div><div style="font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#9C9588;">Issues</div><div style="font-size:18px;font-weight:700;">9</div></div>
+      <div style="width:1px;height:34px;background:#E6E0D4;"></div>
+      <div><div style="font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#9C9588;">Strongest area</div><div style="font-size:13px;font-weight:600;">Visual hierarchy</div></div>
+      <div style="flex:1;"></div>
+      <div style="display:flex;gap:8px;"><span style="font-size:12px;padding:7px 12px;border:1px solid #D7CFC0;border-radius:8px;">Preview prompt</span><span style="font-size:12px;font-weight:600;padding:7px 12px;background:#1B1915;color:#F7F4EE;border-radius:8px;">Copy · 3 fixes</span></div>
+    </div>
+
+    <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Recommendation card — anatomy</div>
+    <div style="display:flex;gap:13px;align-items:flex-start;border:1px solid #E6E0D4;border-radius:12px;padding:15px;background:#FCFBF8;position:relative;">
+      <div style="width:20px;height:20px;border-radius:6px;background:#1B1915;color:#F7F4EE;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></div>
+      <div style="width:96px;height:62px;border-radius:8px;background:#F4F1EA;border:1px solid #E6E0D4;flex:none;position:relative;"><div style="position:absolute;left:7px;right:7px;bottom:8px;height:15px;border:1.5px dashed #AF4239;border-radius:5px;"></div></div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;align-items:center;gap:9px;"><span style="font-size:13.5px;font-weight:600;">Issue title</span><span style="font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;background:#F2E2DE;color:#AF4239;">● High</span></div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9C9588;background:#ECE7DD;padding:2px 6px;border-radius:5px;align-self:flex-start;">.element-selector</span>
+        <div style="display:flex;gap:7px;"><span style="font-size:10px;font-weight:700;text-transform:uppercase;color:#9C9588;margin-top:2px;">Fix</span><span style="font-size:12.5px;color:#6E685D;line-height:1.45;">Recommended remedy in one sentence.</span></div>
+      </div>
+      <div style="position:absolute;right:12px;top:13px;display:flex;gap:14px;font-size:10px;color:#C0B9AB;">
+        <span>← include toggle</span>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:22px;">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9C9588;margin-bottom:9px;">Groups (in order)</div>
+        <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.7;color:#6E685D;">
+          <li>Layout</li><li>Visual style</li><li>Hierarchy</li><li>Motion / interaction</li><li>AI-generated UI cleanup</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9C9588;margin-bottom:9px;">States</div>
+        <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.7;color:#6E685D;">
+          <li><b style="color:#211E18;">Default / hover</b> — border darkens on hover</li>
+          <li><b style="color:#211E18;">Included</b> — checkbox filled black; counts into prompt</li>
+          <li><b style="color:#211E18;">Empty</b> — "No recommendations yet" (see §06)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" style="background:#FCFBF8;border:1px solid #E6E0D4;border-radius:14px;padding:40px 48px;box-shadow:0 1px 3px rgba(30,26,18,0.07);">
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;color:#9C9588;margin-bottom:4px;">04</div>
+    <h2 style="margin:0 0 6px;font-size:22px;font-weight:600;letter-spacing:-0.015em;">Layout Ideas</h2>
+    <p style="margin:0 0 20px;font-size:13.5px;line-height:1.6;color:#6E685D;max-width:64ch;">Context line: "Choose a structure for this selected UI." A segmented control switches Layouts / Templates / Animations. Lives only in this tab — never duplicated in the sidebar. Switching segments never clears a selection.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+      <div style="border:1px solid #E6E0D4;border-radius:11px;padding:14px;background:#FCFBF8;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:9px;">Layout card</div>
+        <ul style="margin:0;padding-left:17px;font-size:12.5px;line-height:1.65;color:#6E685D;">
+          <li>Abstract wireframe preview</li>
+          <li>Name + category chip</li>
+          <li>"Why it fits" line</li>
+          <li>"Best for" line</li>
+          <li>Selected = 2px ink ring + check</li>
+          <li>Action: <b style="color:#211E18;">Use layout</b> → <i>Selected</i></li>
+        </ul>
+      </div>
+      <div style="border:1px solid #E6E0D4;border-radius:11px;padding:14px;background:#FCFBF8;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:9px;">Template card</div>
+        <ul style="margin:0;padding-left:17px;font-size:12.5px;line-height:1.65;color:#6E685D;">
+          <li>Representative wireframe</li>
+          <li>Name + category chip</li>
+          <li>Source / reference (e.g. "Inspired by Linear")</li>
+          <li>Reason it matches</li>
+          <li>Buttons: <b style="color:#211E18;">Use template</b> · Open reference</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:16px;border:1px solid #E6E0D4;border-radius:11px;padding:14px;background:#F4F1EA;">
+      <div style="font-size:13px;font-weight:600;margin-bottom:6px;">Animations segment (page-level motion)</div>
+      <p style="margin:0;font-size:12.5px;line-height:1.6;color:#6E685D;">Three macro presets — Page entrance, Tab transition, Scroll reveal — set the layout's overall rhythm with a live preview. A banner points to the dedicated Animations tab for per-element motion. Selectable like a layout (single).</p>
+    </div>
+  </div>
+
+  <div class="page" style="background:#FCFBF8;border:1px solid #E6E0D4;border-radius:14px;padding:40px 48px;box-shadow:0 1px 3px rgba(30,26,18,0.07);">
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;color:#9C9588;margin-bottom:4px;">05</div>
+    <h2 style="margin:0 0 6px;font-size:22px;font-weight:600;letter-spacing:-0.015em;">Animations</h2>
+    <p style="margin:0 0 20px;font-size:13.5px;line-height:1.6;color:#6E685D;max-width:64ch;">Suggestions grouped by target. Each card carries a live motion preview so the effect reads instantly without prose.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9C9588;margin-bottom:9px;">Targets (groups)</div>
+        <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.7;color:#6E685D;">
+          <li>Text</li><li>Cards</li><li>Buttons</li><li>Section transitions</li><li>Background / ambient</li>
+        </ul>
+        <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9C9588;margin:16px 0 9px;">Intensity</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:#E1EAEC;color:#5C7A8A;">Subtle</span>
+          <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:#F0E8D4;color:#A57B2A;">Medium</span>
+          <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:#F2E2DE;color:#AF4239;">Expressive</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9C9588;margin-bottom:9px;">Card fields</div>
+        <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.7;color:#6E685D;">
+          <li>Live preview area (looping CSS demo)</li>
+          <li>Animation name + intensity label</li>
+          <li>Target element (mono)</li>
+          <li>Effect description</li>
+          <li>"When to use it"</li>
+          <li>Action: <b style="color:#211E18;">Use animation</b> → <i>Added</i> (single select)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" style="background:#FCFBF8;border:1px solid #E6E0D4;border-radius:14px;padding:40px 48px;box-shadow:0 1px 3px rgba(30,26,18,0.07);">
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;color:#9C9588;margin-bottom:4px;">06</div>
+    <h2 style="margin:0 0 18px;font-size:22px;font-weight:600;letter-spacing:-0.015em;">Interaction model & states</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+      <div>
+        <div style="font-size:13px;font-weight:600;margin-bottom:9px;">Selection rules</div>
+        <ul style="margin:0 0 18px;padding-left:18px;font-size:13px;line-height:1.7;color:#6E685D;">
+          <li>Fixes — <b style="color:#211E18;">multi-select</b> via checkbox</li>
+          <li>Layout, Template, Animation — <b style="color:#211E18;">one each</b>; tap again to clear</li>
+          <li>Selections persist across tab and segment changes</li>
+          <li>Selected state is always explicit: filled box or 2px ink ring + check</li>
+        </ul>
+        <div style="font-size:13px;font-weight:600;margin-bottom:9px;">Prompt assembly</div>
+        <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.7;color:#6E685D;">
+          <li>Bottom bar mirrors current selection at all times</li>
+          <li>"Preview prompt" reveals the assembled text drawer</li>
+          <li>"Copy" writes it to clipboard → "Copied ✓" for 1.5s</li>
+          <li>Prompt = selected fixes + chosen layout / template / motion</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:600;margin-bottom:9px;">Empty & system states</div>
+        <div style="border:1px dashed #D7CFC0;border-radius:10px;padding:16px;background:#F4F1EA;text-align:center;margin-bottom:12px;">
+          <div style="font-size:13px;font-weight:600;margin-bottom:4px;">No recommendations yet</div>
+          <div style="font-size:12px;color:#6E685D;line-height:1.5;margin-bottom:10px;">Run an analysis on the current page to see issues and fixes here.</div>
+          <span style="font-size:12px;font-weight:600;padding:6px 12px;background:#1B1915;color:#F7F4EE;border-radius:8px;">Run analysis</span>
+        </div>
+        <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.7;color:#6E685D;">
+          <li><b style="color:#211E18;">Analyzing</b> — header shows progress; cards as skeletons</li>
+          <li><b style="color:#211E18;">Layout Ideas empty</b> — "Select a UI region to see structures"</li>
+          <li><b style="color:#211E18;">Animations empty</b> — "Pick a layout first to tailor motion"</li>
+          <li><b style="color:#211E18;">Error</b> — inline retry, never a raw stack trace</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" style="background:#FCFBF8;border:1px solid #E6E0D4;border-radius:14px;padding:40px 48px;box-shadow:0 1px 3px rgba(30,26,18,0.07);">
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;color:#9C9588;margin-bottom:4px;">07</div>
+    <h2 style="margin:0 0 18px;font-size:22px;font-weight:600;letter-spacing:-0.015em;">Sample UI copy</h2>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div style="display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:start;">
+        <div style="font-size:12px;font-weight:600;color:#9C9588;">Recs header</div>
+        <div style="font-size:13px;color:#211E18;line-height:1.6;">"9 issues found on <b>Beunique</b> · Billing settings" · pill: "Analysis complete"</div>
+      </div>
+      <div style="height:1px;background:#E6E0D4;"></div>
+      <div style="display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:start;">
+        <div style="font-size:12px;font-weight:600;color:#9C9588;">Score caption</div>
+        <div style="font-size:13px;color:#211E18;line-height:1.6;">"Good — room to tighten" (72 / 100)</div>
+      </div>
+      <div style="height:1px;background:#E6E0D4;"></div>
+      <div style="display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:start;">
+        <div style="font-size:12px;font-weight:600;color:#9C9588;">Fix line</div>
+        <div style="font-size:13px;color:#211E18;line-height:1.6;">"Adopt an 8px scale — set row padding to 12/16px and gaps to 12px throughout."</div>
+      </div>
+      <div style="height:1px;background:#E6E0D4;"></div>
+      <div style="display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:start;">
+        <div style="font-size:12px;font-weight:600;color:#9C9588;">Layout "why"</div>
+        <div style="font-size:13px;color:#211E18;line-height:1.6;">"Mirrors your current two-zone structure while giving settings room to breathe."</div>
+      </div>
+      <div style="height:1px;background:#E6E0D4;"></div>
+      <div style="display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:start;">
+        <div style="font-size:12px;font-weight:600;color:#9C9588;">Animation "when"</div>
+        <div style="font-size:13px;color:#211E18;line-height:1.6;">"First paint of a text block or on scroll into view."</div>
+      </div>
+      <div style="height:1px;background:#E6E0D4;"></div>
+      <div style="display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:start;">
+        <div style="font-size:12px;font-weight:600;color:#9C9588;">Primary actions</div>
+        <div style="font-size:13px;color:#211E18;line-height:1.6;">"Copy · 3 fixes" · "Preview prompt" · "Use layout" · "Use template" · "Use animation"</div>
+      </div>
+    </div>
+    <div style="margin-top:24px;padding-top:18px;border-top:1px solid #E6E0D4;font-size:12px;color:#9C9588;">Pair this spec with the interactive mockup — <b style="color:#6E685D;">Extension Workspace.dc.html</b> — for live states, hover, and dark mode.</div>
+  </div>
+
+</div>
+</div>
+</x-dc>
+</body>
+</html>

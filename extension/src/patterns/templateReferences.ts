@@ -1,4 +1,50 @@
-export type TemplateSource = "21st.dev";
+import { watermelonTemplateReferences } from "./watermelonTemplateReferences";
+import { typeUiDesignSkillReferences } from "./typeUiDesignSkillReferences";
+import { huashuDesignReferences } from "./huashuDesignReferences";
+import { uiUxProMaxReferences } from "./uiUxProMaxReferences";
+import { tasteSkillReferences } from "./tasteSkillReferences";
+import { antiAiSlopWritingReferences } from "./antiAiSlopWritingReferences";
+import { hallmarkDesignReferences } from "./hallmarkDesignReferences";
+import { stopSlopReferences } from "./stopSlopReferences";
+import { antiAiSlopPackReferences } from "./antiAiSlopPackReferences";
+import { interfaceDesignReferences } from "./interfaceDesignReferences";
+import { magicUiTemplateReferences } from "./magicUiTemplateReferences";
+import { aceternityTemplateReferences } from "./aceternityTemplateReferences";
+import { layoutGuidelineReferences } from "./layoutGuidelineReferences";
+import { interactionGuidelineReferences } from "./interactionGuidelineReferences";
+import { visualSystemGuidelineReferences } from "./visualSystemGuidelineReferences";
+import { dataVisualizationGuidelineReferences } from "./dataVisualizationGuidelineReferences";
+import { tableGuidelineReferences } from "./tableGuidelineReferences";
+import { navigationGuidelineReferences } from "./navigationGuidelineReferences";
+
+export type TemplateSource =
+  | "21st.dev"
+  | "watermelon-ui"
+  | "typeui-design-skills"
+  | "huashu-design"
+  | "ui-ux-pro-max"
+  | "taste-skill"
+  | "anti-ai-slop-writing"
+  | "hallmark"
+  | "stop-slop"
+  | "anti-ai-slop-pack"
+  | "interface-design"
+  | "magic-ui"
+  | "aceternity-ui"
+  | "nng-ux-guidelines"
+  | "baymard-ux"
+  | "wai-aria-apg"
+  | "wcag-wai"
+  | "govuk-design-system"
+  | "material-design"
+  | "carbon-design-system"
+  | "apple-hig"
+  | "carbon-data-viz"
+  | "uswds"
+  | "carbon-table"
+  | "ons-design-system"
+  | "carbon-navigation"
+  | "material-navigation";
 
 export type TemplateCategory =
   | "hero"
@@ -35,7 +81,7 @@ export type TemplateReference = {
   fallbackUrl?: string;
 };
 
-export const templateReferences: TemplateReference[] = [
+const communityTemplateReferences: TemplateReference[] = [
   {
     "id": "21st-dev-abdulali254-aurora-button",
     "source": "21st.dev",
@@ -7574,4 +7620,26 @@ export const templateReferences: TemplateReference[] = [
     "checkedAt": "2026-06-06T19:45:52.662Z",
     "fallbackUrl": "https://21st.dev/community/components/s/testimonials"
   }
+];
+
+export const templateReferences: TemplateReference[] = [
+  ...communityTemplateReferences,
+  ...watermelonTemplateReferences,
+  ...typeUiDesignSkillReferences,
+  ...huashuDesignReferences,
+  ...uiUxProMaxReferences,
+  ...tasteSkillReferences,
+  ...antiAiSlopWritingReferences,
+  ...hallmarkDesignReferences,
+  ...stopSlopReferences,
+  ...antiAiSlopPackReferences,
+  ...interfaceDesignReferences,
+  ...magicUiTemplateReferences,
+  ...aceternityTemplateReferences,
+  ...layoutGuidelineReferences,
+  ...interactionGuidelineReferences,
+  ...visualSystemGuidelineReferences,
+  ...dataVisualizationGuidelineReferences,
+  ...tableGuidelineReferences,
+  ...navigationGuidelineReferences
 ];

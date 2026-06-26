@@ -8,6 +8,11 @@ import {
 import type { PolishPilotMode } from "../shared/types";
 import { EmailAuthForm } from "./EmailAuthForm";
 import { getScreenshotUsage, type ScreenshotUsage } from "../shared/usageService";
+import { API_BASE_URL } from "../shared/apiConfig";
+
+function formatScreenshotCount(count: number) {
+  return `${count} ${count === 1 ? "screenshot" : "screenshots"}`;
+}
 
 export function AccountPanel({ mode: _mode }: { mode: PolishPilotMode }) {
   const [user, setUser] = useState<ExtensionUser | null>(null);
@@ -64,6 +69,10 @@ export function AccountPanel({ mode: _mode }: { mode: PolishPilotMode }) {
     setUsage(null);
   }
 
+  async function openBuyCredits() {
+    await chrome.tabs.create({ url: `${API_BASE_URL}/credits` });
+  }
+
   return (
     <section className="dh-card mt-4 p-4">
       <div className="flex items-center justify-between gap-2">
@@ -100,7 +109,7 @@ export function AccountPanel({ mode: _mode }: { mode: PolishPilotMode }) {
               Screenshots left
             </p>
             <p className="mt-1 text-2xl font-black text-pilot-text">
-              {usage ? `${usage.screenshotsRemaining}/${usage.screenshotsTotal}` : "Loading..."}
+              {usage ? formatScreenshotCount(usage.screenshotsRemaining) : "Loading..."}
             </p>
             {usage ? (
               <p className="mt-1 text-xs leading-5 text-pilot-muted">
@@ -108,6 +117,13 @@ export function AccountPanel({ mode: _mode }: { mode: PolishPilotMode }) {
               </p>
             ) : null}
           </div>
+          <button
+            className="dh-button-primary mt-3 w-full px-3 py-2.5 text-sm"
+            onClick={() => void openBuyCredits()}
+            type="button"
+          >
+            Buy more credits
+          </button>
           <button
             className="dh-button-secondary mt-3 w-full px-3 py-2.5 text-sm"
             onClick={() => void handleSignOut()}

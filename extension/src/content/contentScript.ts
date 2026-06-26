@@ -6,10 +6,13 @@ import type {
   SelectionRect,
   AIImagePreviewPayload,
   InPagePreviewPayload,
-  StyleContext
+  PageDesignContext,
+  StyleContext,
+  SourceSectionPart
 } from "../shared/types";
 import { detectSectionAndLayout, estimateCards } from "./sectionDetection";
 import { extractStyleTokens } from "./extractStyleTokens";
+import { extractPageDesignContext } from "./extractPageDesignContext";
 import { extractUsedCssRules } from "./extractUsedCssRules";
 import type { StyleTokens } from "./extractStyleTokens";
 import type { UsedCssExtractionResult } from "./extractUsedCssRules";
@@ -19,6 +22,7 @@ import {
   sanitizeDebugHtml,
   truncateDebugText
 } from "../shared/previewDebug";
+import { sanitizeHtmlSnapshot } from "./htmlSnapshot";
 
 declare global {
   interface Window {
@@ -221,21 +225,42 @@ function handleMouseUp(event: MouseEvent) {
     return;
   }
 
-  const matchedElements = getElementsInRect(selectedRect);
-  const counts = buildCounts(matchedElements);
-  const detected = detectSectionAndLayout(matchedElements, counts);
-  const styleContext = extractStyleContext(selectedRect, matchedElements);
   const selectedRoot = findSelectedRootElement(selectedRect);
+  const sourceSections = selectedRoot ? buildSourceSections(selectedRoot, selectedRect) : [];
+  const selectedSourceSection = selectSourceSection(sourceSections);
+  const matchedElements = selectedSourceSection
+    ? getElementsForSourceSection(selectedSourceSection, selectedRect)
+    : getElementsInRect(selectedRect);
+  const counts = selectedSourceSection?.counts ?? buildCounts(matchedElements);
+  const detected = detectSectionAndLayout(matchedElements, counts, {
+    selectedSourceSection,
+    sourceSections
+  });
+  const enrichedSelectedSourceSection = selectedSourceSection
+    ? { ...selectedSourceSection, ...detected }
+    : undefined;
+  const enrichedSourceSections = sourceSections.map((section) =>
+    section.domPath === enrichedSelectedSourceSection?.domPath
+      ? enrichedSelectedSourceSection
+      : section
+  );
+  const styleContext = extractStyleContext(selectedRect, matchedElements);
   const usedCssRules = selectedRoot ? extractUsedCssRules(selectedRoot) : undefined;
   const styleTokens = selectedRoot ? extractStyleTokens(selectedRoot) : undefined;
+  const pageDesignContext = extractPageDesignContext();
+  const fullPageHtmlPreview = captureFullPageHtmlSnapshot();
   const previewDebugLogs = buildCapturePreviewDebugLogs({
     selectedRect,
     selectedRoot,
+    sourceSections: enrichedSourceSections,
+    selectedSourceSection: enrichedSelectedSourceSection,
     matchedElements,
     counts,
     detected,
     usedCssRules,
-    styleTokens
+    styleTokens,
+    pageDesignContext,
+    fullPageHtmlPreview
   });
   const payload: RectangleSelectionPayload = {
     url: window.location.href,
@@ -247,6 +272,10 @@ function handleMouseUp(event: MouseEvent) {
     styleContext,
     usedCssRules,
     styleTokens,
+    pageDesignContext,
+    fullPageHtmlPreview,
+    sourceSections: enrichedSourceSections,
+    selectedSourceSection: enrichedSelectedSourceSection,
     previewDebugLogs
   };
 
@@ -1046,22 +1075,496 @@ function findSelectedRootElement(selectionRect: SelectionRect): HTMLElement | nu
   return selected instanceof HTMLElement ? selected : document.body;
 }
 
+const SOURCE_SECTION_TAGS = new Set([
+  "section",
+  "article",
+  "nav",
+  "header",
+  "footer",
+  "main",
+  "form",
+  "aside"
+]);
+const SOURCE_SECTION_IDENTITY_RE =
+  /\b(hero|landing|intro|masthead|pricing|plans?|billing|feature|benefit|card|cards|testimonial|review|stats?|metrics?|kpi|cta|call-to-action|nav|navbar|footer|form|contact|newsletter|waitlist|dashboard|auth|login|signin|signup|steps?|process|workflow|how-it-works|integrations?|comparison|faq|settings|checkout|profile)\b/i;
+const SOURCE_MEDIA_TAGS = new Set(["img", "svg", "picture", "video", "canvas"]);
+const SOURCE_IGNORED_TAGS = new Set([...IGNORED_TAGS, "TEMPLATE"]);
+
+function buildSourceSections(
+  selectedRoot: HTMLElement,
+  selectionRect: SelectionRect
+): SourceSectionPart[] {
+  const candidates = collectSourceSectionCandidates(selectedRoot, selectionRect);
+  const pruned = pruneWrapperSourceCandidates(candidates);
+  const sourceSections = pruned
+    .map((element) => buildSourceSectionPart(element, selectionRect))
+    .filter((section): section is SourceSectionPart => Boolean(section))
+    .sort((a, b) => sourceSelectionScore(b) - sourceSelectionScore(a));
+
+  return sourceSections.slice(0, 12);
+}
+
+function collectSourceSectionCandidates(
+  selectedRoot: HTMLElement,
+  selectionRect: SelectionRect
+): HTMLElement[] {
+  const all = [selectedRoot, ...Array.from(selectedRoot.querySelectorAll<HTMLElement>(
+    "section, article, nav, header, footer, main, form, aside, div, ul, ol"
+  ))];
+  const candidates = all.filter((element) =>
+    isSourceSectionCandidate(element, selectionRect)
+  );
+
+  if (candidates.length) {
+    return dedupeElements(candidates);
+  }
+
+  return isViableSourceElement(selectedRoot, selectionRect)
+    ? [selectedRoot]
+    : [];
+}
+
+function isSourceSectionCandidate(
+  element: HTMLElement,
+  selectionRect: SelectionRect
+): boolean {
+  if (!isViableSourceElement(element, selectionRect)) {
+    return false;
+  }
+
+  const tag = element.tagName.toLowerCase();
+  const identity = getSourceIdentity(element);
+  const explicitTag = SOURCE_SECTION_TAGS.has(tag);
+  const meaningfulContainer =
+    ["div", "ul", "ol"].includes(tag) && SOURCE_SECTION_IDENTITY_RE.test(identity);
+  const directSectionChildren = Array.from(element.children).filter(
+    (child): child is HTMLElement =>
+      child instanceof HTMLElement &&
+      isViableSourceElement(child, selectionRect) &&
+      (SOURCE_SECTION_TAGS.has(child.tagName.toLowerCase()) ||
+        SOURCE_SECTION_IDENTITY_RE.test(getSourceIdentity(child)))
+  );
+  const repeatedContentChildren = Array.from(element.children).filter(
+    (child): child is HTMLElement =>
+      child instanceof HTMLElement &&
+      isViableSourceElement(child, selectionRect) &&
+      isRepeatedContentChild(child)
+  );
+
+  return (
+    explicitTag ||
+    meaningfulContainer ||
+    directSectionChildren.length >= 2 ||
+    repeatedContentChildren.length >= 3
+  );
+}
+
+function isViableSourceElement(
+  element: HTMLElement,
+  selectionRect: SelectionRect
+): boolean {
+  if (SOURCE_IGNORED_TAGS.has(element.tagName) || element.closest("[data-polishpilot='true']")) {
+    return false;
+  }
+  if (element === document.body || element === document.documentElement) {
+    return false;
+  }
+
+  const rect = element.getBoundingClientRect();
+  if (rect.width < 24 || rect.height < 24 || !intersects(rect, selectionRect)) {
+    return false;
+  }
+
+  const style = getComputedStyle(element);
+  if (
+    style.display === "none" ||
+    style.visibility === "hidden" ||
+    style.opacity === "0" ||
+    Number(style.opacity) === 0
+  ) {
+    return false;
+  }
+
+  return hasSourceContent(element);
+}
+
+function hasSourceContent(element: HTMLElement): boolean {
+  const text = getElementText(element);
+  if (text.length >= 8) return true;
+  if (element.querySelector("button, a, input, textarea, select, img, svg, picture, video, canvas")) return true;
+  return false;
+}
+
+function isRepeatedContentChild(element: HTMLElement): boolean {
+  const tag = element.tagName.toLowerCase();
+  const className = getClassName(element).toLowerCase();
+  const rect = element.getBoundingClientRect();
+  const style = getComputedStyle(element);
+  const identity = `${tag} ${className} ${element.id ?? ""} ${element.getAttribute("role") ?? ""}`;
+  const hasContainerShape =
+    rect.width >= 96 &&
+    rect.height >= 56 &&
+    (Boolean(nonTransparentColor(style.backgroundColor)) ||
+      Boolean(nonTransparentColor(style.borderColor)) ||
+      style.borderRadius !== "0px" ||
+      style.boxShadow !== "none");
+
+  return (
+    ["article", "li"].includes(tag) ||
+    /\b(card|item|tile|feature|step|plan|price|testimonial|review|metric|stat|panel|box|cell)\b/i.test(identity) ||
+    hasContainerShape
+  );
+}
+
+function pruneWrapperSourceCandidates(candidates: HTMLElement[]): HTMLElement[] {
+  return dedupeElements(candidates).filter((candidate) => {
+    const tag = candidate.tagName.toLowerCase();
+    const identity = getSourceIdentity(candidate);
+    const hasOwnIdentity = SOURCE_SECTION_TAGS.has(tag) || SOURCE_SECTION_IDENTITY_RE.test(identity);
+    const childCandidates = candidates.filter(
+      (other) => other !== candidate && candidate.contains(other)
+    );
+    const selectedChildCandidates = childCandidates.filter((child) => {
+      const parentRect = candidate.getBoundingClientRect();
+      const childRect = child.getBoundingClientRect();
+      const childArea = areaOf(childRect);
+      return childArea > 0 && childArea / Math.max(areaOf(parentRect), 1) > 0.45;
+    });
+
+    if (!hasOwnIdentity && selectedChildCandidates.length === 1) {
+      return false;
+    }
+    if ((tag === "main" || tag === "div") && childCandidates.length >= 2 && !SOURCE_SECTION_IDENTITY_RE.test(identity)) {
+      return false;
+    }
+
+    return true;
+  });
+}
+
+function buildSourceSectionPart(
+  element: HTMLElement,
+  selectionRect: SelectionRect
+): SourceSectionPart | null {
+  const elements = getMeaningfulElementsInSource(element);
+  const counts = buildCounts(elements);
+  if (!counts.totalElements && !getElementText(element)) {
+    return null;
+  }
+
+  const sourceContext = buildSourceDetectionContext(element, selectionRect, counts);
+  const detected = detectSectionAndLayout(elements, counts, {
+    selectedSourceSection: sourceContext
+  });
+
+  return {
+    ...sourceContext,
+    rect: rectToPlain(element.getBoundingClientRect()),
+    htmlPreview: sanitizeHtmlSnapshot(element.outerHTML, {
+      scope: "selected-block",
+      maxLength: 2400
+    }),
+    sectionType: detected.sectionType,
+    layoutType: detected.layoutType,
+    confidence: detected.confidence,
+    score: sourceSelectionScore({
+      ...sourceContext,
+      sectionType: detected.sectionType,
+      confidence: detected.confidence
+    }),
+    reasons: detected.reasons
+  };
+}
+
+function buildSourceDetectionContext(
+  element: HTMLElement,
+  selectionRect: SelectionRect,
+  counts: SourceSectionPart["counts"]
+): Omit<
+  SourceSectionPart,
+  "rect" | "htmlPreview" | "sectionType" | "layoutType" | "confidence" | "score" | "reasons"
+> {
+  const rect = element.getBoundingClientRect();
+  return {
+    domPath: buildDomPath(element),
+    tagName: element.tagName.toLowerCase(),
+    id: element.id || null,
+    className: getClassName(element) || null,
+    role: element.getAttribute("role"),
+    ariaLabel: element.getAttribute("aria-label"),
+    textSummary: getElementText(element).slice(0, 600),
+    childElementCount: element.childElementCount,
+    selectionOverlap: calculateSelectionOverlap(rect, selectionRect),
+    counts,
+    headingSnippets: extractSourceSnippets(element, "h1,h2,h3,[role='heading']", 4),
+    ctaSnippets: extractSourceSnippets(element, "button,a,[role='button'],input[type='submit']", 5),
+    mediaSnippets: extractMediaSnippets(element, 5)
+  };
+}
+
+function getMeaningfulElementsInSource(element: HTMLElement): MatchedElement[] {
+  const nodes = [element, ...Array.from(element.querySelectorAll<HTMLElement | SVGElement>("*"))]
+    .filter((node): node is HTMLElement | SVGElement => node instanceof HTMLElement || node instanceof SVGElement)
+    .filter((node) => isMeaningfulElementInSource(node))
+    .map((node) => ({
+      node,
+      score: scoreElement(node),
+      area: areaOf(node.getBoundingClientRect())
+    }))
+    .sort((a, b) => b.score - a.score || b.area - a.area)
+    .slice(0, 90)
+    .map(({ node }) => serializeElement(node));
+
+  return nodes;
+}
+
+function isMeaningfulElementInSource(element: HTMLElement | SVGElement): boolean {
+  if (SOURCE_IGNORED_TAGS.has(element.tagName) || element.closest("[data-polishpilot='true']")) {
+    return false;
+  }
+
+  const rect = element.getBoundingClientRect();
+  if (rect.width < 8 || rect.height < 8) {
+    return false;
+  }
+
+  const style = getComputedStyle(element);
+  if (
+    style.display === "none" ||
+    style.visibility === "hidden" ||
+    style.opacity === "0" ||
+    Number(style.opacity) === 0
+  ) {
+    return false;
+  }
+
+  const text = getElementText(element);
+  const tag = element.tagName.toLowerCase();
+  const className = getClassName(element).toLowerCase();
+
+  return Boolean(
+    text ||
+      ["img", "svg", "button", "a", "input", "textarea", "select", "article", "section", "form", "nav", "footer", "li", "ul", "ol"].includes(tag) ||
+      SOURCE_SECTION_IDENTITY_RE.test(className) ||
+      (element instanceof HTMLElement && isRepeatedContentChild(element))
+  );
+}
+
+function getElementsForSourceSection(
+  sourceSection: SourceSectionPart,
+  selectionRect: SelectionRect
+): MatchedElement[] {
+  const element = resolveDomPath(sourceSection.domPath);
+  if (element) {
+    return getMeaningfulElementsInSource(element);
+  }
+
+  return getElementsInRect(selectionRect);
+}
+
+function selectSourceSection(sourceSections: SourceSectionPart[]): SourceSectionPart | undefined {
+  return sourceSections
+    .filter((section) => section.selectionOverlap >= 0.08 || section.score >= 55)
+    .sort((a, b) => sourceSelectionScore(b) - sourceSelectionScore(a))[0];
+}
+
+function sourceSelectionScore(section: Pick<
+  SourceSectionPart,
+  | "tagName"
+  | "id"
+  | "className"
+  | "role"
+  | "ariaLabel"
+  | "selectionOverlap"
+  | "counts"
+  | "headingSnippets"
+  | "ctaSnippets"
+  | "mediaSnippets"
+  | "childElementCount"
+  | "sectionType"
+  | "confidence"
+>) {
+  const identity = [
+    section.tagName,
+    section.id,
+    section.className,
+    section.role,
+    section.ariaLabel
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const semantic =
+    SOURCE_SECTION_TAGS.has(section.tagName) || SOURCE_SECTION_IDENTITY_RE.test(identity)
+      ? 18
+      : 0;
+  const completeness =
+    Math.min(section.headingSnippets.length, 1) * 8 +
+    Math.min(section.ctaSnippets.length, 2) * 5 +
+    Math.min(section.mediaSnippets.length, 1) * 4 +
+    Math.min(section.counts.cardsEstimate, 4) * 3 +
+    Math.min(section.counts.inputs, 2) * 5;
+  const sectionBonus = section.sectionType === "unknown" ? 0 : section.confidence * 35;
+  const wrapperPenalty =
+    (section.tagName === "main" || section.childElementCount > 16) &&
+    section.selectionOverlap < 0.3
+      ? 18
+      : 0;
+
+  return section.selectionOverlap * 55 + semantic + completeness + sectionBonus - wrapperPenalty;
+}
+
+function extractSourceSnippets(
+  element: HTMLElement,
+  selector: string,
+  limit: number
+): string[] {
+  return Array.from(element.querySelectorAll<HTMLElement>(selector))
+    .map((node) => getElementText(node))
+    .filter(Boolean)
+    .slice(0, limit);
+}
+
+function extractMediaSnippets(element: HTMLElement, limit: number): string[] {
+  return Array.from(element.querySelectorAll<HTMLElement | SVGElement>("img,svg,picture,video,canvas"))
+    .map((node) => {
+      const tag = node.tagName.toLowerCase();
+      if (tag === "img") {
+        const image = node as HTMLImageElement;
+        return image.alt || image.currentSrc || image.src || "image";
+      }
+      return SOURCE_MEDIA_TAGS.has(tag) ? tag : "";
+    })
+    .filter(Boolean)
+    .slice(0, limit);
+}
+
+function calculateSelectionOverlap(rect: DOMRect, selectionRect: SelectionRect): number {
+  const overlapArea = intersectionArea(rect, selectionRect);
+  const sectionArea = Math.max(areaOf(rect), 1);
+  const selectionArea = Math.max(selectionRect.width * selectionRect.height, 1);
+  return Number((overlapArea / Math.min(sectionArea, selectionArea)).toFixed(3));
+}
+
+function intersectionArea(rect: DOMRect, selectionRect: SelectionRect): number {
+  const left = Math.max(rect.left, selectionRect.left);
+  const right = Math.min(rect.right, selectionRect.right);
+  const top = Math.max(rect.top, selectionRect.top);
+  const bottom = Math.min(rect.bottom, selectionRect.bottom);
+  const width = Math.max(0, right - left);
+  const height = Math.max(0, bottom - top);
+  return width * height;
+}
+
+function buildDomPath(element: HTMLElement): string {
+  const parts: string[] = [];
+  let current: HTMLElement | null = element;
+
+  while (current && current !== document.body && current !== document.documentElement) {
+    const parent: HTMLElement | null = current.parentElement;
+    const tag = current.tagName.toLowerCase();
+    const id = current.id ? `#${cssEscapeLite(current.id)}` : "";
+    const siblings = parent
+      ? Array.from(parent.children).filter((child): child is HTMLElement =>
+          child instanceof HTMLElement && child.tagName === current?.tagName
+        )
+      : [];
+    const index = !id && siblings.length > 1 ? `:nth-of-type(${siblings.indexOf(current) + 1})` : "";
+    parts.unshift(`${tag}${id}${index}`);
+    current = parent;
+  }
+
+  return parts.join(" > ");
+}
+
+function resolveDomPath(domPath: string): HTMLElement | null {
+  if (!domPath) return null;
+  try {
+    const element = document.querySelector(domPath);
+    return element instanceof HTMLElement ? element : null;
+  } catch {
+    return null;
+  }
+}
+
+function captureFullPageHtmlSnapshot(): string {
+  const clone = document.documentElement.cloneNode(true) as HTMLElement;
+  clone
+    .querySelectorAll(
+      [
+        "script",
+        "style",
+        "noscript",
+        "template",
+        "[data-polishpilot='true']",
+        `#${OVERLAY_ID}`,
+        `#${PREVIEW_OVERLAY_ID}`,
+        `#${PREVIEW_BACKDROP_ID}`
+      ].join(",")
+    )
+    .forEach((element) => element.remove());
+
+  return sanitizeHtmlSnapshot(`<!doctype html>\n${clone.outerHTML}`, {
+    scope: "whole-page"
+  });
+}
+
+function cssEscapeLite(value: string): string {
+  return value.replace(/([ !"#$%&'()*+,./:;<=>?@[\\\]^`{|}~])/g, "\\$1");
+}
+
+function getSourceIdentity(element: HTMLElement): string {
+  return [
+    element.tagName,
+    element.id,
+    getClassName(element),
+    element.getAttribute("role"),
+    element.getAttribute("aria-label")
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
+function dedupeElements(elements: HTMLElement[]): HTMLElement[] {
+  return [...new Set(elements)];
+}
+
+function rectToPlain(rect: DOMRect): SourceSectionPart["rect"] {
+  return {
+    x: rect.x,
+    y: rect.y,
+    width: rect.width,
+    height: rect.height,
+    top: rect.top,
+    left: rect.left,
+    right: rect.right,
+    bottom: rect.bottom
+  };
+}
+
 function buildCapturePreviewDebugLogs({
   selectedRect,
   selectedRoot,
+  sourceSections,
+  selectedSourceSection,
   matchedElements,
   counts,
   detected,
   usedCssRules,
-  styleTokens
+  styleTokens,
+  pageDesignContext,
+  fullPageHtmlPreview
 }: {
   selectedRect: SelectionRect;
   selectedRoot: HTMLElement | null;
+  sourceSections?: SourceSectionPart[];
+  selectedSourceSection?: SourceSectionPart;
   matchedElements: MatchedElement[];
   counts: ElementCounts;
   detected: DetectionSummary;
   usedCssRules?: UsedCssExtractionResult;
   styleTokens?: StyleTokens;
+  pageDesignContext?: PageDesignContext;
+  fullPageHtmlPreview?: string;
 }) {
   const logs = [];
 
@@ -1112,6 +1615,44 @@ function buildCapturePreviewDebugLogs({
     })
   );
 
+  if (sourceSections?.length) {
+    logs.push(
+      createPreviewDebugLog("source-section-detection", "HTML source sections detected", {
+        summary: {
+          selected: selectedSourceSection
+            ? {
+                domPath: selectedSourceSection.domPath,
+                tagName: selectedSourceSection.tagName,
+                className: truncateDebugText(selectedSourceSection.className ?? "", 160),
+                sectionType: selectedSourceSection.sectionType,
+                layoutType: selectedSourceSection.layoutType,
+                confidence: selectedSourceSection.confidence,
+                score: Number(selectedSourceSection.score.toFixed(2)),
+                selectionOverlap: selectedSourceSection.selectionOverlap,
+                reasons: selectedSourceSection.reasons
+              }
+            : null,
+          candidates: sourceSections.slice(0, 10).map((section) => ({
+            domPath: section.domPath,
+            tagName: section.tagName,
+            className: truncateDebugText(section.className ?? "", 120),
+            sectionType: section.sectionType,
+            layoutType: section.layoutType,
+            confidence: section.confidence,
+            score: Number(section.score.toFixed(2)),
+            selectionOverlap: section.selectionOverlap,
+            counts: section.counts,
+            headings: section.headingSnippets,
+            ctas: section.ctaSnippets,
+            media: section.mediaSnippets,
+            reasons: section.reasons
+          }))
+        },
+        htmlPreview: selectedSourceSection?.htmlPreview
+      })
+    );
+  }
+
   if (usedCssRules) {
     logs.push(
       createPreviewDebugLog("used-css-extraction", "Used CSS rules extracted", {
@@ -1140,6 +1681,34 @@ function buildCapturePreviewDebugLogs({
     logs.push(
       createPreviewDebugLog("style-token-extraction", "Style tokens extracted", {
         summary: styleTokens
+      })
+    );
+  }
+
+  if (pageDesignContext) {
+    logs.push(
+      createPreviewDebugLog("page-design-extraction", "Page design context extracted", {
+        summary: {
+          sampledElements: pageDesignContext.sampledElements,
+          totalElements: pageDesignContext.totalElements,
+          fullPageHtmlPreviewChars: fullPageHtmlPreview?.length ?? 0,
+          typography: pageDesignContext.typography,
+          colors: pageDesignContext.colors,
+          spacing: pageDesignContext.spacing,
+          radius: pageDesignContext.radius,
+          shadows: pageDesignContext.shadows,
+          motion: pageDesignContext.motion,
+          components: pageDesignContext.components,
+          siteSignals: {
+            title: pageDesignContext.siteSignals.title,
+            description: truncateDebugText(pageDesignContext.siteSignals.description, 220),
+            headings: pageDesignContext.siteSignals.headings,
+            navTexts: pageDesignContext.siteSignals.navTexts.slice(0, 12),
+            ctaTexts: pageDesignContext.siteSignals.ctaTexts.slice(0, 12),
+            elementCounts: pageDesignContext.siteSignals.elementCounts
+          },
+          diagnostics: pageDesignContext.diagnostics
+        }
       })
     );
   }
@@ -1259,7 +1828,14 @@ function getStyleCandidates(selectionRect: SelectionRect) {
         Number(style.opacity) !== 0
       );
     })
-    .slice(0, 160);
+    .map((element) => ({
+      element,
+      overlapArea: intersectionArea(element.getBoundingClientRect(), selectionRect),
+      area: areaOf(element.getBoundingClientRect())
+    }))
+    .sort((a, b) => b.overlapArea - a.overlapArea || b.area - a.area)
+    .slice(0, 360)
+    .map(({ element }) => element);
 }
 
 function findLargestLocalContainer(
@@ -1273,14 +1849,24 @@ function findLargestLocalContainer(
       const rect = element.getBoundingClientRect();
       const area = rect.width * rect.height;
       const style = getComputedStyle(element);
+      const selectionArea = Math.max(selectionRect.width * selectionRect.height, 1);
+      const overlapArea = intersectionArea(rect, selectionRect);
+      const selectionCoverage = overlapArea / selectionArea;
+      const elementCoverage = overlapArea / Math.max(area, 1);
+      const sizeFit = 1 - Math.min(Math.abs(area - selectionArea) / selectionArea, 4) / 4;
+      const hugeWrapperPenalty = area > selectionArea * 8 && elementCoverage < 0.3 ? 18000 : 0;
+      const identity = getSourceIdentity(element);
 
       return {
         element,
         score:
-          area -
-          Math.abs(area - selectionRect.width * selectionRect.height) * 0.35 +
+          selectionCoverage * 60000 +
+          elementCoverage * 26000 +
+          sizeFit * 18000 +
           (nonTransparentColor(style.backgroundColor) ? 8000 : 0) +
-          (Number.parseFloat(style.padding) > 0 ? 1800 : 0)
+          (Number.parseFloat(style.padding) > 0 ? 1800 : 0) +
+          (SOURCE_SECTION_IDENTITY_RE.test(identity) ? 10000 : 0) -
+          hugeWrapperPenalty
       };
     })
     .sort((a, b) => b.score - a.score)[0]?.element;
@@ -1625,7 +2211,7 @@ function getElementsInRect(selectionRect: SelectionRect): MatchedElement[] {
       area: areaOf(element.getBoundingClientRect())
     }))
     .sort((a, b) => b.score - a.score || b.area - a.area)
-    .slice(0, 50)
+    .slice(0, 90)
     .map(({ element }) => serializeElement(element));
 
   return elements;
@@ -1664,10 +2250,12 @@ function isMeaningfulElement(
 
   return Boolean(
     text ||
-      ["img", "svg", "button", "a", "input", "textarea", "select", "article", "section"].includes(tag) ||
+      ["img", "svg", "button", "a", "input", "textarea", "select", "article", "section", "form", "nav", "footer", "li", "ul", "ol"].includes(tag) ||
       className.includes("card") ||
       className.includes("feature") ||
-      className.includes("grid")
+      className.includes("grid") ||
+      SOURCE_SECTION_IDENTITY_RE.test(className) ||
+      (element instanceof HTMLElement && isRepeatedContentChild(element))
   );
 }
 
@@ -1731,12 +2319,18 @@ function buildCounts(elements: MatchedElement[]): ElementCounts {
 function scoreElement(element: HTMLElement | SVGElement): number {
   const tag = element.tagName.toLowerCase();
   const className = getClassName(element).toLowerCase();
+  const identity = `${element.id ?? ""} ${className} ${element.getAttribute("role") ?? ""} ${element.getAttribute("aria-label") ?? ""}`;
+  const style = getComputedStyle(element);
   let score = 0;
 
   if (getElementText(element)) score += 3;
-  if (["h1", "h2", "h3", "button", "a", "img", "svg", "input"].includes(tag)) score += 4;
-  if (["article", "section", "li"].includes(tag)) score += 3;
-  if (className.includes("card") || className.includes("feature") || className.includes("grid")) score += 3;
+  if (/^h[1-6]$/.test(tag)) score += 8;
+  if (["button", "a", "img", "svg", "input", "textarea", "select"].includes(tag)) score += 6;
+  if (["article", "section", "li", "form", "nav", "footer"].includes(tag)) score += 4;
+  if (SOURCE_SECTION_IDENTITY_RE.test(identity)) score += 5;
+  if (/\b(card|feature|tile|item|step|plan|price|testimonial|review|metric|stat|panel|box|cell|widget)\b/i.test(identity)) score += 5;
+  if (nonTransparentColor(style.backgroundColor) || nonTransparentColor(style.borderColor)) score += 2;
+  if (style.boxShadow !== "none" || style.borderRadius !== "0px") score += 2;
   if (element.getAttribute("role") || element.getAttribute("aria-label")) score += 1;
 
   return score;

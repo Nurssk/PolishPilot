@@ -15,6 +15,8 @@ export const SELECTED_TEMPLATE_STORAGE_KEY = "selectedTemplateId";
 export const SELECTED_ANIMATION_STORAGE_KEY = "selectedAnimationId";
 export const EXCLUDED_UNCODIX_RULES_STORAGE_KEY = "excludedUncodixRuleIds";
 export const AI_PREVIEW_REGENERATE_KEY = "aiPreviewRegenerateRequest";
+export const WORKSPACE_AI_PREVIEW_REQUEST_KEY = "workspaceAiPreviewRequest";
+export const CODE_CHANGE_STORAGE_KEY = "codeChangeData";
 
 export function isPolishPilotMessage(value: unknown): value is PolishPilotMessage {
   return Boolean(
@@ -51,7 +53,7 @@ export function formatPixels(value: number): string {
 export function buildDesignerDescription(capture: RectangleCapture): string {
   const counts = summarizeCounts(capture.counts);
 
-  return `This selected area appears to be a ${capture.detected.sectionType} section using a ${capture.detected.layoutType} layout. It contains ${counts} and may be suitable for layout pattern suggestions.`;
+  return `This selected area contains ${counts}. Gemini will classify the section from the screenshot.`;
 }
 
 function summarizeCounts(counts: ElementCounts): string {

@@ -12,16 +12,20 @@ export function AnimationReferenceCard({
 }) {
   return (
     <article
-      className={`rounded-lg border p-4 transition ${
+      className={`relative rounded-xl border p-3 shadow-pilot transition ${
         selected
-          ? "border-pilot-borderStrong bg-pilot-primary/10"
+          ? "border-pilot-borderStrong bg-pilot-card"
           : "border-pilot-border bg-pilot-card hover:border-pilot-borderStrong"
       }`}
     >
+      <MotionPreview active={selected} />
+      {selected ? (
+        <div className="pointer-events-none absolute inset-0 rounded-xl border-2 border-pilot-primary" />
+      ) : null}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="text-base font-black text-pilot-text">{reference.title}</h3>
-          <p className="mt-1 text-xs font-bold uppercase tracking-[0.08em] text-pilot-primaryDeep">
+          <p className="mt-1 text-xs font-bold uppercase tracking-[0.08em] text-pilot-muted">
             {reference.source} · {reference.category}
           </p>
         </div>
@@ -45,7 +49,7 @@ export function AnimationReferenceCard({
           onClick={onSelect}
           type="button"
         >
-          {selected ? "Added" : "Use animation idea"}
+          {selected ? "Selected" : "Use animation"}
         </button>
         <a
           className="rounded-lg border border-pilot-border px-2.5 py-2.5 text-center text-sm font-semibold text-pilot-text transition hover:border-pilot-borderStrong hover:bg-pilot-primary/10"
@@ -57,5 +61,29 @@ export function AnimationReferenceCard({
         </a>
       </div>
     </article>
+  );
+}
+
+function MotionPreview({ active }: { active: boolean }) {
+  return (
+    <div
+      className={`mb-3 h-24 overflow-hidden rounded-lg border p-3 ${
+        active
+          ? "border-pilot-primary/40 bg-pilot-primary/10"
+          : "border-pilot-border bg-pilot-surface"
+      }`}
+    >
+      <div className="flex h-full items-center gap-3">
+        <div className="grid flex-1 gap-2">
+          <div className="h-3 w-2/3 rounded bg-pilot-muted/35" />
+          <div className="h-2 rounded bg-pilot-muted/20" />
+          <div className="h-2 w-4/5 rounded bg-pilot-muted/20" />
+        </div>
+        <div className="relative h-12 w-16">
+          <div className="absolute left-0 top-1 h-10 w-10 rounded-lg border border-pilot-border bg-pilot-card shadow-pilot" />
+          <div className="absolute right-0 top-4 h-8 w-8 rounded-lg border border-pilot-border bg-pilot-card shadow-pilot" />
+        </div>
+      </div>
+    </div>
   );
 }

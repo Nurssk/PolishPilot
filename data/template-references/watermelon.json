@@ -1,0 +1,4448 @@
+[
+  {
+    "id": "watermelon-announcement-1",
+    "source": "watermelon-ui",
+    "title": "Announcement 1",
+    "url": "https://registry.watermelon.sh/r/announcement-1.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "announcement",
+      "cta"
+    ],
+    "keywords": [
+      "announcement",
+      "cta"
+    ],
+    "description": "Watermelon UI announcement block reference for announcement sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Announcement"
+  },
+  {
+    "id": "watermelon-announcement-2",
+    "source": "watermelon-ui",
+    "title": "Announcement 2",
+    "url": "https://registry.watermelon.sh/r/announcement-2.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "announcement",
+      "cta"
+    ],
+    "keywords": [
+      "announcement",
+      "cta"
+    ],
+    "description": "Watermelon UI announcement block reference for announcement sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Announcement"
+  },
+  {
+    "id": "watermelon-announcement-3",
+    "source": "watermelon-ui",
+    "title": "Announcement 3",
+    "url": "https://registry.watermelon.sh/r/announcement-3.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "announcement",
+      "cta"
+    ],
+    "keywords": [
+      "announcement",
+      "cta"
+    ],
+    "description": "Watermelon UI announcement block reference for announcement sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Announcement"
+  },
+  {
+    "id": "watermelon-announcement-4",
+    "source": "watermelon-ui",
+    "title": "Announcement 4",
+    "url": "https://registry.watermelon.sh/r/announcement-4.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "announcement",
+      "cta"
+    ],
+    "keywords": [
+      "announcement",
+      "cta"
+    ],
+    "description": "Watermelon UI announcement block reference for announcement sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Announcement"
+  },
+  {
+    "id": "watermelon-announcement-5",
+    "source": "watermelon-ui",
+    "title": "Announcement 5",
+    "url": "https://registry.watermelon.sh/r/announcement-5.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "announcement",
+      "cta"
+    ],
+    "keywords": [
+      "announcement",
+      "cta"
+    ],
+    "description": "Watermelon UI announcement block reference for announcement sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Announcement"
+  },
+  {
+    "id": "watermelon-announcement-6",
+    "source": "watermelon-ui",
+    "title": "Announcement 6",
+    "url": "https://registry.watermelon.sh/r/announcement-6.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "announcement",
+      "cta"
+    ],
+    "keywords": [
+      "announcement",
+      "cta"
+    ],
+    "description": "Watermelon UI announcement block reference for announcement sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Announcement"
+  },
+  {
+    "id": "watermelon-announcement-7",
+    "source": "watermelon-ui",
+    "title": "Announcement 7",
+    "url": "https://registry.watermelon.sh/r/announcement-7.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "announcement",
+      "cta"
+    ],
+    "keywords": [
+      "announcement",
+      "cta"
+    ],
+    "description": "Watermelon UI announcement block reference for announcement sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Announcement"
+  },
+  {
+    "id": "watermelon-announcement-8",
+    "source": "watermelon-ui",
+    "title": "Announcement 8",
+    "url": "https://registry.watermelon.sh/r/announcement-8.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "announcement",
+      "cta"
+    ],
+    "keywords": [
+      "announcement",
+      "cta"
+    ],
+    "description": "Watermelon UI announcement block reference for announcement sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Announcement"
+  },
+  {
+    "id": "watermelon-announcement-9",
+    "source": "watermelon-ui",
+    "title": "Announcement 9",
+    "url": "https://registry.watermelon.sh/r/announcement-9.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "announcement",
+      "cta"
+    ],
+    "keywords": [
+      "announcement",
+      "cta"
+    ],
+    "description": "Watermelon UI announcement block reference for announcement sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Announcement"
+  },
+  {
+    "id": "watermelon-auth-01",
+    "source": "watermelon-ui",
+    "title": "auth 01",
+    "url": "https://registry.watermelon.sh/r/auth-01.json",
+    "category": "auth",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "auth"
+    ],
+    "keywords": [
+      "auth"
+    ],
+    "description": "Watermelon UI auth block reference for auth sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/auth"
+  },
+  {
+    "id": "watermelon-auth-02",
+    "source": "watermelon-ui",
+    "title": "auth 02",
+    "url": "https://registry.watermelon.sh/r/auth-02.json",
+    "category": "auth",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "auth"
+    ],
+    "keywords": [
+      "auth"
+    ],
+    "description": "Watermelon UI auth block reference for auth sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/auth"
+  },
+  {
+    "id": "watermelon-auth-03",
+    "source": "watermelon-ui",
+    "title": "auth 03",
+    "url": "https://registry.watermelon.sh/r/auth-03.json",
+    "category": "auth",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "auth"
+    ],
+    "keywords": [
+      "auth"
+    ],
+    "description": "Watermelon UI auth block reference for auth sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/auth"
+  },
+  {
+    "id": "watermelon-auth-04",
+    "source": "watermelon-ui",
+    "title": "auth 04",
+    "url": "https://registry.watermelon.sh/r/auth-04.json",
+    "category": "auth",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "auth"
+    ],
+    "keywords": [
+      "auth"
+    ],
+    "description": "Watermelon UI auth block reference for auth sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/auth"
+  },
+  {
+    "id": "watermelon-auth-05",
+    "source": "watermelon-ui",
+    "title": "auth 05",
+    "url": "https://registry.watermelon.sh/r/auth-05.json",
+    "category": "auth",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "auth"
+    ],
+    "keywords": [
+      "auth"
+    ],
+    "description": "Watermelon UI auth block reference for auth sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/auth"
+  },
+  {
+    "id": "watermelon-auth-06",
+    "source": "watermelon-ui",
+    "title": "auth 06",
+    "url": "https://registry.watermelon.sh/r/auth-06.json",
+    "category": "auth",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "auth"
+    ],
+    "keywords": [
+      "auth"
+    ],
+    "description": "Watermelon UI auth block reference for auth sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/auth"
+  },
+  {
+    "id": "watermelon-auth-07",
+    "source": "watermelon-ui",
+    "title": "auth 07",
+    "url": "https://registry.watermelon.sh/r/auth-07.json",
+    "category": "auth",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "auth"
+    ],
+    "keywords": [
+      "auth"
+    ],
+    "description": "Watermelon UI auth block reference for auth sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/auth"
+  },
+  {
+    "id": "watermelon-auth-08",
+    "source": "watermelon-ui",
+    "title": "auth 08",
+    "url": "https://registry.watermelon.sh/r/auth-08.json",
+    "category": "auth",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "auth"
+    ],
+    "keywords": [
+      "auth"
+    ],
+    "description": "Watermelon UI auth block reference for auth sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/auth"
+  },
+  {
+    "id": "watermelon-auth-09",
+    "source": "watermelon-ui",
+    "title": "auth 09",
+    "url": "https://registry.watermelon.sh/r/auth-09.json",
+    "category": "auth",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "auth"
+    ],
+    "keywords": [
+      "auth"
+    ],
+    "description": "Watermelon UI auth block reference for auth sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/auth"
+  },
+  {
+    "id": "watermelon-auth-10",
+    "source": "watermelon-ui",
+    "title": "auth 10",
+    "url": "https://registry.watermelon.sh/r/auth-10.json",
+    "category": "auth",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "auth"
+    ],
+    "keywords": [
+      "auth"
+    ],
+    "description": "Watermelon UI auth block reference for auth sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/auth"
+  },
+  {
+    "id": "watermelon-auth-11",
+    "source": "watermelon-ui",
+    "title": "auth 11",
+    "url": "https://registry.watermelon.sh/r/auth-11.json",
+    "category": "auth",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "auth"
+    ],
+    "keywords": [
+      "auth"
+    ],
+    "description": "Watermelon UI auth block reference for auth sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/auth"
+  },
+  {
+    "id": "watermelon-auth-12",
+    "source": "watermelon-ui",
+    "title": "auth 12",
+    "url": "https://registry.watermelon.sh/r/auth-12.json",
+    "category": "auth",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "auth"
+    ],
+    "keywords": [
+      "auth"
+    ],
+    "description": "Watermelon UI auth block reference for auth sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/auth"
+  },
+  {
+    "id": "watermelon-auth-13",
+    "source": "watermelon-ui",
+    "title": "auth 13",
+    "url": "https://registry.watermelon.sh/r/auth-13.json",
+    "category": "auth",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "auth"
+    ],
+    "keywords": [
+      "auth"
+    ],
+    "description": "Watermelon UI auth block reference for auth sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/auth"
+  },
+  {
+    "id": "watermelon-blog-1",
+    "source": "watermelon-ui",
+    "title": "Blog 1",
+    "url": "https://registry.watermelon.sh/r/blog-1.json",
+    "category": "other",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "blog",
+      "other"
+    ],
+    "keywords": [
+      "blog",
+      "other"
+    ],
+    "description": "Watermelon UI blog block reference for blog sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Blog"
+  },
+  {
+    "id": "watermelon-blog-2",
+    "source": "watermelon-ui",
+    "title": "Blog 2",
+    "url": "https://registry.watermelon.sh/r/blog-2.json",
+    "category": "other",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "blog",
+      "other"
+    ],
+    "keywords": [
+      "blog",
+      "other"
+    ],
+    "description": "Watermelon UI blog block reference for blog sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Blog"
+  },
+  {
+    "id": "watermelon-blog-3",
+    "source": "watermelon-ui",
+    "title": "Blog 3",
+    "url": "https://registry.watermelon.sh/r/blog-3.json",
+    "category": "other",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "blog",
+      "other"
+    ],
+    "keywords": [
+      "blog",
+      "other"
+    ],
+    "description": "Watermelon UI blog block reference for blog sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Blog"
+  },
+  {
+    "id": "watermelon-blog-4",
+    "source": "watermelon-ui",
+    "title": "Blog 4",
+    "url": "https://registry.watermelon.sh/r/blog-4.json",
+    "category": "other",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "blog",
+      "other"
+    ],
+    "keywords": [
+      "blog",
+      "other"
+    ],
+    "description": "Watermelon UI blog block reference for blog sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Blog"
+  },
+  {
+    "id": "watermelon-career-1",
+    "source": "watermelon-ui",
+    "title": "career 1",
+    "url": "https://registry.watermelon.sh/r/career-1.json",
+    "category": "other",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "career",
+      "other"
+    ],
+    "keywords": [
+      "career",
+      "other"
+    ],
+    "description": "Watermelon UI career block reference for career sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Career"
+  },
+  {
+    "id": "watermelon-career-2",
+    "source": "watermelon-ui",
+    "title": "career 2",
+    "url": "https://registry.watermelon.sh/r/career-2.json",
+    "category": "other",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "career",
+      "other"
+    ],
+    "keywords": [
+      "career",
+      "other"
+    ],
+    "description": "Watermelon UI career block reference for career sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Career"
+  },
+  {
+    "id": "watermelon-career-3",
+    "source": "watermelon-ui",
+    "title": "career 3",
+    "url": "https://registry.watermelon.sh/r/career-3.json",
+    "category": "other",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "career",
+      "other"
+    ],
+    "keywords": [
+      "career",
+      "other"
+    ],
+    "description": "Watermelon UI career block reference for career sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Career"
+  },
+  {
+    "id": "watermelon-career-4",
+    "source": "watermelon-ui",
+    "title": "career 4",
+    "url": "https://registry.watermelon.sh/r/career-4.json",
+    "category": "other",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "career",
+      "other"
+    ],
+    "keywords": [
+      "career",
+      "other"
+    ],
+    "description": "Watermelon UI career block reference for career sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Career"
+  },
+  {
+    "id": "watermelon-contact-1",
+    "source": "watermelon-ui",
+    "title": "contact 1",
+    "url": "https://registry.watermelon.sh/r/contact-1.json",
+    "category": "forms",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "contact",
+      "forms"
+    ],
+    "keywords": [
+      "contact",
+      "forms"
+    ],
+    "description": "Watermelon UI contact block reference for contact sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/contact"
+  },
+  {
+    "id": "watermelon-contact-2",
+    "source": "watermelon-ui",
+    "title": "contact 2",
+    "url": "https://registry.watermelon.sh/r/contact-2.json",
+    "category": "forms",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "contact",
+      "forms"
+    ],
+    "keywords": [
+      "contact",
+      "forms"
+    ],
+    "description": "Watermelon UI contact block reference for contact sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/contact"
+  },
+  {
+    "id": "watermelon-contact-3",
+    "source": "watermelon-ui",
+    "title": "contact 3",
+    "url": "https://registry.watermelon.sh/r/contact-3.json",
+    "category": "forms",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "contact",
+      "forms"
+    ],
+    "keywords": [
+      "contact",
+      "forms"
+    ],
+    "description": "Watermelon UI contact block reference for contact sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/contact"
+  },
+  {
+    "id": "watermelon-contact-4",
+    "source": "watermelon-ui",
+    "title": "contact 4",
+    "url": "https://registry.watermelon.sh/r/contact-4.json",
+    "category": "forms",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "contact",
+      "forms"
+    ],
+    "keywords": [
+      "contact",
+      "forms"
+    ],
+    "description": "Watermelon UI contact block reference for contact sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/contact"
+  },
+  {
+    "id": "watermelon-contact-5",
+    "source": "watermelon-ui",
+    "title": "contact 5",
+    "url": "https://registry.watermelon.sh/r/contact-5.json",
+    "category": "forms",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "contact",
+      "forms"
+    ],
+    "keywords": [
+      "contact",
+      "forms"
+    ],
+    "description": "Watermelon UI contact block reference for contact sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/contact"
+  },
+  {
+    "id": "watermelon-contact-6",
+    "source": "watermelon-ui",
+    "title": "contact 6",
+    "url": "https://registry.watermelon.sh/r/contact-6.json",
+    "category": "forms",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "contact",
+      "forms"
+    ],
+    "keywords": [
+      "contact",
+      "forms"
+    ],
+    "description": "Watermelon UI contact block reference for contact sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/contact"
+  },
+  {
+    "id": "watermelon-contact-7",
+    "source": "watermelon-ui",
+    "title": "contact 7",
+    "url": "https://registry.watermelon.sh/r/contact-7.json",
+    "category": "forms",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "contact",
+      "forms"
+    ],
+    "keywords": [
+      "contact",
+      "forms"
+    ],
+    "description": "Watermelon UI contact block reference for contact sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/contact"
+  },
+  {
+    "id": "watermelon-cta-1",
+    "source": "watermelon-ui",
+    "title": "cta 1",
+    "url": "https://registry.watermelon.sh/r/cta-1.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "cta"
+    ],
+    "keywords": [
+      "cta"
+    ],
+    "description": "Watermelon UI cta block reference for cta sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/CTA"
+  },
+  {
+    "id": "watermelon-cta-2",
+    "source": "watermelon-ui",
+    "title": "cta 2",
+    "url": "https://registry.watermelon.sh/r/cta-2.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "cta"
+    ],
+    "keywords": [
+      "cta"
+    ],
+    "description": "Watermelon UI cta block reference for cta sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/CTA"
+  },
+  {
+    "id": "watermelon-cta-3",
+    "source": "watermelon-ui",
+    "title": "cta 3",
+    "url": "https://registry.watermelon.sh/r/cta-3.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "cta"
+    ],
+    "keywords": [
+      "cta"
+    ],
+    "description": "Watermelon UI cta block reference for cta sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/CTA"
+  },
+  {
+    "id": "watermelon-cta-4",
+    "source": "watermelon-ui",
+    "title": "cta 4",
+    "url": "https://registry.watermelon.sh/r/cta-4.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "cta"
+    ],
+    "keywords": [
+      "cta"
+    ],
+    "description": "Watermelon UI cta block reference for cta sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/CTA"
+  },
+  {
+    "id": "watermelon-cta-5",
+    "source": "watermelon-ui",
+    "title": "cta 5",
+    "url": "https://registry.watermelon.sh/r/cta-5.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "cta"
+    ],
+    "keywords": [
+      "cta"
+    ],
+    "description": "Watermelon UI cta block reference for cta sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/CTA"
+  },
+  {
+    "id": "watermelon-error-1",
+    "source": "watermelon-ui",
+    "title": "error 1",
+    "url": "https://registry.watermelon.sh/r/error-1.json",
+    "category": "other",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "error",
+      "other"
+    ],
+    "keywords": [
+      "error",
+      "other"
+    ],
+    "description": "Watermelon UI error block reference for error sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Error"
+  },
+  {
+    "id": "watermelon-error-2",
+    "source": "watermelon-ui",
+    "title": "error 2",
+    "url": "https://registry.watermelon.sh/r/error-2.json",
+    "category": "other",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "error",
+      "other"
+    ],
+    "keywords": [
+      "error",
+      "other"
+    ],
+    "description": "Watermelon UI error block reference for error sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Error"
+  },
+  {
+    "id": "watermelon-error-3",
+    "source": "watermelon-ui",
+    "title": "error 3",
+    "url": "https://registry.watermelon.sh/r/error-3.json",
+    "category": "other",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "error",
+      "other"
+    ],
+    "keywords": [
+      "error",
+      "other"
+    ],
+    "description": "Watermelon UI error block reference for error sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Error"
+  },
+  {
+    "id": "watermelon-error-4",
+    "source": "watermelon-ui",
+    "title": "error 4",
+    "url": "https://registry.watermelon.sh/r/error-4.json",
+    "category": "other",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "error",
+      "other"
+    ],
+    "keywords": [
+      "error",
+      "other"
+    ],
+    "description": "Watermelon UI error block reference for error sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Error"
+  },
+  {
+    "id": "watermelon-error-5",
+    "source": "watermelon-ui",
+    "title": "error 5",
+    "url": "https://registry.watermelon.sh/r/error-5.json",
+    "category": "other",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "error",
+      "other"
+    ],
+    "keywords": [
+      "error",
+      "other"
+    ],
+    "description": "Watermelon UI error block reference for error sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Error"
+  },
+  {
+    "id": "watermelon-error-6",
+    "source": "watermelon-ui",
+    "title": "error 6",
+    "url": "https://registry.watermelon.sh/r/error-6.json",
+    "category": "other",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "error",
+      "other"
+    ],
+    "keywords": [
+      "error",
+      "other"
+    ],
+    "description": "Watermelon UI error block reference for error sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Error"
+  },
+  {
+    "id": "watermelon-error-7",
+    "source": "watermelon-ui",
+    "title": "error 7",
+    "url": "https://registry.watermelon.sh/r/error-7.json",
+    "category": "other",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "error",
+      "other"
+    ],
+    "keywords": [
+      "error",
+      "other"
+    ],
+    "description": "Watermelon UI error block reference for error sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Error"
+  },
+  {
+    "id": "watermelon-faq-1",
+    "source": "watermelon-ui",
+    "title": "faq 1",
+    "url": "https://registry.watermelon.sh/r/faq-1.json",
+    "category": "features",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "faq",
+      "features"
+    ],
+    "keywords": [
+      "faq",
+      "features"
+    ],
+    "description": "Watermelon UI faq block reference for faq sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "icon-feature-grid"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/FAQ"
+  },
+  {
+    "id": "watermelon-faq-2",
+    "source": "watermelon-ui",
+    "title": "faq 2",
+    "url": "https://registry.watermelon.sh/r/faq-2.json",
+    "category": "features",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "faq",
+      "features"
+    ],
+    "keywords": [
+      "faq",
+      "features"
+    ],
+    "description": "Watermelon UI faq block reference for faq sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "icon-feature-grid"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/FAQ"
+  },
+  {
+    "id": "watermelon-faq-3",
+    "source": "watermelon-ui",
+    "title": "faq 3",
+    "url": "https://registry.watermelon.sh/r/faq-3.json",
+    "category": "features",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "faq",
+      "features"
+    ],
+    "keywords": [
+      "faq",
+      "features"
+    ],
+    "description": "Watermelon UI faq block reference for faq sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "icon-feature-grid"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/FAQ"
+  },
+  {
+    "id": "watermelon-faq-4",
+    "source": "watermelon-ui",
+    "title": "faq 4",
+    "url": "https://registry.watermelon.sh/r/faq-4.json",
+    "category": "features",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "faq",
+      "features"
+    ],
+    "keywords": [
+      "faq",
+      "features"
+    ],
+    "description": "Watermelon UI faq block reference for faq sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "icon-feature-grid"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/FAQ"
+  },
+  {
+    "id": "watermelon-faq-5",
+    "source": "watermelon-ui",
+    "title": "faq 5",
+    "url": "https://registry.watermelon.sh/r/faq-5.json",
+    "category": "features",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "faq",
+      "features"
+    ],
+    "keywords": [
+      "faq",
+      "features"
+    ],
+    "description": "Watermelon UI faq block reference for faq sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "icon-feature-grid"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/FAQ"
+  },
+  {
+    "id": "watermelon-feature-1",
+    "source": "watermelon-ui",
+    "title": "Feature 1",
+    "url": "https://registry.watermelon.sh/r/feature-1.json",
+    "category": "features",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "feature",
+      "features"
+    ],
+    "keywords": [
+      "feature",
+      "features"
+    ],
+    "description": "Watermelon UI feature block reference for feature sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "icon-feature-grid"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Feature"
+  },
+  {
+    "id": "watermelon-feature-2",
+    "source": "watermelon-ui",
+    "title": "Feature 2",
+    "url": "https://registry.watermelon.sh/r/feature-2.json",
+    "category": "features",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "feature",
+      "features"
+    ],
+    "keywords": [
+      "feature",
+      "features"
+    ],
+    "description": "Watermelon UI feature block reference for feature sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "icon-feature-grid"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Feature"
+  },
+  {
+    "id": "watermelon-feature-3",
+    "source": "watermelon-ui",
+    "title": "Feature 3",
+    "url": "https://registry.watermelon.sh/r/feature-3.json",
+    "category": "features",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "feature",
+      "features"
+    ],
+    "keywords": [
+      "feature",
+      "features"
+    ],
+    "description": "Watermelon UI feature block reference for feature sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "icon-feature-grid"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Feature"
+  },
+  {
+    "id": "watermelon-feature-4",
+    "source": "watermelon-ui",
+    "title": "Feature 4",
+    "url": "https://registry.watermelon.sh/r/feature-4.json",
+    "category": "features",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "feature",
+      "features"
+    ],
+    "keywords": [
+      "feature",
+      "features"
+    ],
+    "description": "Watermelon UI feature block reference for feature sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "icon-feature-grid"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Feature"
+  },
+  {
+    "id": "watermelon-feature-5",
+    "source": "watermelon-ui",
+    "title": "Feature 5",
+    "url": "https://registry.watermelon.sh/r/feature-5.json",
+    "category": "features",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "feature",
+      "features"
+    ],
+    "keywords": [
+      "feature",
+      "features"
+    ],
+    "description": "Watermelon UI feature block reference for feature sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "icon-feature-grid"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Feature"
+  },
+  {
+    "id": "watermelon-file-upload-1",
+    "source": "watermelon-ui",
+    "title": "file-upload 1",
+    "url": "https://registry.watermelon.sh/r/file-upload-1.json",
+    "category": "forms",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "file-upload",
+      "forms"
+    ],
+    "keywords": [
+      "file-upload",
+      "forms"
+    ],
+    "description": "Watermelon UI file-upload block reference for file upload sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/file-upload"
+  },
+  {
+    "id": "watermelon-file-upload-2",
+    "source": "watermelon-ui",
+    "title": "file-upload 2",
+    "url": "https://registry.watermelon.sh/r/file-upload-2.json",
+    "category": "forms",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "file-upload",
+      "forms"
+    ],
+    "keywords": [
+      "file-upload",
+      "forms"
+    ],
+    "description": "Watermelon UI file-upload block reference for file upload sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/file-upload"
+  },
+  {
+    "id": "watermelon-file-upload-3",
+    "source": "watermelon-ui",
+    "title": "file-upload 3",
+    "url": "https://registry.watermelon.sh/r/file-upload-3.json",
+    "category": "forms",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "file-upload",
+      "forms"
+    ],
+    "keywords": [
+      "file-upload",
+      "forms"
+    ],
+    "description": "Watermelon UI file-upload block reference for file upload sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/file-upload"
+  },
+  {
+    "id": "watermelon-file-upload-4",
+    "source": "watermelon-ui",
+    "title": "file-upload 4",
+    "url": "https://registry.watermelon.sh/r/file-upload-4.json",
+    "category": "forms",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "file-upload",
+      "forms"
+    ],
+    "keywords": [
+      "file-upload",
+      "forms"
+    ],
+    "description": "Watermelon UI file-upload block reference for file upload sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/file-upload"
+  },
+  {
+    "id": "watermelon-file-upload-5",
+    "source": "watermelon-ui",
+    "title": "file-upload 5",
+    "url": "https://registry.watermelon.sh/r/file-upload-5.json",
+    "category": "forms",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "file-upload",
+      "forms"
+    ],
+    "keywords": [
+      "file-upload",
+      "forms"
+    ],
+    "description": "Watermelon UI file-upload block reference for file upload sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "split-auth-proof"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/file-upload"
+  },
+  {
+    "id": "watermelon-footer-1",
+    "source": "watermelon-ui",
+    "title": "Footer 1",
+    "url": "https://registry.watermelon.sh/r/footer-1.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-10",
+    "source": "watermelon-ui",
+    "title": "Footer 10",
+    "url": "https://registry.watermelon.sh/r/footer-10.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-11",
+    "source": "watermelon-ui",
+    "title": "Footer 11",
+    "url": "https://registry.watermelon.sh/r/footer-11.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-12",
+    "source": "watermelon-ui",
+    "title": "Footer 12",
+    "url": "https://registry.watermelon.sh/r/footer-12.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-13",
+    "source": "watermelon-ui",
+    "title": "Footer 13",
+    "url": "https://registry.watermelon.sh/r/footer-13.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-14",
+    "source": "watermelon-ui",
+    "title": "Footer 14",
+    "url": "https://registry.watermelon.sh/r/footer-14.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-15",
+    "source": "watermelon-ui",
+    "title": "Footer 15",
+    "url": "https://registry.watermelon.sh/r/footer-15.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-16",
+    "source": "watermelon-ui",
+    "title": "Footer 16",
+    "url": "https://registry.watermelon.sh/r/footer-16.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-17",
+    "source": "watermelon-ui",
+    "title": "Footer 17",
+    "url": "https://registry.watermelon.sh/r/footer-17.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-18",
+    "source": "watermelon-ui",
+    "title": "Footer 18",
+    "url": "https://registry.watermelon.sh/r/footer-18.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-19",
+    "source": "watermelon-ui",
+    "title": "Footer 19",
+    "url": "https://registry.watermelon.sh/r/footer-19.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-2",
+    "source": "watermelon-ui",
+    "title": "Footer 2",
+    "url": "https://registry.watermelon.sh/r/footer-2.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-20",
+    "source": "watermelon-ui",
+    "title": "Footer 20",
+    "url": "https://registry.watermelon.sh/r/footer-20.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-21",
+    "source": "watermelon-ui",
+    "title": "Footer 21",
+    "url": "https://registry.watermelon.sh/r/footer-21.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-22",
+    "source": "watermelon-ui",
+    "title": "Footer 22",
+    "url": "https://registry.watermelon.sh/r/footer-22.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-23",
+    "source": "watermelon-ui",
+    "title": "Footer 23",
+    "url": "https://registry.watermelon.sh/r/footer-23.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-24",
+    "source": "watermelon-ui",
+    "title": "Footer 24",
+    "url": "https://registry.watermelon.sh/r/footer-24.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-25",
+    "source": "watermelon-ui",
+    "title": "Footer 25",
+    "url": "https://registry.watermelon.sh/r/footer-25.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-26",
+    "source": "watermelon-ui",
+    "title": "Footer 26",
+    "url": "https://registry.watermelon.sh/r/footer-26.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-3",
+    "source": "watermelon-ui",
+    "title": "Footer 3",
+    "url": "https://registry.watermelon.sh/r/footer-3.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-4",
+    "source": "watermelon-ui",
+    "title": "Footer 4",
+    "url": "https://registry.watermelon.sh/r/footer-4.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-5",
+    "source": "watermelon-ui",
+    "title": "Footer 5",
+    "url": "https://registry.watermelon.sh/r/footer-5.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-6",
+    "source": "watermelon-ui",
+    "title": "Footer 6",
+    "url": "https://registry.watermelon.sh/r/footer-6.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-7",
+    "source": "watermelon-ui",
+    "title": "Footer 7",
+    "url": "https://registry.watermelon.sh/r/footer-7.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-8",
+    "source": "watermelon-ui",
+    "title": "Footer 8",
+    "url": "https://registry.watermelon.sh/r/footer-8.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-footer-9",
+    "source": "watermelon-ui",
+    "title": "Footer 9",
+    "url": "https://registry.watermelon.sh/r/footer-9.json",
+    "category": "footer",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "footer"
+    ],
+    "keywords": [
+      "footer"
+    ],
+    "description": "Watermelon UI footer block reference for footer sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "footer-columns"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/footer"
+  },
+  {
+    "id": "watermelon-hero-1",
+    "source": "watermelon-ui",
+    "title": "hero 1",
+    "url": "https://registry.watermelon.sh/r/hero-1.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-10",
+    "source": "watermelon-ui",
+    "title": "hero 10",
+    "url": "https://registry.watermelon.sh/r/hero-10.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-11",
+    "source": "watermelon-ui",
+    "title": "hero 11",
+    "url": "https://registry.watermelon.sh/r/hero-11.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-12",
+    "source": "watermelon-ui",
+    "title": "hero 12",
+    "url": "https://registry.watermelon.sh/r/hero-12.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-13",
+    "source": "watermelon-ui",
+    "title": "hero 13",
+    "url": "https://registry.watermelon.sh/r/hero-13.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-14",
+    "source": "watermelon-ui",
+    "title": "hero 14",
+    "url": "https://registry.watermelon.sh/r/hero-14.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-15",
+    "source": "watermelon-ui",
+    "title": "hero 15",
+    "url": "https://registry.watermelon.sh/r/hero-15.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-16",
+    "source": "watermelon-ui",
+    "title": "hero 16",
+    "url": "https://registry.watermelon.sh/r/hero-16.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-17",
+    "source": "watermelon-ui",
+    "title": "hero 17",
+    "url": "https://registry.watermelon.sh/r/hero-17.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-18",
+    "source": "watermelon-ui",
+    "title": "hero 18",
+    "url": "https://registry.watermelon.sh/r/hero-18.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-19",
+    "source": "watermelon-ui",
+    "title": "hero 19",
+    "url": "https://registry.watermelon.sh/r/hero-19.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-2",
+    "source": "watermelon-ui",
+    "title": "hero 2",
+    "url": "https://registry.watermelon.sh/r/hero-2.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-20",
+    "source": "watermelon-ui",
+    "title": "hero 20",
+    "url": "https://registry.watermelon.sh/r/hero-20.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-21",
+    "source": "watermelon-ui",
+    "title": "hero 21",
+    "url": "https://registry.watermelon.sh/r/hero-21.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-22",
+    "source": "watermelon-ui",
+    "title": "hero 22",
+    "url": "https://registry.watermelon.sh/r/hero-22.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-23",
+    "source": "watermelon-ui",
+    "title": "hero 23",
+    "url": "https://registry.watermelon.sh/r/hero-23.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-24",
+    "source": "watermelon-ui",
+    "title": "hero 24",
+    "url": "https://registry.watermelon.sh/r/hero-24.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-25",
+    "source": "watermelon-ui",
+    "title": "hero 25",
+    "url": "https://registry.watermelon.sh/r/hero-25.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-26",
+    "source": "watermelon-ui",
+    "title": "hero 26",
+    "url": "https://registry.watermelon.sh/r/hero-26.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-27",
+    "source": "watermelon-ui",
+    "title": "hero 27",
+    "url": "https://registry.watermelon.sh/r/hero-27.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-28",
+    "source": "watermelon-ui",
+    "title": "hero 28",
+    "url": "https://registry.watermelon.sh/r/hero-28.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-29",
+    "source": "watermelon-ui",
+    "title": "hero 29",
+    "url": "https://registry.watermelon.sh/r/hero-29.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-3",
+    "source": "watermelon-ui",
+    "title": "hero 3",
+    "url": "https://registry.watermelon.sh/r/hero-3.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-30",
+    "source": "watermelon-ui",
+    "title": "hero 30",
+    "url": "https://registry.watermelon.sh/r/hero-30.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-4",
+    "source": "watermelon-ui",
+    "title": "hero 4",
+    "url": "https://registry.watermelon.sh/r/hero-4.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-5",
+    "source": "watermelon-ui",
+    "title": "hero 5",
+    "url": "https://registry.watermelon.sh/r/hero-5.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-6",
+    "source": "watermelon-ui",
+    "title": "hero 6",
+    "url": "https://registry.watermelon.sh/r/hero-6.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-7",
+    "source": "watermelon-ui",
+    "title": "hero 7",
+    "url": "https://registry.watermelon.sh/r/hero-7.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-8",
+    "source": "watermelon-ui",
+    "title": "hero 8",
+    "url": "https://registry.watermelon.sh/r/hero-8.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-hero-9",
+    "source": "watermelon-ui",
+    "title": "hero 9",
+    "url": "https://registry.watermelon.sh/r/hero-9.json",
+    "category": "hero",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "hero"
+    ],
+    "keywords": [
+      "hero"
+    ],
+    "description": "Watermelon UI hero block reference for hero sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "hero-trust-bar"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/hero"
+  },
+  {
+    "id": "watermelon-integrations-1",
+    "source": "watermelon-ui",
+    "title": "integrations 1",
+    "url": "https://registry.watermelon.sh/r/integrations-1.json",
+    "category": "features",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "integrations",
+      "features"
+    ],
+    "keywords": [
+      "integrations",
+      "features"
+    ],
+    "description": "Watermelon UI integrations block reference for integrations sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "icon-feature-grid"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/integrations"
+  },
+  {
+    "id": "watermelon-integrations-2",
+    "source": "watermelon-ui",
+    "title": "integrations 2",
+    "url": "https://registry.watermelon.sh/r/integrations-2.json",
+    "category": "features",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "integrations",
+      "features"
+    ],
+    "keywords": [
+      "integrations",
+      "features"
+    ],
+    "description": "Watermelon UI integrations block reference for integrations sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "icon-feature-grid"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/integrations"
+  },
+  {
+    "id": "watermelon-integrations-3",
+    "source": "watermelon-ui",
+    "title": "integrations 3",
+    "url": "https://registry.watermelon.sh/r/integrations-3.json",
+    "category": "features",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "integrations",
+      "features"
+    ],
+    "keywords": [
+      "integrations",
+      "features"
+    ],
+    "description": "Watermelon UI integrations block reference for integrations sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "icon-feature-grid"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/integrations"
+  },
+  {
+    "id": "watermelon-integrations-4",
+    "source": "watermelon-ui",
+    "title": "integrations 4",
+    "url": "https://registry.watermelon.sh/r/integrations-4.json",
+    "category": "features",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "integrations",
+      "features"
+    ],
+    "keywords": [
+      "integrations",
+      "features"
+    ],
+    "description": "Watermelon UI integrations block reference for integrations sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "icon-feature-grid"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/integrations"
+  },
+  {
+    "id": "watermelon-integrations-5",
+    "source": "watermelon-ui",
+    "title": "integrations 5",
+    "url": "https://registry.watermelon.sh/r/integrations-5.json",
+    "category": "features",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "integrations",
+      "features"
+    ],
+    "keywords": [
+      "integrations",
+      "features"
+    ],
+    "description": "Watermelon UI integrations block reference for integrations sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "icon-feature-grid"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/integrations"
+  },
+  {
+    "id": "watermelon-navigation-1",
+    "source": "watermelon-ui",
+    "title": "Navigation-1",
+    "url": "https://registry.watermelon.sh/r/navigation-1.json",
+    "category": "navigation",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "navigation",
+      "navigation-1"
+    ],
+    "keywords": [
+      "navigation-1",
+      "navigation"
+    ],
+    "description": "Watermelon UI navigation block reference for navigation sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "navigation-cleanup"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/navigation"
+  },
+  {
+    "id": "watermelon-navigation-2",
+    "source": "watermelon-ui",
+    "title": "Navigation-2",
+    "url": "https://registry.watermelon.sh/r/navigation-2.json",
+    "category": "navigation",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "navigation",
+      "navigation-2"
+    ],
+    "keywords": [
+      "navigation-2",
+      "navigation"
+    ],
+    "description": "Watermelon UI navigation block reference for navigation sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "navigation-cleanup"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/navigation"
+  },
+  {
+    "id": "watermelon-navigation-3",
+    "source": "watermelon-ui",
+    "title": "Navigation-3",
+    "url": "https://registry.watermelon.sh/r/navigation-3.json",
+    "category": "navigation",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "navigation",
+      "navigation-3"
+    ],
+    "keywords": [
+      "navigation-3",
+      "navigation"
+    ],
+    "description": "Watermelon UI navigation block reference for navigation sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "navigation-cleanup"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/navigation"
+  },
+  {
+    "id": "watermelon-navigation-4",
+    "source": "watermelon-ui",
+    "title": "Navigation-4",
+    "url": "https://registry.watermelon.sh/r/navigation-4.json",
+    "category": "navigation",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "navigation",
+      "navigation-4"
+    ],
+    "keywords": [
+      "navigation-4",
+      "navigation"
+    ],
+    "description": "Watermelon UI navigation block reference for navigation sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "navigation-cleanup"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/navigation"
+  },
+  {
+    "id": "watermelon-navigation-5",
+    "source": "watermelon-ui",
+    "title": "Navigation-5",
+    "url": "https://registry.watermelon.sh/r/navigation-5.json",
+    "category": "navigation",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "navigation",
+      "navigation-5"
+    ],
+    "keywords": [
+      "navigation-5",
+      "navigation"
+    ],
+    "description": "Watermelon UI navigation block reference for navigation sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "navigation-cleanup"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/navigation"
+  },
+  {
+    "id": "watermelon-navigation-6",
+    "source": "watermelon-ui",
+    "title": "Navigation-6",
+    "url": "https://registry.watermelon.sh/r/navigation-6.json",
+    "category": "navigation",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "navigation",
+      "navigation-6"
+    ],
+    "keywords": [
+      "navigation-6",
+      "navigation"
+    ],
+    "description": "Watermelon UI navigation block reference for navigation sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "navigation-cleanup"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/navigation"
+  },
+  {
+    "id": "watermelon-navigation-7",
+    "source": "watermelon-ui",
+    "title": "Navigation-7",
+    "url": "https://registry.watermelon.sh/r/navigation-7.json",
+    "category": "navigation",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "navigation",
+      "navigation-7"
+    ],
+    "keywords": [
+      "navigation-7",
+      "navigation"
+    ],
+    "description": "Watermelon UI navigation block reference for navigation sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "navigation-cleanup"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/navigation"
+  },
+  {
+    "id": "watermelon-newsletter-1",
+    "source": "watermelon-ui",
+    "title": "newsletter 1",
+    "url": "https://registry.watermelon.sh/r/newsletter-1.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "newsletter",
+      "cta"
+    ],
+    "keywords": [
+      "newsletter",
+      "cta"
+    ],
+    "description": "Watermelon UI newsletter block reference for newsletter sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/newsletter"
+  },
+  {
+    "id": "watermelon-newsletter-2",
+    "source": "watermelon-ui",
+    "title": "newsletter 2",
+    "url": "https://registry.watermelon.sh/r/newsletter-2.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "newsletter",
+      "cta"
+    ],
+    "keywords": [
+      "newsletter",
+      "cta"
+    ],
+    "description": "Watermelon UI newsletter block reference for newsletter sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/newsletter"
+  },
+  {
+    "id": "watermelon-newsletter-3",
+    "source": "watermelon-ui",
+    "title": "newsletter 3",
+    "url": "https://registry.watermelon.sh/r/newsletter-3.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "newsletter",
+      "cta"
+    ],
+    "keywords": [
+      "newsletter",
+      "cta"
+    ],
+    "description": "Watermelon UI newsletter block reference for newsletter sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/newsletter"
+  },
+  {
+    "id": "watermelon-newsletter-4",
+    "source": "watermelon-ui",
+    "title": "newsletter 4",
+    "url": "https://registry.watermelon.sh/r/newsletter-4.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "newsletter",
+      "cta"
+    ],
+    "keywords": [
+      "newsletter",
+      "cta"
+    ],
+    "description": "Watermelon UI newsletter block reference for newsletter sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/newsletter"
+  },
+  {
+    "id": "watermelon-newsletter-5",
+    "source": "watermelon-ui",
+    "title": "newsletter 5",
+    "url": "https://registry.watermelon.sh/r/newsletter-5.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "newsletter",
+      "cta"
+    ],
+    "keywords": [
+      "newsletter",
+      "cta"
+    ],
+    "description": "Watermelon UI newsletter block reference for newsletter sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/newsletter"
+  },
+  {
+    "id": "watermelon-notification-1",
+    "source": "watermelon-ui",
+    "title": "notification 1",
+    "url": "https://registry.watermelon.sh/r/notification-1.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "notification",
+      "cta"
+    ],
+    "keywords": [
+      "notification",
+      "cta"
+    ],
+    "description": "Watermelon UI notification block reference for notification sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/notification"
+  },
+  {
+    "id": "watermelon-notification-2",
+    "source": "watermelon-ui",
+    "title": "notification 2",
+    "url": "https://registry.watermelon.sh/r/notification-2.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "notification",
+      "cta"
+    ],
+    "keywords": [
+      "notification",
+      "cta"
+    ],
+    "description": "Watermelon UI notification block reference for notification sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/notification"
+  },
+  {
+    "id": "watermelon-notification-3",
+    "source": "watermelon-ui",
+    "title": "notification 3",
+    "url": "https://registry.watermelon.sh/r/notification-3.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "notification",
+      "cta"
+    ],
+    "keywords": [
+      "notification",
+      "cta"
+    ],
+    "description": "Watermelon UI notification block reference for notification sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/notification"
+  },
+  {
+    "id": "watermelon-notification-4",
+    "source": "watermelon-ui",
+    "title": "notification 4",
+    "url": "https://registry.watermelon.sh/r/notification-4.json",
+    "category": "cta",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "notification",
+      "cta"
+    ],
+    "keywords": [
+      "notification",
+      "cta"
+    ],
+    "description": "Watermelon UI notification block reference for notification sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "card-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/notification"
+  },
+  {
+    "id": "watermelon-pricing-1",
+    "source": "watermelon-ui",
+    "title": "Pricing 1",
+    "url": "https://registry.watermelon.sh/r/pricing-1.json",
+    "category": "pricing",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "pricing"
+    ],
+    "keywords": [
+      "pricing"
+    ],
+    "description": "Watermelon UI pricing block reference for pricing sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "pricing-emphasis",
+      "pricing-toggle",
+      "plan-comparison-table"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/pricing"
+  },
+  {
+    "id": "watermelon-pricing-2",
+    "source": "watermelon-ui",
+    "title": "Pricing 2",
+    "url": "https://registry.watermelon.sh/r/pricing-2.json",
+    "category": "pricing",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "pricing"
+    ],
+    "keywords": [
+      "pricing"
+    ],
+    "description": "Watermelon UI pricing block reference for pricing sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "pricing-emphasis",
+      "pricing-toggle",
+      "plan-comparison-table"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/pricing"
+  },
+  {
+    "id": "watermelon-pricing-3",
+    "source": "watermelon-ui",
+    "title": "Pricing 3",
+    "url": "https://registry.watermelon.sh/r/pricing-3.json",
+    "category": "pricing",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "pricing"
+    ],
+    "keywords": [
+      "pricing"
+    ],
+    "description": "Watermelon UI pricing block reference for pricing sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "pricing-emphasis",
+      "pricing-toggle",
+      "plan-comparison-table"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/pricing"
+  },
+  {
+    "id": "watermelon-pricing-4",
+    "source": "watermelon-ui",
+    "title": "Pricing 4",
+    "url": "https://registry.watermelon.sh/r/pricing-4.json",
+    "category": "pricing",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "pricing"
+    ],
+    "keywords": [
+      "pricing"
+    ],
+    "description": "Watermelon UI pricing block reference for pricing sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "pricing-emphasis",
+      "pricing-toggle",
+      "plan-comparison-table"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/pricing"
+  },
+  {
+    "id": "watermelon-pricing-5",
+    "source": "watermelon-ui",
+    "title": "Pricing 5",
+    "url": "https://registry.watermelon.sh/r/pricing-5.json",
+    "category": "pricing",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "pricing"
+    ],
+    "keywords": [
+      "pricing"
+    ],
+    "description": "Watermelon UI pricing block reference for pricing sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "pricing-emphasis",
+      "pricing-toggle",
+      "plan-comparison-table"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/pricing"
+  },
+  {
+    "id": "watermelon-stats-1",
+    "source": "watermelon-ui",
+    "title": "Stats 1",
+    "url": "https://registry.watermelon.sh/r/stats-1.json",
+    "category": "dashboard",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "stats",
+      "dashboard"
+    ],
+    "keywords": [
+      "stats",
+      "dashboard"
+    ],
+    "description": "Watermelon UI stats block reference for stats sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Stats"
+  },
+  {
+    "id": "watermelon-stats-2",
+    "source": "watermelon-ui",
+    "title": "Stats 2",
+    "url": "https://registry.watermelon.sh/r/stats-2.json",
+    "category": "dashboard",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "stats",
+      "dashboard"
+    ],
+    "keywords": [
+      "stats",
+      "dashboard"
+    ],
+    "description": "Watermelon UI stats block reference for stats sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Stats"
+  },
+  {
+    "id": "watermelon-stats-3",
+    "source": "watermelon-ui",
+    "title": "Stats 3",
+    "url": "https://registry.watermelon.sh/r/stats-3.json",
+    "category": "dashboard",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "stats",
+      "dashboard"
+    ],
+    "keywords": [
+      "stats",
+      "dashboard"
+    ],
+    "description": "Watermelon UI stats block reference for stats sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Stats"
+  },
+  {
+    "id": "watermelon-stats-4",
+    "source": "watermelon-ui",
+    "title": "Stats 4",
+    "url": "https://registry.watermelon.sh/r/stats-4.json",
+    "category": "dashboard",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "stats",
+      "dashboard"
+    ],
+    "keywords": [
+      "stats",
+      "dashboard"
+    ],
+    "description": "Watermelon UI stats block reference for stats sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Stats"
+  },
+  {
+    "id": "watermelon-team-1",
+    "source": "watermelon-ui",
+    "title": "Team 1",
+    "url": "https://registry.watermelon.sh/r/team-1.json",
+    "category": "testimonials",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "team",
+      "testimonials"
+    ],
+    "keywords": [
+      "team",
+      "testimonials"
+    ],
+    "description": "Watermelon UI team block reference for team sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "testimonial-wall",
+      "featured-testimonial"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Team"
+  },
+  {
+    "id": "watermelon-team-2",
+    "source": "watermelon-ui",
+    "title": "Team 2",
+    "url": "https://registry.watermelon.sh/r/team-2.json",
+    "category": "testimonials",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "team",
+      "testimonials"
+    ],
+    "keywords": [
+      "team",
+      "testimonials"
+    ],
+    "description": "Watermelon UI team block reference for team sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "testimonial-wall",
+      "featured-testimonial"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Team"
+  },
+  {
+    "id": "watermelon-team-3",
+    "source": "watermelon-ui",
+    "title": "Team 3",
+    "url": "https://registry.watermelon.sh/r/team-3.json",
+    "category": "testimonials",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "team",
+      "testimonials"
+    ],
+    "keywords": [
+      "team",
+      "testimonials"
+    ],
+    "description": "Watermelon UI team block reference for team sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "testimonial-wall",
+      "featured-testimonial"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Team"
+  },
+  {
+    "id": "watermelon-team-4",
+    "source": "watermelon-ui",
+    "title": "Team 4",
+    "url": "https://registry.watermelon.sh/r/team-4.json",
+    "category": "testimonials",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "team",
+      "testimonials"
+    ],
+    "keywords": [
+      "team",
+      "testimonials"
+    ],
+    "description": "Watermelon UI team block reference for team sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "testimonial-wall",
+      "featured-testimonial"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Team"
+  },
+  {
+    "id": "watermelon-team-5",
+    "source": "watermelon-ui",
+    "title": "Team 5",
+    "url": "https://registry.watermelon.sh/r/team-5.json",
+    "category": "testimonials",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "team",
+      "testimonials"
+    ],
+    "keywords": [
+      "team",
+      "testimonials"
+    ],
+    "description": "Watermelon UI team block reference for team sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "testimonial-wall",
+      "featured-testimonial"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/Team"
+  },
+  {
+    "id": "watermelon-testimonials-1",
+    "source": "watermelon-ui",
+    "title": "testimonials 1",
+    "url": "https://registry.watermelon.sh/r/testimonials-1.json",
+    "category": "testimonials",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "testimonials"
+    ],
+    "keywords": [
+      "testimonials"
+    ],
+    "description": "Watermelon UI testimonials block reference for testimonials sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "testimonial-wall",
+      "featured-testimonial"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/testimonials"
+  },
+  {
+    "id": "watermelon-testimonials-2",
+    "source": "watermelon-ui",
+    "title": "testimonials 2",
+    "url": "https://registry.watermelon.sh/r/testimonials-2.json",
+    "category": "testimonials",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "testimonials"
+    ],
+    "keywords": [
+      "testimonials"
+    ],
+    "description": "Watermelon UI testimonials block reference for testimonials sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "testimonial-wall",
+      "featured-testimonial"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/testimonials"
+  },
+  {
+    "id": "watermelon-testimonials-3",
+    "source": "watermelon-ui",
+    "title": "testimonials 3",
+    "url": "https://registry.watermelon.sh/r/testimonials-3.json",
+    "category": "testimonials",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "testimonials"
+    ],
+    "keywords": [
+      "testimonials"
+    ],
+    "description": "Watermelon UI testimonials block reference for testimonials sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "testimonial-wall",
+      "featured-testimonial"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/testimonials"
+  },
+  {
+    "id": "watermelon-testimonials-4",
+    "source": "watermelon-ui",
+    "title": "testimonials 4",
+    "url": "https://registry.watermelon.sh/r/testimonials-4.json",
+    "category": "testimonials",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "testimonials"
+    ],
+    "keywords": [
+      "testimonials"
+    ],
+    "description": "Watermelon UI testimonials block reference for testimonials sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "testimonial-wall",
+      "featured-testimonial"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/testimonials"
+  },
+  {
+    "id": "watermelon-widget-1",
+    "source": "watermelon-ui",
+    "title": "widget 1",
+    "url": "https://registry.watermelon.sh/r/widget-1.json",
+    "category": "dashboard",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "widget",
+      "dashboard"
+    ],
+    "keywords": [
+      "widget",
+      "dashboard"
+    ],
+    "description": "Watermelon UI widget block reference for widget sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/widget"
+  },
+  {
+    "id": "watermelon-widget-2",
+    "source": "watermelon-ui",
+    "title": "widget 2",
+    "url": "https://registry.watermelon.sh/r/widget-2.json",
+    "category": "dashboard",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "widget",
+      "dashboard"
+    ],
+    "keywords": [
+      "widget",
+      "dashboard"
+    ],
+    "description": "Watermelon UI widget block reference for widget sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/widget"
+  },
+  {
+    "id": "watermelon-widget-3",
+    "source": "watermelon-ui",
+    "title": "widget 3",
+    "url": "https://registry.watermelon.sh/r/widget-3.json",
+    "category": "dashboard",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "widget",
+      "dashboard"
+    ],
+    "keywords": [
+      "widget",
+      "dashboard"
+    ],
+    "description": "Watermelon UI widget block reference for widget sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/widget"
+  },
+  {
+    "id": "watermelon-widget-4",
+    "source": "watermelon-ui",
+    "title": "widget 4",
+    "url": "https://registry.watermelon.sh/r/widget-4.json",
+    "category": "dashboard",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "widget",
+      "dashboard"
+    ],
+    "keywords": [
+      "widget",
+      "dashboard"
+    ],
+    "description": "Watermelon UI widget block reference for widget sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/widget"
+  },
+  {
+    "id": "watermelon-widget-5",
+    "source": "watermelon-ui",
+    "title": "widget 5",
+    "url": "https://registry.watermelon.sh/r/widget-5.json",
+    "category": "dashboard",
+    "tags": [
+      "watermelon-ui",
+      "block",
+      "widget",
+      "dashboard"
+    ],
+    "keywords": [
+      "widget",
+      "dashboard"
+    ],
+    "description": "Watermelon UI widget block reference for widget sections.",
+    "author": "Watermelon UI",
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z",
+    "urlStatus": "ok",
+    "checkedAt": "2026-06-25T12:14:21.557Z",
+    "fallbackUrl": "https://ui.watermelon.sh/blocks/widget"
+  }
+]

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+body{margin:0;}
+:root{
+  --bg:#F4F1EA; --bg-2:#ECE7DD; --card:#FCFBF8; --card-2:#FFFFFF;
+  --border:#E6E0D4; --border-strong:#D7CFC0;
+  --ink:#211E18; --ink-2:#6E685D; --ink-3:#9C9588;
+  --primary:#1B1915; --primary-ink:#F7F4EE; --primary-h:#322E27;
+  --sel:#1B1915; --sel-bg:#E9E3D7;
+  --high:#AF4239; --high-bg:#F2E2DE; --med:#A57B2A; --med-bg:#F0E8D4; --low:#5C7A8A; --low-bg:#E1EAEC;
+  --ok:#4E7A52;
+  --pad:15px; --gap:12px;
+  --shadow:0 1px 2px rgba(30,26,18,0.05),0 1px 1px rgba(30,26,18,0.03);
+}
+[data-theme="dark"]{
+  --bg:#16140F; --bg-2:#201D16; --card:#201D17; --card-2:#27241B;
+  --border:#332F26; --border-strong:#443F34;
+  --ink:#ECE7DC; --ink-2:#A39C8D; --ink-3:#746E5E;
+  --primary:#F1EDE3; --primary-ink:#19160F; --primary-h:#E1DBCD;
+  --sel:#F1EDE3; --sel-bg:#2C281F;
+  --high:#D9756C; --high-bg:#3A2723; --med:#CFA253; --med-bg:#352C1A; --low:#86A3B2; --low-bg:#1E2A30;
+  --ok:#7FA982;
+  --shadow:0 1px 2px rgba(0,0,0,0.32);
+}
+[data-density="compact"]{ --pad:12px; --gap:9px; }
+::-webkit-scrollbar{width:11px;height:11px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:9px;border:3px solid transparent;background-clip:content-box;}
+::-webkit-scrollbar-track{background:transparent;}
+@keyframes kf-fadeup{0%{opacity:0;transform:translateY(7px)}18%{opacity:1;transform:translateY(0)}70%{opacity:1}90%,100%{opacity:0;transform:translateY(7px)}}
+@keyframes kf-cascade{0%{opacity:0;filter:blur(4px);transform:translateY(4px)}28%,72%{opacity:1;filter:blur(0);transform:translateY(0)}100%{opacity:0;filter:blur(4px)}}
+@keyframes kf-lift{0%,100%{transform:translateY(0);box-shadow:0 1px 2px rgba(0,0,0,.07)}50%{transform:translateY(-3px);box-shadow:0 9px 20px rgba(0,0,0,.13)}}
+@keyframes kf-press{0%,100%{transform:scale(1)}45%{transform:scale(.91)}}
+@keyframes kf-sheen{0%{transform:translateX(-140%) skewX(-16deg)}55%,100%{transform:translateX(360%) skewX(-16deg)}}
+@keyframes kf-crossfade{0%,100%{opacity:.22}50%{opacity:1}}
+@keyframes kf-slide{0%{opacity:0;transform:translateX(13px)}22%,68%{opacity:1;transform:translateX(0)}100%{opacity:0;transform:translateX(-13px)}}
+@keyframes kf-drift{0%{transform:translate(-6%,-4%) scale(1.1)}50%{transform:translate(8%,5%) scale(1.25)}100%{transform:translate(-6%,-4%) scale(1.1)}}
+@keyframes kf-shimmer{0%,100%{opacity:.16}50%{opacity:.5}}
+</style>
+</helmet>
+<div data-theme="{{ theme }}" data-density="{{ density }}" style="display:flex;height:100vh;overflow:hidden;background:var(--bg);color:var(--ink);font-family:'Hanken Grotesk',ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-size:14px;">
+
+  <aside style="width:256px;flex:none;border-right:1px solid var(--border);background:var(--card);display:flex;flex-direction:column;height:100vh;">
+    <div style="padding:18px 16px 14px;display:flex;align-items:center;gap:10px;">
+      <div style="width:28px;height:28px;border-radius:8px;background:var(--primary);display:flex;align-items:center;justify-content:center;color:var(--primary-ink);flex:none;font-size:14px;font-weight:700;letter-spacing:-0.04em;">
+        B
+      </div>
+      <div style="display:flex;flex-direction:column;line-height:1.15;">
+        <span style="font-size:14px;font-weight:600;letter-spacing:-0.01em;color:var(--ink);">Beunique</span>
+        <span style="font-size:11px;color:var(--ink-3);">Design analysis</span>
+      </div>
+    </div>
+
+    <div style="padding:6px 10px;display:flex;flex-direction:column;gap:3px;">
+      <button onClick="{{ goRecs }}" style="font:inherit;text-align:left;display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;border:none;cursor:pointer;font-size:13px;font-weight:500;background:{{ nav.recs.bg }};color:{{ nav.recs.fg }};" style-hover="background:var(--bg-2)">
+        <span style="display:flex;flex:none;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6h10"/><path d="M10 12h10"/><path d="M10 18h10"/><path d="M3.5 6l1.2 1.2L7 5"/><path d="M3.5 12l1.2 1.2L7 11"/><path d="M3.5 18l1.2 1.2L7 17"/></svg></span>
+        <span style="flex:1;">Recommendations</span>
+        <span style="font-size:11px;font-weight:600;padding:1px 7px;border-radius:20px;background:{{ nav.recs.badgeBg }};color:{{ nav.recs.badgeFg }};">9</span>
+      </button>
+      <button onClick="{{ goLayouts }}" style="font:inherit;text-align:left;display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;border:none;cursor:pointer;font-size:13px;font-weight:500;background:{{ nav.layouts.bg }};color:{{ nav.layouts.fg }};" style-hover="background:var(--bg-2)">
+        <span style="display:flex;flex:none;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2.5"/><path d="M9 3v18"/><path d="M9 12h12"/></svg></span>
+        <span style="flex:1;">Layout Ideas</span>
+      </button>
+      <button onClick="{{ goAnims }}" style="font:inherit;text-align:left;display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;border:none;cursor:pointer;font-size:13px;font-weight:500;background:{{ nav.anims.bg }};color:{{ nav.anims.fg }};" style-hover="background:var(--bg-2)">
+        <span style="display:flex;flex:none;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L4 14h7l-1 7 9-11h-7z"/></svg></span>
+        <span style="flex:1;">Animations</span>
+      </button>
+    </div>
+
+    <div style="margin:13px 14px;height:1px;background:var(--border);"></div>
+
+    <div style="margin:0 14px;padding:11px;border:1px solid var(--border);border-radius:11px;background:var(--card-2);display:flex;flex-direction:column;gap:9px;">
+      <div style="display:flex;align-items:center;gap:9px;">
+        <div style="width:27px;height:27px;border-radius:7px;background:var(--bg-2);display:flex;align-items:center;justify-content:center;flex:none;border:1px solid var(--border);"><span style="font-size:12px;font-weight:700;color:var(--ink-2);">B</span></div>
+        <div style="display:flex;flex-direction:column;line-height:1.25;min-width:0;">
+          <span style="font-size:12.5px;font-weight:600;color:var(--ink);">Beunique</span>
+          <span style="font-size:10.5px;color:var(--ink-3);font-family:'IBM Plex Mono',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">beunique.app/billing</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px;">
+        <span style="width:7px;height:7px;border-radius:50%;background:var(--ok);flex:none;"></span>
+        <span style="font-size:11.5px;color:var(--ink-2);">Analysis complete · 2m ago</span>
+      </div>
+    </div>
+
+    <div style="flex:1;"></div>
+
+    <div style="padding:12px 14px;display:flex;flex-direction:column;gap:9px;">
+      <button onClick="{{ reanalyze }}" style="font:inherit;display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:8px;border-radius:9px;border:1px solid var(--border-strong);background:transparent;color:var(--ink);cursor:pointer;font-size:12.5px;font-weight:500;" style-hover="background:var(--bg-2)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 4v4h-4"/></svg>
+        Re-analyze
+      </button>
+      <div style="display:flex;padding:3px;background:var(--bg-2);border-radius:9px;gap:3px;">
+        <button onClick="{{ setLight }}" style="font:inherit;flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:5px;border-radius:7px;border:none;cursor:pointer;font-size:12px;font-weight:500;background:{{ themeSeg.light.bg }};color:{{ themeSeg.light.fg }};box-shadow:{{ themeSeg.light.sh }};">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>Light
+        </button>
+        <button onClick="{{ setDark }}" style="font:inherit;flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:5px;border-radius:7px;border:none;cursor:pointer;font-size:12px;font-weight:500;background:{{ themeSeg.dark.bg }};color:{{ themeSeg.dark.fg }};box-shadow:{{ themeSeg.dark.sh }};">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8z"/></svg>Dark
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column;height:100vh;">
+    <div style="flex:1;overflow:auto;">
+
+      <sc-if value="{{ tabRecs }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width:1080px;margin:0 auto;padding:26px 30px 24px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;">
+          <div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <h1 style="margin:0;font-size:21px;font-weight:600;letter-spacing:-0.02em;color:var(--ink);">Recommendations</h1>
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:500;color:var(--ink-2);background:var(--bg-2);border:1px solid var(--border);padding:3px 9px;border-radius:20px;"><span style="width:6px;height:6px;border-radius:50%;background:var(--ok);"></span>Analysis complete</span>
+            </div>
+            <p style="margin:6px 0 0;font-size:13px;color:var(--ink-2);">9 issues found on <span style="color:var(--ink);font-weight:600;">Beunique</span> · Billing settings</p>
+          </div>
+        </div>
+
+        <div style="margin-top:18px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;border:1px solid var(--border);background:var(--card);border-radius:14px;padding:16px 20px;box-shadow:var(--shadow);">
+          <div style="display:flex;align-items:center;gap:13px;">
+            <div style="position:relative;width:60px;height:60px;flex:none;">
+              <svg width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="25" fill="none" stroke="var(--border-strong)" stroke-width="5"/><circle cx="30" cy="30" r="25" fill="none" stroke="var(--ink)" stroke-width="5" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="44" transform="rotate(-90 30 30)"/></svg>
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:18px;font-weight:700;color:var(--ink);">72</span></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:2px;">
+              <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);">Design score</span>
+              <span style="font-size:13px;color:var(--ink-2);">Good — room to tighten</span>
+            </div>
+          </div>
+          <div style="width:1px;height:42px;background:var(--border);"></div>
+          <div style="display:flex;flex-direction:column;gap:3px;">
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);">Detected issues</span>
+            <span style="font-size:20px;font-weight:700;color:var(--ink);line-height:1;">9</span>
+          </div>
+          <div style="width:1px;height:42px;background:var(--border);"></div>
+          <div style="display:flex;flex-direction:column;gap:3px;">
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);">Strongest problem area</span>
+            <span style="font-size:14px;font-weight:600;color:var(--ink);">Visual hierarchy <span style="font-weight:500;color:var(--ink-2);">· 3 issues</span></span>
+          </div>
+          <div style="flex:1;"></div>
+          <div style="display:flex;align-items:center;gap:9px;">
+            <button onClick="{{ togglePrompt }}" style="font:inherit;display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:500;padding:9px 14px;border-radius:9px;border:1px solid var(--border-strong);background:transparent;color:var(--ink);cursor:pointer;" style-hover="background:var(--bg-2)">Preview prompt</button>
+            <button onClick="{{ doCopy }}" style="font:inherit;display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;padding:9px 15px;border-radius:9px;border:none;background:var(--primary);color:var(--primary-ink);cursor:pointer;" style-hover="background:var(--primary-h)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+              {{ copyLabel }} · {{ fixCountLabel }}
+            </button>
+          </div>
+        </div>
+
+        <sc-for list="{{ recGroups }}" as="group" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:10px;margin:22px 0 10px;">
+            <span style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);">{{ group.label }}</span>
+            <span style="font-size:11px;color:var(--ink-3);">{{ group.count }}</span>
+            <div style="flex:1;height:1px;background:var(--border);"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <sc-for list="{{ group.items }}" as="rec" hint-placeholder-count="2">
+              <div style="position:relative;display:flex;gap:13px;align-items:flex-start;padding:var(--pad);background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);" style-hover="border-color:var(--border-strong)">
+                <button onClick="{{ rec.onToggle }}" aria-label="Include in prompt" style="flex:none;margin-top:1px;width:20px;height:20px;border-radius:6px;border:1.5px solid {{ rec.boxBorder }};background:{{ rec.boxBg }};color:var(--primary-ink);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;">
+                  <sc-if value="{{ rec.checked }}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></sc-if>
+                </button>
+                <div style="flex:none;">{{ rec.evidenceEl }}</div>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;">
+                  <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;">
+                    <span style="font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.3;">{{ rec.title }}</span>
+                    <span style="flex:none;display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;background:{{ rec.sevBg }};color:{{ rec.sevInk }};"><span style="width:5px;height:5px;border-radius:50%;background:{{ rec.sevInk }};"></span>{{ rec.sevLabel }}</span>
+                  </div>
+                  <div><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-3);background:var(--bg-2);padding:2px 6px;border-radius:5px;">{{ rec.element }}</span></div>
+                  <div style="display:flex;gap:7px;align-items:flex-start;">
+                    <span style="flex:none;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);margin-top:2px;">Fix</span>
+                    <span style="font-size:12.5px;color:var(--ink-2);line-height:1.5;">{{ rec.fix }}</span>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ tabLayouts }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:1080px;margin:0 auto;padding:26px 30px 24px;">
+        <h1 style="margin:0;font-size:21px;font-weight:600;letter-spacing:-0.02em;color:var(--ink);">Layout Ideas</h1>
+        <p style="margin:6px 0 0;font-size:13px;color:var(--ink-2);">Choose a structure for this selected UI. One layout and one template carry into your prompt.</p>
+
+        <div style="display:inline-flex;padding:3px;background:var(--bg-2);border-radius:10px;gap:3px;margin-top:16px;">
+          <button onClick="{{ setSegLayouts }}" style="font:inherit;font-size:12.5px;font-weight:500;padding:6px 14px;border-radius:8px;border:none;cursor:pointer;background:{{ seg.layouts.bg }};color:{{ seg.layouts.fg }};box-shadow:{{ seg.layouts.sh }};">Layouts</button>
+          <button onClick="{{ setSegTemplates }}" style="font:inherit;font-size:12.5px;font-weight:500;padding:6px 14px;border-radius:8px;border:none;cursor:pointer;background:{{ seg.templates.bg }};color:{{ seg.templates.fg }};box-shadow:{{ seg.templates.sh }};">Templates</button>
+          <button onClick="{{ setSegMotion }}" style="font:inherit;font-size:12.5px;font-weight:500;padding:6px 14px;border-radius:8px;border:none;cursor:pointer;background:{{ seg.motion.bg }};color:{{ seg.motion.fg }};box-shadow:{{ seg.motion.sh }};">Animations</button>
+        </div>
+
+        <sc-if value="{{ segLayouts }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;">
+          <sc-for list="{{ layouts }}" as="lo" hint-placeholder-count="6">
+            <div style="position:relative;background:var(--card);border:1px solid var(--border);border-radius:13px;padding:13px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow);" style-hover="border-color:var(--border-strong)">
+              <div>{{ lo.wireEl }}</div>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-size:14px;font-weight:600;color:var(--ink);">{{ lo.name }}</span>
+                  <span style="font-size:10.5px;font-weight:600;color:var(--ink-2);background:var(--bg-2);border:1px solid var(--border);padding:1px 7px;border-radius:20px;">{{ lo.cat }}</span>
+                </div>
+                <div style="display:flex;gap:6px;align-items:flex-start;">
+                  <span style="flex:none;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);margin-top:2px;">Why</span>
+                  <span style="font-size:12px;color:var(--ink-2);line-height:1.45;">{{ lo.why }}</span>
+                </div>
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <span style="flex:none;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);">Best for</span>
+                  <span style="font-size:12px;color:var(--ink-2);">{{ lo.best }}</span>
+                </div>
+              </div>
+              <button onClick="{{ lo.onUse }}" style="font:inherit;display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:8px;border-radius:9px;font-size:12.5px;font-weight:600;cursor:pointer;background:{{ lo.btnBg }};color:{{ lo.btnFg }};border:1px solid {{ lo.btnBorder }};">
+                <sc-if value="{{ lo.selected }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></sc-if>
+                {{ lo.btnLabel }}
+              </button>
+              <sc-if value="{{ lo.selected }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;border:2px solid var(--sel);border-radius:13px;pointer-events:none;"></div></sc-if>
+            </div>
+          </sc-for>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ segTemplates }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;">
+          <sc-for list="{{ templates }}" as="tp" hint-placeholder-count="4">
+            <div style="position:relative;background:var(--card);border:1px solid var(--border);border-radius:13px;padding:13px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow);" style-hover="border-color:var(--border-strong)">
+              <div>{{ tp.wireEl }}</div>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                  <span style="font-size:14px;font-weight:600;color:var(--ink);">{{ tp.name }}</span>
+                  <span style="font-size:10.5px;font-weight:600;color:var(--ink-2);background:var(--bg-2);border:1px solid var(--border);padding:1px 7px;border-radius:20px;">{{ tp.cat }}</span>
+                </div>
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--ink-3);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>{{ tp.src }}</span>
+                </div>
+                <div style="display:flex;gap:6px;align-items:flex-start;">
+                  <span style="flex:none;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);margin-top:2px;">Match</span>
+                  <span style="font-size:12px;color:var(--ink-2);line-height:1.45;">{{ tp.why }}</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <button onClick="{{ tp.onUse }}" style="font:inherit;flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px;border-radius:9px;font-size:12.5px;font-weight:600;cursor:pointer;background:{{ tp.btnBg }};color:{{ tp.btnFg }};border:1px solid {{ tp.btnBorder }};">
+                  <sc-if value="{{ tp.selected }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></sc-if>
+                  {{ tp.btnLabel }}
+                </button>
+                <button onClick="{{ tp.onOpen }}" style="font:inherit;display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:9px;font-size:12.5px;font-weight:500;cursor:pointer;background:transparent;color:var(--ink);border:1px solid var(--border-strong);" style-hover="background:var(--bg-2)">Open reference<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></button>
+              </div>
+              <sc-if value="{{ tp.selected }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;border:2px solid var(--sel);border-radius:13px;pointer-events:none;"></div></sc-if>
+            </div>
+          </sc-for>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ segMotion }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:16px;">
+          <div style="display:flex;align-items:flex-start;gap:9px;padding:12px 14px;border:1px solid var(--border);background:var(--card);border-radius:11px;margin-bottom:14px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-2)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px;"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16h.01"/></svg>
+            <span style="font-size:12.5px;color:var(--ink-2);line-height:1.5;">Page-level motion sets the overall rhythm of this layout. For per-element motion, fine-tune in the <span style="color:var(--ink);font-weight:600;">Animations</span> tab.</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;">
+            <sc-for list="{{ macros }}" as="mo" hint-placeholder-count="3">
+              <div style="position:relative;background:var(--card);border:1px solid var(--border);border-radius:13px;padding:13px;display:flex;flex-direction:column;gap:11px;box-shadow:var(--shadow);" style-hover="border-color:var(--border-strong)">
+                <div>{{ mo.previewEl }}</div>
+                <div style="display:flex;flex-direction:column;gap:5px;">
+                  <span style="font-size:13.5px;font-weight:600;color:var(--ink);">{{ mo.name }}</span>
+                  <span style="font-size:12px;color:var(--ink-2);line-height:1.45;">{{ mo.desc }}</span>
+                </div>
+                <button onClick="{{ mo.onUse }}" style="font:inherit;display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:8px;border-radius:9px;font-size:12.5px;font-weight:600;cursor:pointer;background:{{ mo.btnBg }};color:{{ mo.btnFg }};border:1px solid {{ mo.btnBorder }};">
+                  <sc-if value="{{ mo.selected }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></sc-if>
+                  {{ mo.btnLabel }}
+                </button>
+                <sc-if value="{{ mo.selected }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;border:2px solid var(--sel);border-radius:13px;pointer-events:none;"></div></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ tabAnims }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:1080px;margin:0 auto;padding:26px 30px 24px;">
+        <h1 style="margin:0;font-size:21px;font-weight:600;letter-spacing:-0.02em;color:var(--ink);">Animations</h1>
+        <p style="margin:6px 0 0;font-size:13px;color:var(--ink-2);">Motion suggestions grouped by target. Pick one to carry into your prompt — hover a card to preview.</p>
+
+        <sc-for list="{{ animGroups }}" as="ag" hint-placeholder-count="5">
+          <div style="display:flex;align-items:center;gap:10px;margin:22px 0 11px;">
+            <span style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);">{{ ag.label }}</span>
+            <span style="font-size:11px;color:var(--ink-3);">{{ ag.count }}</span>
+            <div style="flex:1;height:1px;background:var(--border);"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;">
+            <sc-for list="{{ ag.items }}" as="an" hint-placeholder-count="2">
+              <div style="position:relative;background:var(--card);border:1px solid var(--border);border-radius:13px;padding:13px;display:flex;flex-direction:column;gap:11px;box-shadow:var(--shadow);" style-hover="border-color:var(--border-strong)">
+                <div>{{ an.previewEl }}</div>
+                <div style="display:flex;flex-direction:column;gap:7px;">
+                  <div style="display:flex;align-items:center;gap:8px;justify-content:space-between;">
+                    <span style="font-size:14px;font-weight:600;color:var(--ink);">{{ an.name }}</span>
+                    <span style="flex:none;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:20px;background:{{ an.intBg }};color:{{ an.intInk }};">{{ an.intLabel }}</span>
+                  </div>
+                  <div><span style="display:inline-flex;align-items:center;gap:5px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-3);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 6 4-14 2 8h6"/></svg>{{ an.target }}</span></div>
+                  <span style="font-size:12.5px;color:var(--ink-2);line-height:1.5;">{{ an.effect }}</span>
+                  <div style="display:flex;gap:6px;align-items:flex-start;">
+                    <span style="flex:none;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);margin-top:2px;">When</span>
+                    <span style="font-size:11.5px;color:var(--ink-3);line-height:1.45;">{{ an.when }}</span>
+                  </div>
+                </div>
+                <button onClick="{{ an.onUse }}" style="font:inherit;display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:8px;border-radius:9px;font-size:12.5px;font-weight:600;cursor:pointer;background:{{ an.btnBg }};color:{{ an.btnFg }};border:1px solid {{ an.btnBorder }};">
+                  <sc-if value="{{ an.selected }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></sc-if>
+                  {{ an.btnLabel }}
+                </button>
+                <sc-if value="{{ an.selected }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;border:2px solid var(--sel);border-radius:13px;pointer-events:none;"></div></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+      </sc-if>
+
+    </div>
+
+    <sc-if value="{{ showPrompt }}" hint-placeholder-val="{{ false }}">
+    <div style="flex:none;border-top:1px solid var(--border);background:var(--bg-2);padding:14px 30px;max-height:220px;overflow:auto;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;">
+        <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);">Generated prompt</span>
+        <button onClick="{{ togglePrompt }}" style="font:inherit;border:none;background:transparent;color:var(--ink-3);cursor:pointer;font-size:12px;display:flex;align-items:center;gap:4px;" style-hover="color:var(--ink)">Hide<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+      </div>
+      <pre style="margin:0;white-space:pre-wrap;font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.65;color:var(--ink-2);">{{ prompt }}</pre>
+    </div>
+    </sc-if>
+
+    <div style="flex:none;border-top:1px solid var(--border);background:var(--card);padding:13px 30px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;">
+        <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);background:var(--bg-2);border:1px solid var(--border);padding:4px 10px;border-radius:8px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg><span style="color:var(--ink);font-weight:600;">{{ fixCountLabel }}</span></span>
+        <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-3);background:var(--bg-2);border:1px solid var(--border);padding:4px 10px;border-radius:8px;">Layout: <span style="color:var(--ink);font-weight:600;">{{ chipLayout }}</span></span>
+        <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-3);background:var(--bg-2);border:1px solid var(--border);padding:4px 10px;border-radius:8px;">Template: <span style="color:var(--ink);font-weight:600;">{{ chipTpl }}</span></span>
+        <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-3);background:var(--bg-2);border:1px solid var(--border);padding:4px 10px;border-radius:8px;">Animation: <span style="color:var(--ink);font-weight:600;">{{ chipAnim }}</span></span>
+      </div>
+      <div style="flex:1;"></div>
+      <button onClick="{{ togglePrompt }}" style="font:inherit;display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:500;padding:9px 14px;border-radius:9px;border:1px solid var(--border-strong);background:transparent;color:var(--ink);cursor:pointer;" style-hover="background:var(--bg-2)">Preview prompt</button>
+      <button onClick="{{ doCopy }}" style="font:inherit;display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;padding:9px 16px;border-radius:9px;border:none;background:var(--primary);color:var(--primary-ink);cursor:pointer;" style-hover="background:var(--primary-h)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+        {{ copyLabel }} prompt
+      </button>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;defaultTab&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;recs&quot;,&quot;layouts&quot;,&quot;anims&quot;],&quot;default&quot;:&quot;recs&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;comfortable&quot;,&quot;compact&quot;],&quot;default&quot;:&quot;comfortable&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { theme:null, tab:null, seg:'layouts', fixes:{l1:true,v1:true,h1:true}, layout:'split', template:null, anim:null, macro:null, copied:false, showPrompt:false };
+
+  toggleFix(id){ this.setState(s=>{ const f=Object.assign({},s.fixes); f[id]=!f[id]; return {fixes:f}; }); }
+
+  copyPrompt(text){
+    try{ if(navigator.clipboard) navigator.clipboard.writeText(text); }catch(e){}
+    this.setState({copied:true});
+    clearTimeout(this._t);
+    this._t=setTimeout(()=>this.setState({copied:false}),1500);
+  }
+
+  renderVals(){
+    const h=React.createElement;
+    const K=(a)=>a.map((c,i)=>(c&&c.$$typeof)?React.cloneElement(c,{key:i}):c);
+    const D=(style,kids)=>h('div',{style:style||{}}, kids?K(kids):null);
+    const tile=(s)=>D(Object.assign({background:'var(--ink-3)',opacity:0.3,borderRadius:'4px'},s||{}));
+    const FRAME={height:'112px',background:'var(--bg-2)',border:'1px solid var(--border)',borderRadius:'9px',padding:'10px',overflow:'hidden'};
+    const FR2=Object.assign({},FRAME,{height:'92px'});
+
+    const layoutWire=(k)=>{
+      if(k==='split') return D(Object.assign({},FRAME,{display:'flex',gap:'8px'}),[ tile({width:'30%',opacity:.42}), D({flex:1,display:'flex',flexDirection:'column',gap:'7px'},[tile({height:'12px',width:'55%',opacity:.5}),tile({flex:1,opacity:.2})]) ]);
+      if(k==='master') return D(Object.assign({},FRAME,{display:'flex',gap:'8px'}),[ D({width:'36%',display:'flex',flexDirection:'column',gap:'5px'},[tile({height:'13px',opacity:.45}),tile({height:'13px',opacity:.3}),tile({height:'13px',opacity:.3}),tile({height:'13px',opacity:.3})]), tile({flex:1,opacity:.2}) ]);
+      if(k==='topgrid') return D(Object.assign({},FRAME,{display:'flex',flexDirection:'column',gap:'8px'}),[ tile({height:'14px',width:'45%',opacity:.45}), D({flex:1,display:'grid',gridTemplateColumns:'1fr 1fr',gridTemplateRows:'1fr 1fr',gap:'7px'},[tile({opacity:.25}),tile({opacity:.25}),tile({opacity:.25}),tile({opacity:.25})]) ]);
+      if(k==='centered') return D(Object.assign({},FRAME,{display:'flex',flexDirection:'column',alignItems:'center',gap:'7px',padding:'10px 26px'}),[ tile({height:'12px',width:'72%',opacity:.45}), tile({height:'8px',width:'92%',opacity:.25}), tile({flex:1,width:'100%',opacity:.2}) ]);
+      if(k==='bento') return D(Object.assign({},FRAME,{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gridTemplateRows:'1fr 1fr',gap:'7px'}),[ tile({gridColumn:'1 / 2',gridRow:'1 / 3',opacity:.4}), tile({opacity:.25}), tile({opacity:.25}), tile({gridColumn:'2 / 4',opacity:.25}) ]);
+      return D(Object.assign({},FRAME,{display:'flex',gap:'8px'}),[ D({flex:1,display:'flex',flexDirection:'column',gap:'6px'},[tile({height:'10px',opacity:.4}),tile({height:'22px',opacity:.22}),tile({height:'22px',opacity:.22})]), D({flex:1,display:'flex',flexDirection:'column',gap:'6px'},[tile({height:'10px',opacity:.4}),tile({height:'22px',opacity:.22})]), D({flex:1,display:'flex',flexDirection:'column',gap:'6px'},[tile({height:'10px',opacity:.4}),tile({height:'22px',opacity:.22}),tile({height:'22px',opacity:.22})]) ]);
+    };
+
+    const templateWire=(k)=>{
+      if(k==='board') return D(Object.assign({},FR2,{display:'flex',gap:'7px'}),[ D({flex:1,display:'flex',flexDirection:'column',gap:'5px'},[tile({height:'20px',opacity:.22}),tile({height:'20px',opacity:.22})]), D({flex:1,display:'flex',flexDirection:'column',gap:'5px'},[tile({height:'20px',opacity:.22})]), D({flex:1,display:'flex',flexDirection:'column',gap:'5px'},[tile({height:'20px',opacity:.22}),tile({height:'20px',opacity:.22})]) ]);
+      if(k==='settings') return D(Object.assign({},FR2,{display:'flex',gap:'8px'}),[ tile({width:'26%',opacity:.4}), D({flex:1,display:'flex',flexDirection:'column',gap:'6px'},[tile({height:'10px',width:'40%',opacity:.45}),tile({height:'14px',opacity:.22}),tile({height:'14px',opacity:.22}),tile({height:'14px',width:'60%',opacity:.22})]) ]);
+      if(k==='analytics') return D(Object.assign({},FR2,{display:'flex',flexDirection:'column',gap:'7px'}),[ D({display:'flex',gap:'6px'},[tile({flex:1,height:'16px',opacity:.3}),tile({flex:1,height:'16px',opacity:.3}),tile({flex:1,height:'16px',opacity:.3})]), D({flex:1,display:'flex',alignItems:'flex-end',gap:'5px'},[tile({flex:1,height:'40%',opacity:.25}),tile({flex:1,height:'70%',opacity:.25}),tile({flex:1,height:'50%',opacity:.25}),tile({flex:1,height:'90%',opacity:.42}),tile({flex:1,height:'60%',opacity:.25}),tile({flex:1,height:'80%',opacity:.25})]) ]);
+      return D(Object.assign({},FR2,{display:'flex',gap:'8px'}),[ tile({width:'24%',opacity:.4}), D({flex:1,display:'flex',flexDirection:'column',gap:'5px'},[tile({height:'11px',width:'55%',opacity:.45}),tile({height:'7px',opacity:.22}),tile({height:'7px',opacity:.22}),tile({height:'7px',width:'80%',opacity:.22}),tile({height:'7px',width:'70%',opacity:.22})]) ]);
+    };
+
+    const animPreview=(demo)=>{
+      let inner;
+      if(demo==='fadeup') inner=D({display:'flex',flexDirection:'column',gap:'5px',width:'62%'},[ tile({height:'6px',width:'92%',opacity:.6,animation:'kf-fadeup 2.6s ease-in-out infinite'}), tile({height:'6px',width:'72%',opacity:.6,animation:'kf-fadeup 2.6s ease-in-out 0.18s infinite'}), tile({height:'6px',width:'82%',opacity:.6,animation:'kf-fadeup 2.6s ease-in-out 0.36s infinite'}) ]);
+      else if(demo==='cascade') inner=D({display:'flex',gap:'4px'},[0,1,2,3,4].map(i=>tile({width:'9px',height:'16px',opacity:.6,animation:'kf-cascade 2.8s ease-in-out '+(i*0.12)+'s infinite'})));
+      else if(demo==='stagger') inner=D({display:'flex',gap:'6px'},[0,1,2].map(i=>D({width:'30px',height:'34px',borderRadius:'6px',background:'var(--card)',border:'1px solid var(--border)',animation:'kf-fadeup 2.8s ease-in-out '+(i*0.18)+'s infinite'})));
+      else if(demo==='lift') inner=D({width:'58px',height:'34px',borderRadius:'7px',background:'var(--card)',border:'1px solid var(--border)',animation:'kf-lift 2.6s ease-in-out infinite'});
+      else if(demo==='press') inner=D({width:'50px',height:'21px',borderRadius:'6px',background:'var(--ink)',animation:'kf-press 1.8s ease-in-out infinite'});
+      else if(demo==='sheen') inner=D({position:'relative',overflow:'hidden',width:'54px',height:'22px',borderRadius:'6px',background:'var(--ink)'},[ D({position:'absolute',top:0,bottom:0,left:0,width:'16px',background:'rgba(255,255,255,0.55)',filter:'blur(3px)',animation:'kf-sheen 2.4s ease-in-out infinite'}) ]);
+      else if(demo==='crossfade') inner=D({width:'48px',height:'34px',borderRadius:'7px',background:'var(--ink-3)',opacity:.4,animation:'kf-crossfade 2.6s ease-in-out infinite'});
+      else if(demo==='slide') inner=D({width:'48px',height:'34px',borderRadius:'7px',background:'var(--ink-3)',opacity:.4,animation:'kf-slide 2.8s ease-in-out infinite'});
+      else if(demo==='drift') inner=D({position:'relative',overflow:'hidden',width:'100%',height:'100%',borderRadius:'7px'},[ D({position:'absolute',width:'80px',height:'80px',borderRadius:'50%',background:'var(--ink-3)',opacity:.22,filter:'blur(12px)',left:'8px',top:'-14px',animation:'kf-drift 7s ease-in-out infinite'}) ]);
+      else inner=D({position:'absolute',inset:'0',display:'flex',gap:'4px',padding:'8px',flexWrap:'wrap',alignContent:'center',justifyContent:'center',animation:'kf-shimmer 2.6s ease-in-out infinite'},[0,1,2,3,4,5,6,7].map(()=>tile({width:'18px',height:'9px',opacity:.5})));
+      return D({height:'62px',borderRadius:'9px',background:'var(--bg-2)',border:'1px solid var(--border)',display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden',position:'relative',padding:'8px'},[inner]);
+    };
+
+    const evidenceThumb=(c)=>D({width:'112px',height:'76px',borderRadius:'8px',background:'var(--card-2)',border:'1px solid var(--border)',padding:'9px',display:'flex',flexDirection:'column',gap:'6px',position:'relative',overflow:'hidden'},[
+      D({display:'flex',gap:'5px',alignItems:'center'},[ D({width:'13px',height:'13px',borderRadius:'4px',background:'var(--ink-3)',opacity:.5}), tile({height:'5px',width:'42%',opacity:.5}) ]),
+      tile({height:'5px',width:'86%',opacity:.3}),
+      tile({height:'5px',width:'66%',opacity:.3}),
+      D({marginTop:'auto',display:'flex',gap:'5px',alignItems:'center'},[ D({width:'28px',height:'12px',borderRadius:'4px',background:'var(--ink-2)',opacity:.5}), tile({height:'5px',width:'24%',opacity:.25}) ]),
+      D({position:'absolute',left:'7px',right:'7px',bottom:'8px',height:'17px',border:'1.5px dashed '+c,borderRadius:'6px',pointerEvents:'none'})
+    ]);
+
+    const SEV={high:{bg:'var(--high-bg)',ink:'var(--high)',label:'High'},med:{bg:'var(--med-bg)',ink:'var(--med)',label:'Medium'},low:{bg:'var(--low-bg)',ink:'var(--low)',label:'Low'}};
+    const recsRaw=[
+      {label:'Layout',items:[
+        {id:'l1',title:'Inconsistent spacing in the settings list',sev:'high',element:'.settings-row',fix:'Adopt an 8px scale — set row padding to 12/16px and gaps to 12px throughout.'},
+        {id:'l2',title:'Content stretches past a comfortable reading width',sev:'med',element:'main.content',fix:'Cap content at 720px and center it within the panel.'},
+      ]},
+      {label:'Visual style',items:[
+        {id:'v1',title:'Secondary text falls below 4.5:1 contrast',sev:'high',element:'.text-muted',fix:'Darken muted text to #6E685D to meet WCAG AA on this surface.'},
+        {id:'v2',title:'Borders read heavier than the calm UI intends',sev:'low',element:'.card',fix:'Drop borders to 1px at ~8% opacity and lean on subtle fills.'},
+      ]},
+      {label:'Hierarchy',items:[
+        {id:'h1',title:'Primary action competes with three peers',sev:'high',element:'.toolbar button',fix:'Keep one filled primary; demote the rest to ghost buttons.'},
+        {id:'h2',title:'Section titles share the same weight as body',sev:'med',element:'h2.section',fix:'Set titles to 16px/600 and body to 14px/400 for clear rank.'},
+      ]},
+      {label:'Motion / interaction',items:[
+        {id:'m1',title:'Tab switches jump with no transition',sev:'med',element:'.tabs',fix:'Add a 160ms cross-fade between tab panels.'},
+      ]},
+      {label:'AI-generated UI cleanup',items:[
+        {id:'g1',title:'Placeholder copy left in the interface',sev:'med',element:'6 nodes',fix:'Replace remaining "Lorem ipsum" strings with real labels.'},
+        {id:'g2',title:'Three near-identical card components',sev:'low',element:'components/*',fix:'Consolidate into one Card with size and tone variants.'},
+      ]},
+    ];
+
+    const fixes=this.state.fixes; let fixCount=0; const selFixes=[];
+    const recGroups=recsRaw.map(g=>({
+      label:g.label,
+      count:g.items.length+' issue'+(g.items.length>1?'s':''),
+      items:g.items.map(it=>{
+        const checked=!!fixes[it.id]; if(checked){fixCount++; selFixes.push(it);} const s=SEV[it.sev];
+        return { title:it.title, element:it.element, fix:it.fix, sevBg:s.bg, sevInk:s.ink, sevLabel:s.label, checked,
+          boxBg: checked?'var(--primary)':'transparent', boxBorder: checked?'var(--primary)':'var(--border-strong)',
+          evidenceEl: evidenceThumb(s.ink), onToggle: ()=>this.toggleFix(it.id) };
+      })
+    }));
+
+    const layoutsRaw=[
+      {key:'split',name:'Sidebar + content',cat:'Dashboard',why:'Mirrors your current two-zone structure while giving settings room to breathe.',best:'Settings, admin, account'},
+      {key:'master',name:'Master–detail',cat:'Productivity',why:'List on the left, details on the right — fast scanning with focus.',best:'Inboxes, records, tables'},
+      {key:'topgrid',name:'Top nav + card grid',cat:'Overview',why:'Surfaces many entry points evenly; good for a billing home.',best:'Home dashboards, galleries'},
+      {key:'centered',name:'Centered single column',cat:'Focus',why:'Caps reading width and removes side clutter for one clear task.',best:'Forms, onboarding, reading'},
+      {key:'bento',name:'Bento dashboard',cat:'Analytics',why:'Groups metrics of different sizes into a calm modular grid.',best:'KPIs, mixed-density data'},
+      {key:'kanban',name:'Kanban board',cat:'Workflow',why:'Columns map to states; supports drag between stages.',best:'Pipelines, task flows'},
+    ];
+    const selLayout=this.state.layout;
+    const layouts=layoutsRaw.map(l=>{ const selected=selLayout===l.key; return Object.assign({},l,{ selected,
+      btnBg:selected?'var(--ink)':'transparent', btnBorder:selected?'var(--ink)':'var(--border-strong)', btnFg:selected?'var(--primary-ink)':'var(--ink)', btnLabel:selected?'Selected':'Use layout',
+      wireEl:layoutWire(l.key), onUse:()=>this.setState({layout:selected?null:l.key}) }); });
+
+    const templatesRaw=[
+      {key:'board',name:'Project board',cat:'Productivity',src:'Inspired by Linear',why:'Matches your stage-based billing workflow with a tight, keyboard-first board.'},
+      {key:'settings',name:'Settings & billing panel',cat:'Forms',src:'Inspired by Stripe',why:'Clean sectioned forms with inline help — fits your settings density.'},
+      {key:'analytics',name:'Usage analytics',cat:'Analytics',src:'Inspired by Vercel',why:'Stat row over charts; great for surfacing the metrics you flagged.'},
+      {key:'doc',name:'Doc + side nav',cat:'Content',src:'Inspired by Notion',why:'Readable column with persistent nav for long settings content.'},
+    ];
+    const selTpl=this.state.template;
+    const templates=templatesRaw.map(t=>{ const selected=selTpl===t.key; return Object.assign({},t,{ selected,
+      btnBg:selected?'var(--ink)':'transparent', btnBorder:selected?'var(--ink)':'var(--border-strong)', btnFg:selected?'var(--primary-ink)':'var(--ink)', btnLabel:selected?'Selected':'Use template',
+      wireEl:templateWire(t.key), onUse:()=>this.setState({template:selected?null:t.key}), onOpen:()=>{} }); });
+
+    const INT={subtle:{bg:'var(--low-bg)',ink:'var(--low)'},medium:{bg:'var(--med-bg)',ink:'var(--med)'},expressive:{bg:'var(--high-bg)',ink:'var(--high)'}};
+    const animRaw=[
+      {label:'Text',items:[
+        {id:'t1',name:'Fade up lines',target:'Headings & paragraphs',effect:'Each line rises 8px and fades in on enter.',when:'First paint of a text block or on scroll into view.',intensity:'subtle',demo:'fadeup'},
+        {id:'t2',name:'Letter cascade',target:'Display headings',effect:'Characters reveal left-to-right with a soft blur.',when:'Section openers you want to emphasize.',intensity:'expressive',demo:'cascade'},
+      ]},
+      {label:'Cards',items:[
+        {id:'c1',name:'Stagger fade-in',target:'Card lists & grids',effect:'Cards fade and lift in sequence, 60ms apart.',when:'Lists that load together — keeps the eye moving.',intensity:'medium',demo:'stagger'},
+        {id:'c2',name:'Hover lift',target:'Interactive cards',effect:'Card raises 2px with a softening shadow on hover.',when:'Clickable cards, to signal affordance.',intensity:'subtle',demo:'lift'},
+      ]},
+      {label:'Buttons',items:[
+        {id:'b1',name:'Press scale',target:'All buttons',effect:'Button dips to 92% on press, springs back.',when:'Every actionable button, for tactile feedback.',intensity:'subtle',demo:'press'},
+        {id:'b2',name:'Sheen sweep',target:'Primary buttons',effect:'A soft light sweeps across on hover.',when:'A single primary CTA — use sparingly.',intensity:'medium',demo:'sheen'},
+      ]},
+      {label:'Section transitions',items:[
+        {id:'s1',name:'Cross-fade',target:'Tab & route panels',effect:'Outgoing panel fades out as incoming fades in (160ms).',when:'Switching tabs or views in place.',intensity:'subtle',demo:'crossfade'},
+        {id:'s2',name:'Slide & fade',target:'Step flows & drawers',effect:'Panel slides 16px and fades between steps.',when:'Wizards, drawers, directional nav.',intensity:'medium',demo:'slide'},
+      ]},
+      {label:'Background / ambient',items:[
+        {id:'a1',name:'Gradient drift',target:'Page background',effect:'A low-contrast wash drifts slowly behind content.',when:'Empty or focus states — keep it barely perceptible.',intensity:'subtle',demo:'drift'},
+        {id:'a2',name:'Grain shimmer',target:'Ambient surfaces',effect:'Fine texture pulses at very low opacity.',when:'Add depth to flat backgrounds without color.',intensity:'subtle',demo:'shimmer'},
+      ]},
+    ];
+    const selAnim=this.state.anim;
+    const animGroups=animRaw.map(g=>({ label:g.label, count:g.items.length, items:g.items.map(it=>{
+      const selected=selAnim===it.id; const cap=it.intensity.charAt(0).toUpperCase()+it.intensity.slice(1);
+      return Object.assign({},it,{ selected, intLabel:cap, intBg:INT[it.intensity].bg, intInk:INT[it.intensity].ink, previewEl:animPreview(it.demo),
+        btnBg:selected?'var(--ink)':'transparent', btnBorder:selected?'var(--ink)':'var(--border-strong)', btnFg:selected?'var(--primary-ink)':'var(--ink)', btnLabel:selected?'Added':'Use animation',
+        onUse:()=>this.setState({anim:selected?null:it.id}) });
+    }) }));
+
+    const macroRaw=[
+      {key:'entrance',name:'Page entrance',desc:'Content fades and lifts in as the view mounts.',demo:'stagger'},
+      {key:'tabs',name:'Tab transition',desc:'Cross-fade between tabs and sub-views.',demo:'crossfade'},
+      {key:'reveal',name:'Scroll reveal',desc:'Sections reveal progressively as they enter the viewport.',demo:'fadeup'},
+    ];
+    const selMacro=this.state.macro;
+    const macros=macroRaw.map(m=>{ const selected=selMacro===m.key; return Object.assign({},m,{ selected, previewEl:animPreview(m.demo),
+      btnBg:selected?'var(--ink)':'transparent', btnBorder:selected?'var(--ink)':'var(--border-strong)', btnFg:selected?'var(--primary-ink)':'var(--ink)', btnLabel:selected?'Selected':'Set page motion',
+      onUse:()=>this.setState({macro:selected?null:m.key}) }); });
+
+    const layoutSel=layoutsRaw.find(l=>l.key===selLayout);
+    const tplSel=templatesRaw.find(t=>t.key===selTpl);
+    let animSel=null; for(const g of animRaw){ const f=g.items.find(i=>i.id===selAnim); if(f){animSel=f;break;} }
+    const macroSel=macroRaw.find(m=>m.key===selMacro);
+
+    const L=['Act as a senior product designer. Improve the selected UI on Beunique (Billing settings).',''];
+    if(selFixes.length){ L.push('Apply these fixes:'); selFixes.forEach((f,i)=>L.push('  '+(i+1)+'. '+f.title+' — '+f.fix)); L.push(''); }
+    L.push('Design direction:');
+    L.push('  • Layout: '+(layoutSel?layoutSel.name+' ('+layoutSel.cat+')':'— not selected —'));
+    L.push('  • Template: '+(tplSel?tplSel.name+' ('+tplSel.src+')':'— not selected —'));
+    L.push('  • Motion: '+(animSel?animSel.name+' — '+animSel.effect:'— not selected —'));
+    if(macroSel) L.push('  • Page motion: '+macroSel.name);
+    L.push('','Keep the warm off-white, compact, professional aesthetic. Black primary actions, muted secondary text.');
+    const prompt=L.join('\n');
+
+    const theme=this.state.theme!=null?this.state.theme:(this.props.defaultTheme||'light');
+    const tab=this.state.tab!=null?this.state.tab:(this.props.defaultTab||'recs');
+    const density=this.props.density||'comfortable';
+    const seg=this.state.seg;
+    const navItem=(key)=>({bg:tab===key?'var(--sel-bg)':'transparent', fg:tab===key?'var(--ink)':'var(--ink-2)'});
+    const segS=(key)=>({bg:seg===key?'var(--card)':'transparent', fg:seg===key?'var(--ink)':'var(--ink-2)', sh:seg===key?'var(--shadow)':'none'});
+    const thS=(t)=>({bg:theme===t?'var(--card)':'transparent', fg:theme===t?'var(--ink)':'var(--ink-3)', sh:theme===t?'var(--shadow)':'none'});
+
+    return {
+      theme, density,
+      tabRecs:tab==='recs', tabLayouts:tab==='layouts', tabAnims:tab==='anims',
+      segLayouts:seg==='layouts', segTemplates:seg==='templates', segMotion:seg==='motion',
+      nav:{ recs:Object.assign({},navItem('recs'),{badgeBg:tab==='recs'?'var(--ink)':'var(--bg-2)',badgeFg:tab==='recs'?'var(--primary-ink)':'var(--ink-3)'}), layouts:navItem('layouts'), anims:navItem('anims') },
+      seg:{layouts:segS('layouts'),templates:segS('templates'),motion:segS('motion')},
+      themeSeg:{light:thS('light'),dark:thS('dark')},
+      recGroups, layouts, templates, animGroups, macros,
+      fixCount, fixCountLabel:fixCount+' fix'+(fixCount===1?'':'es'),
+      chipLayout: layoutSel?layoutSel.name:'None', chipTpl: tplSel?tplSel.name:'None', chipAnim: animSel?animSel.name:'None',
+      prompt, copyLabel:this.state.copied?'Copied ✓':'Copy', showPrompt:this.state.showPrompt,
+      goRecs:()=>this.setState({tab:'recs'}), goLayouts:()=>this.setState({tab:'layouts'}), goAnims:()=>this.setState({tab:'anims'}),
+      setSegLayouts:()=>this.setState({seg:'layouts'}), setSegTemplates:()=>this.setState({seg:'templates'}), setSegMotion:()=>this.setState({seg:'motion'}),
+      setLight:()=>this.setState({theme:'light'}), setDark:()=>this.setState({theme:'dark'}),
+      togglePrompt:()=>this.setState(s=>({showPrompt:!s.showPrompt})), doCopy:()=>this.copyPrompt(prompt), reanalyze:()=>{},
+    };
+  }
+}
+</script>
+</body>
+</html>

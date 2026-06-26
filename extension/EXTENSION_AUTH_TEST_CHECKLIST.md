@@ -4,7 +4,7 @@ Prereqs:
 - [ ] Backend has `https://www.beuniq.design/extension/authorize`.
 - [ ] Backend redirects signed-in users to `/extension/code`.
 - [ ] Backend generates a 6-character uppercase alphanumeric code.
-- [ ] Backend has `POST https://www.beuniq.design/api/extension-auth/exchange`.
+- [ ] Backend has `POST https://polish-pilot.vercel.app/api/extension-auth/exchange`.
 - [ ] Exchange response returns `token`, `tokenType: "Bearer"`,
       `expiresInSeconds`, and `email`.
 - [ ] Extension rebuilt (`npm run build`) and reloaded in `chrome://extensions`.

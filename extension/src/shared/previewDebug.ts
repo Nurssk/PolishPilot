@@ -4,8 +4,10 @@ export type PreviewDebugLog = {
   stage:
     | "selection"
     | "dom-extraction"
+    | "source-section-detection"
     | "used-css-extraction"
     | "style-token-extraction"
+    | "page-design-extraction"
     | "preview-content-extraction"
     | "html-generation"
     | "iframe-render"

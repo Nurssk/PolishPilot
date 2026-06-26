@@ -94,8 +94,7 @@ export function extractPreviewContent(args: {
 }): PreviewContent {
   try {
     const elements = normalizeElements(args.capture?.matchedElements ?? []);
-    const sectionType =
-      args.aiResult?.sectionType ?? args.capture?.detected.sectionType ?? "unknown";
+    const sectionType = args.aiResult?.sectionType ?? "unknown";
     const theme = detectPreviewTheme(elements, args.capture?.styleContext);
     const rootMeta = findRootMeta(args.capture?.matchedElements ?? []);
 

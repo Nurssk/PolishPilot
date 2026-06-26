@@ -180,10 +180,11 @@ function buildSummary(
   gemini?: GeminiUncodixifyResult | null
 ): string {
   if (!findings.length) {
-    return "No strong AI/Codex UI patterns were detected. This block reads as human-designed.";
+    return "AI Detect 0/100. No strong AI/Codex UI patterns were detected.";
   }
   const top = findings.slice(0, 3).map((finding) => finding.title.toLowerCase());
-  const base = `Human-designed score ${score}/100. Detected ${findings.length} AI-like pattern${
+  const aiDetectScore = 100 - score;
+  const base = `AI Detect ${aiDetectScore}/100. Detected ${findings.length} AI-like pattern${
     findings.length === 1 ? "" : "s"
   }: ${top.join(", ")}.`;
   const geminiSummary = typeof gemini?.summary === "string" ? gemini.summary.trim() : "";
@@ -191,7 +192,7 @@ function buildSummary(
 }
 
 function buildTopFixes(findings: UncodixifyFinding[]): string[] {
-  return findings.slice(0, 3).map((finding) => finding.recommendation);
+  return findings.slice(0, 5).map((finding) => finding.recommendation);
 }
 
 function buildPromptInstructions(findings: UncodixifyFinding[]): string[] {

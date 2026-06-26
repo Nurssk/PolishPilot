@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AI_PREVIEW_STORAGE_KEY,
   AI_PREVIEW_REGENERATE_KEY,
+  CODE_CHANGE_STORAGE_KEY,
   DESIGN_IDEAS_STORAGE_KEY,
   EXCLUDED_UNCODIX_RULES_STORAGE_KEY,
   FULL_PREVIEW_STORAGE_KEY,
@@ -13,6 +14,7 @@ import {
   SELECTED_ANIMATION_STORAGE_KEY,
   SELECTED_PATTERN_STORAGE_KEY,
   SELECTED_TEMPLATE_STORAGE_KEY,
+  WORKSPACE_AI_PREVIEW_REQUEST_KEY,
   formatPixels,
   isPolishPilotMessage
 } from "../shared/messages";
@@ -28,6 +30,8 @@ import { AccountPanel } from "../components/AccountPanel";
 import { getAuthHeaders } from "../shared/authService";
 import { UncodixifyCheck } from "../components/UncodixifyCheck";
 import { analyzeUncodixify } from "../analysis/analyzeUncodixify";
+import type { UncodixifyAnalysisResult } from "../analysis/uncodixifyTypes";
+import { buildCaptureObjectInventory } from "../analysis/buildObjectInventory";
 import { buildHumanizedPreviewHtml } from "../patterns/buildHumanizedPreviewHtml";
 import {
   extractPreviewContent,
@@ -35,7 +39,10 @@ import {
 } from "../patterns/extractPreviewItems";
 import { generateCursorPrompt } from "../patterns/generateCursorPrompt";
 import { validateGeneratedPrompt } from "../patterns/validateGeneratedPrompt";
-import { selectHumanizerSuggestions } from "../patterns/selectHumanizerSuggestions";
+import {
+  selectHumanizerSuggestions,
+  type HumanizerSuggestions
+} from "../patterns/selectHumanizerSuggestions";
 import {
   appendPreviewDebugLogs,
   createPreviewDebugLog,
@@ -54,13 +61,27 @@ import type {
   PolishPilotMode,
   RectangleCapture
 } from "../shared/types";
-import type { DesignIdeasData, RecommendationsData } from "../shared/windowData";
+import type {
+  CodeChangeData,
+  DesignIdeasData,
+  RecommendationsData
+} from "../shared/windowData";
 
 const ANALYZE_URL = apiUrl("/api/analyze-area");
 const AI_PREVIEW_URL = apiUrl("/api/generate-ai-preview");
 const HEALTH_URL = apiUrl("/api/health");
 
 type AIStatus = "idle" | "loading" | "success" | "error";
+type AnalysisProcessStepId =
+  | "idle"
+  | "capture"
+  | "prepare"
+  | "send"
+  | "read"
+  | "reason"
+  | "recommend"
+  | "complete"
+  | "error";
 type BackendHealthStatus = "checking" | "online" | "offline";
 type GeminiLogEntry = {
   id: string;
@@ -81,8 +102,9 @@ type GeminiDebugState = {
   durationMs?: number;
   retryCount?: number;
   screenshotLength?: number;
+  sourceContextChars?: number;
   matchedElementsCount?: number;
-  jsonParseStrategy?: "direct" | "extracted" | "repaired" | "fallback";
+  jsonParseStrategy?: "direct" | "extracted" | "repaired";
   error?: GeminiApiError;
 };
 type AIPreviewStatus = "idle" | "loading" | "success" | "error";
@@ -104,6 +126,20 @@ type AIPreviewDebugState = {
   callMode?: string;
   responseTopLevelKeys?: string[];
   imageInlineDataFound?: boolean;
+  recommendationCounts?: {
+    designChecks: number;
+    layoutIdeas: number;
+    templateReferences: number;
+    animationReferences: number;
+    uncodixifyRecommendations: number;
+  };
+  solutionStatus?: "success" | "error" | "skipped";
+  solutionModel?: string;
+  solutionDurationMs?: number;
+  solutionPromptChars?: number;
+  solutionTextEditCount?: number;
+  solutionSummary?: string;
+  solutionError?: string;
   promptUsed?: string;
   error?: {
     code: string;
@@ -119,9 +155,10 @@ type AnalyzeAreaSuccessResponse = {
   result: AIUnderstandingResult;
   debug?: {
     screenshotLength?: number;
+    sourceContextChars?: number;
     matchedElementsCount?: number;
     rawResponseLength?: number;
-    jsonParseStrategy?: "direct" | "extracted" | "repaired" | "fallback";
+    jsonParseStrategy?: "direct" | "extracted" | "repaired";
     retryCount?: number;
   };
 };
@@ -148,6 +185,14 @@ type GenerateAIPreviewSuccessResponse = {
     callMode?: string;
     responseTopLevelKeys?: string[];
     imageInlineDataFound?: boolean;
+    recommendationCounts?: AIPreviewDebugState["recommendationCounts"];
+    solutionStatus?: AIPreviewDebugState["solutionStatus"];
+    solutionModel?: string;
+    solutionDurationMs?: number;
+    solutionPromptChars?: number;
+    solutionTextEditCount?: number;
+    solutionSummary?: string;
+    solutionError?: string;
   };
 };
 type GenerateAIPreviewErrorResponse = {
@@ -168,6 +213,7 @@ type AnalyzeAreaErrorResponse = {
     model?: string;
     durationMs?: number;
     screenshotLength?: number;
+    sourceContextChars?: number;
     matchedElementsCount?: number;
     retryCount?: number;
   };
@@ -179,6 +225,7 @@ export function SidePanel() {
   const [hasLoadedCapture, setHasLoadedCapture] = useState(false);
   const [aiResult, setAIResult] = useState<AIUnderstandingResult | null>(null);
   const [aiStatus, setAIStatus] = useState<AIStatus>("idle");
+  const [analysisStep, setAnalysisStep] = useState<AnalysisProcessStepId>("idle");
   const [aiError, setAIError] = useState("");
   const [backendHealthStatus, setBackendHealthStatus] =
     useState<BackendHealthStatus>("checking");
@@ -187,7 +234,6 @@ export function SidePanel() {
     useState<LayoutPatternId | null>(null);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const [selectedAnimationId, setSelectedAnimationId] = useState<string | null>(null);
-  const [copiedMainPrompt, setCopiedMainPrompt] = useState(false);
   const [pagePreviewStatus, setPagePreviewStatus] = useState("");
   const [lastAnalyzedCaptureId, setLastAnalyzedCaptureId] = useState<string | null>(
     null
@@ -199,9 +245,11 @@ export function SidePanel() {
   const [geminiLogs, setGeminiLogs] = useState<GeminiLogEntry[]>([]);
   const [debugCopied, setDebugCopied] = useState(false);
   const [previewDebugCopied, setPreviewDebugCopied] = useState(false);
+  const [promptCopied, setPromptCopied] = useState(false);
   const [generatedPreviews, setGeneratedPreviews] = useState<GeneratedPreviewImage[]>([]);
   const [excludedUncodixRuleIds, setExcludedUncodixRuleIds] = useState<string[]>([]);
-  const generateAIPreviewRef = useRef<(() => Promise<void>) | null>(null);
+  const generateAIPreviewRef = useRef<((options?: { openResult?: boolean }) => Promise<void>) | null>(null);
+  const analysisTimersRef = useRef<number[]>([]);
 
   useEffect(() => {
     void refreshData();
@@ -252,6 +300,12 @@ export function SidePanel() {
       if (AI_PREVIEW_REGENERATE_KEY in changes && changes[AI_PREVIEW_REGENERATE_KEY]?.newValue) {
         void generateAIPreviewRef.current?.();
       }
+      if (
+        WORKSPACE_AI_PREVIEW_REQUEST_KEY in changes &&
+        changes[WORKSPACE_AI_PREVIEW_REQUEST_KEY]?.newValue
+      ) {
+        void generateAIPreviewRef.current?.({ openResult: false });
+      }
 
       if (nextCapture) {
         setCapture((current) => {
@@ -260,6 +314,7 @@ export function SidePanel() {
           if (!isSameCapture) {
             setAIResult(null);
             setAIStatus("idle");
+            setAnalysisStep("capture");
             setAIError("");
             setGeminiDebug({});
             setAIPreviewStatus("idle");
@@ -269,6 +324,7 @@ export function SidePanel() {
             setSelectedTemplateId(null);
             setSelectedAnimationId(null);
             setExcludedUncodixRuleIds([]);
+            setPromptCopied(false);
             void chrome.storage.session.remove([
               SELECTED_PATTERN_STORAGE_KEY,
               SELECTED_TEMPLATE_STORAGE_KEY,
@@ -283,6 +339,7 @@ export function SidePanel() {
       if (nextAIResult) {
         setAIResult(nextAIResult);
         setAIStatus("success");
+        setAnalysisStep("complete");
       }
       if (nextPatternId) setSelectedPatternId(nextPatternId);
       if (Array.isArray(nextGeneratedPreviews)) {
@@ -298,6 +355,7 @@ export function SidePanel() {
         setCapture(message.capture);
         setAIResult(null);
         setAIStatus("idle");
+        setAnalysisStep("capture");
         setAIError("");
         setGeminiDebug({});
         setAIPreviewStatus("idle");
@@ -307,6 +365,7 @@ export function SidePanel() {
         setSelectedTemplateId(null);
         setSelectedAnimationId(null);
         setExcludedUncodixRuleIds([]);
+        setPromptCopied(false);
         void chrome.storage.session.remove([
           SELECTED_PATTERN_STORAGE_KEY,
           SELECTED_TEMPLATE_STORAGE_KEY,
@@ -322,6 +381,7 @@ export function SidePanel() {
     return () => {
       chrome.storage.onChanged.removeListener(handleStorageChange);
       chrome.runtime.onMessage.removeListener(handleRuntimeMessage);
+      clearAnalysisProgressTimers();
     };
   }, []);
 
@@ -336,10 +396,7 @@ export function SidePanel() {
   }, [aiResult, aiStatus, capture, lastAnalyzedCaptureId, mode]);
 
   const imageSrc = getScreenshotImageSrc(capture?.screenshotBase64);
-  const effectiveAIResult = useMemo(
-    () => aiResult ?? (capture ? buildFallbackAIResultFromCapture(capture) : null),
-    [aiResult, capture]
-  );
+  const effectiveAIResult = aiResult;
   const uncodixifyResult = useMemo(
     () => analyzeUncodixify(capture, effectiveAIResult),
     [capture, effectiveAIResult]
@@ -351,13 +408,23 @@ export function SidePanel() {
       .map((finding) => finding.ruleId)
       .filter((ruleId) => !excluded.has(ruleId));
   }, [uncodixifyResult, excludedUncodixRuleIds]);
-  const includedUncodixRecommendations = useMemo(() => {
+  const allUncodixRecommendations = useMemo(() => {
+    if (!uncodixifyResult) return [];
+    return uncodixifyResult.findings.map(
+      (finding) =>
+        `${finding.title}: ${finding.recommendation} Better direction: ${finding.betterDirection}`
+    );
+  }, [uncodixifyResult]);
+  const codeChangeRecommendations = useMemo(() => {
     if (!uncodixifyResult) return [];
     const included = new Set(includedUncodixRuleIds);
     return uncodixifyResult.findings
       .filter((finding) => included.has(finding.ruleId))
-      .map((finding) => finding.recommendation);
-  }, [uncodixifyResult, includedUncodixRuleIds]);
+      .map(
+        (finding) =>
+          `${finding.title}: ${finding.recommendation} Better direction: ${finding.betterDirection}`
+      );
+  }, [includedUncodixRuleIds, uncodixifyResult]);
 
   function toggleUncodixRule(ruleId: string) {
     setExcludedUncodixRuleIds((current) => {
@@ -379,20 +446,27 @@ export function SidePanel() {
     [effectiveAIResult, mode]
   );
   const suggestedPatterns = suggestions?.layoutPatterns ?? [];
-  const suggestedTemplates = useMemo(
+  const allSuggestedTemplates = useMemo(
     () =>
       (suggestions?.templateReferences ?? []).filter(
         (reference) => mode === "developer" || reference.urlStatus !== "broken"
-      ).slice(0, 4),
+      ),
     [mode, suggestions]
   );
+  const suggestedTemplates = useMemo(
+    () => allSuggestedTemplates.slice(0, 4),
+    [allSuggestedTemplates]
+  );
   const suggestedAnimations = suggestions?.animationReferences ?? [];
+  const explicitSelectedPattern = selectedPatternId
+    ? suggestedPatterns.find((pattern) => pattern.id === selectedPatternId) ?? null
+    : null;
   const selectedPattern =
-    suggestedPatterns.find((pattern) => pattern.id === selectedPatternId) ??
+    explicitSelectedPattern ??
     suggestedPatterns[0] ??
     null;
   const selectedTemplate =
-    suggestedTemplates.find((reference) => reference.id === selectedTemplateId) ?? null;
+    allSuggestedTemplates.find((reference) => reference.id === selectedTemplateId) ?? null;
   const selectedAnimation =
     suggestedAnimations.find((reference) => reference.id === selectedAnimationId) ?? null;
   const latestGeneratedPreview = generatedPreviews[0] ?? null;
@@ -433,7 +507,7 @@ export function SidePanel() {
       sourceTitle: capture?.title,
       sourceUrl: capture?.url,
       layoutPatterns: suggestedPatterns,
-      templateReferences: suggestions?.templateReferences ?? [],
+      templateReferences: allSuggestedTemplates,
       animationReferences: suggestedAnimations,
       fitReason:
         effectiveAIResult?.designerDescription ||
@@ -441,7 +515,8 @@ export function SidePanel() {
         undefined,
       selectedPatternId,
       selectedTemplateId,
-      selectedAnimationId
+      selectedAnimationId,
+      cursorPrompt: cursorPromptText
     };
     void chrome.storage.session.set({ [DESIGN_IDEAS_STORAGE_KEY]: data });
   }, [
@@ -450,10 +525,12 @@ export function SidePanel() {
     capture,
     suggestions,
     suggestedPatterns,
+    allSuggestedTemplates,
     suggestedAnimations,
     selectedPatternId,
     selectedTemplateId,
-    selectedAnimationId
+    selectedAnimationId,
+    cursorPromptText
   ]);
 
   // Mirror the Uncodixify analysis to the Recommendations floating window.
@@ -464,28 +541,80 @@ export function SidePanel() {
       sourceTitle: capture?.title,
       sourceUrl: capture?.url,
       analysis: uncodixifyResult,
-      excludedRuleIds: excludedUncodixRuleIds
+      excludedRuleIds: excludedUncodixRuleIds,
+      cursorPrompt: cursorPromptText
     };
     void chrome.storage.session.set({ [RECOMMENDATIONS_STORAGE_KEY]: data });
-  }, [mode, effectiveAIResult, capture, uncodixifyResult, excludedUncodixRuleIds]);
+  }, [mode, effectiveAIResult, capture, uncodixifyResult, excludedUncodixRuleIds, cursorPromptText]);
 
-  async function openDesignIdeasWindow() {
-    await chrome.tabs.create({ url: chrome.runtime.getURL("design-ideas.html") });
-  }
+  // Mirror the latest capture and recommendations to the Code Change tab.
+  useEffect(() => {
+    const data: CodeChangeData = {
+      mode,
+      hasAnalysis: Boolean(effectiveAIResult),
+      sourceTitle: capture?.title,
+      sourceUrl: capture?.url,
+      capture,
+      aiResult: effectiveAIResult,
+      analysis: uncodixifyResult,
+      selectedPattern: explicitSelectedPattern,
+      selectedTemplateReference: selectedTemplate,
+      selectedAnimationReference: selectedAnimation,
+      recommendations: codeChangeRecommendations,
+      cursorPrompt: cursorPromptText,
+      defaultScope: "selected-block"
+    };
+    void chrome.storage.session.set({ [CODE_CHANGE_STORAGE_KEY]: data });
+  }, [
+    mode,
+    effectiveAIResult,
+    capture,
+    uncodixifyResult,
+    explicitSelectedPattern,
+    selectedTemplate,
+    selectedAnimation,
+    codeChangeRecommendations,
+    cursorPromptText
+  ]);
 
   async function openRecommendationsWindow() {
-    await chrome.tabs.create({ url: chrome.runtime.getURL("recommendations.html") });
-  }
+    const url = chrome.runtime.getURL("recommendations.html");
+    const existing = await chrome.tabs.query({ url });
+    const tab = existing[0];
 
-  async function openAIPreviewWindow() {
-    if (latestGeneratedPreview) {
-      await chrome.tabs.create({
-        url: chrome.runtime.getURL(`preview-image.html?id=${latestGeneratedPreview.id}`)
-      });
+    if (tab?.id) {
+      await chrome.tabs.update(tab.id, { active: true });
+      if (tab.windowId !== undefined) {
+        await chrome.windows.update(tab.windowId, { focused: true });
+      }
       return;
     }
-    // Nothing generated yet — generate now (which opens the tab on success).
-    await generateAIPreview();
+
+    await chrome.tabs.create({ url });
+  }
+
+  async function openCodeChangeTab() {
+    const url = chrome.runtime.getURL("code-change.html");
+    const existing = await chrome.tabs.query({ url });
+    const tab = existing[0];
+
+    if (tab?.id) {
+      await chrome.tabs.update(tab.id, { active: true });
+      if (tab.windowId !== undefined) {
+        await chrome.windows.update(tab.windowId, { focused: true });
+      }
+      return;
+    }
+
+    await chrome.tabs.create({ url });
+  }
+
+  async function copyCursorPromptFromSidePanel() {
+    if (!cursorPromptText) return;
+    await navigator.clipboard.writeText(cursorPromptText);
+    setPromptCopied(true);
+    setPagePreviewStatus("Prompt copied.");
+    window.setTimeout(() => setPromptCopied(false), 1600);
   }
 
   // Keep a live reference so the AI Preview window's "Regenerate" can call it.
@@ -507,12 +636,15 @@ export function SidePanel() {
     const storedMode = localResult[POLISH_PILOT_MODE_STORAGE_KEY];
     if (storedMode === "simple" || storedMode === "developer") setMode(storedMode);
 
-    setCapture((sessionResult[LATEST_CAPTURE_STORAGE_KEY] as RectangleCapture | undefined) ?? null);
+    const storedCapture =
+      (sessionResult[LATEST_CAPTURE_STORAGE_KEY] as RectangleCapture | undefined) ?? null;
+    setCapture(storedCapture);
     const storedAIResult = sessionResult[LATEST_AI_RESULT_STORAGE_KEY] as
       | AIUnderstandingResult
       | undefined;
     setAIResult(storedAIResult ?? null);
     setAIStatus(storedAIResult ? "success" : "idle");
+    setAnalysisStep(storedAIResult ? "complete" : storedCapture ? "capture" : "idle");
     setSelectedPatternId(
       (sessionResult[SELECTED_PATTERN_STORAGE_KEY] as LayoutPatternId | undefined) ?? null
     );
@@ -538,6 +670,33 @@ export function SidePanel() {
   async function updateMode(nextMode: PolishPilotMode) {
     setMode(nextMode);
     await chrome.storage.local.set({ [POLISH_PILOT_MODE_STORAGE_KEY]: nextMode });
+  }
+
+  function clearAnalysisProgressTimers() {
+    analysisTimersRef.current.forEach((timer) => window.clearTimeout(timer));
+    analysisTimersRef.current = [];
+  }
+
+  function scheduleAnalysisStep(step: AnalysisProcessStepId, delayMs: number) {
+    const timer = window.setTimeout(() => {
+      setAnalysisStep(step);
+    }, delayMs);
+    analysisTimersRef.current.push(timer);
+  }
+
+  function startAnalysisProgress() {
+    clearAnalysisProgressTimers();
+    setAnalysisStep("capture");
+    scheduleAnalysisStep("prepare", 250);
+    scheduleAnalysisStep("send", 650);
+    scheduleAnalysisStep("read", 1300);
+    scheduleAnalysisStep("reason", 2800);
+    scheduleAnalysisStep("recommend", 4800);
+  }
+
+  function finishAnalysisProgress(step: Extract<AnalysisProcessStepId, "complete" | "error">) {
+    clearAnalysisProgressTimers();
+    setAnalysisStep(step);
   }
 
   async function checkBackendHealth() {
@@ -574,6 +733,7 @@ export function SidePanel() {
   ) {
     if (!targetCapture) {
       setAIStatus("error");
+      setAnalysisStep("error");
       setAIError("Select an area before analyzing.");
       setGeminiDebug({
         error: {
@@ -587,20 +747,24 @@ export function SidePanel() {
     }
 
     setAIStatus("loading");
+    startAnalysisProgress();
     setAIError("");
     setDebugCopied(false);
     setGeminiDebug({
       screenshotLength: targetCapture.screenshotBase64.length,
-      matchedElementsCount: targetCapture.matchedElements.length
+      matchedElementsCount: 0
     });
     addGeminiLog("info", simpleMode ? "Auto-analysis started" : "Analyze clicked", {
       url: ANALYZE_URL
     });
     addGeminiLog("info", "Request payload summary", {
       screenshotLength: targetCapture.screenshotBase64.length,
-      matchedElementsCount: targetCapture.matchedElements.length,
       selectedWidth: Math.round(targetCapture.selectedRect.width),
-      selectedHeight: Math.round(targetCapture.selectedRect.height)
+      selectedHeight: Math.round(targetCapture.selectedRect.height),
+      geminiInput: "screenshot+source-context",
+      sourceSections: targetCapture.sourceSections?.length ?? 0,
+      usedCssRuleCount: targetCapture.usedCssRules?.ruleCount ?? 0,
+      pageDesignSampledElements: targetCapture.pageDesignContext?.sampledElements ?? 0
     });
 
     try {
@@ -610,6 +774,7 @@ export function SidePanel() {
         body: JSON.stringify(buildAnalyzePayload(targetCapture))
       });
       const body = await response.json().catch(() => null);
+      setAnalysisStep("recommend");
       addGeminiLog("info", "Response received", { status: response.status });
 
       if (!response.ok || isWrappedErrorResponse(body)) {
@@ -621,10 +786,8 @@ export function SidePanel() {
           message: parsedError.message
         });
         setAIStatus("error");
+        finishAnalysisProgress("error");
         setAIError(simpleMode ? simpleGeminiErrorMessage(parsedError) : formatGeminiError(parsedError));
-        const fallbackResult = buildFallbackAIResultFromCapture(targetCapture);
-        setAIResult(fallbackResult);
-        await chrome.storage.session.set({ [LATEST_AI_RESULT_STORAGE_KEY]: fallbackResult });
         return;
       }
 
@@ -633,6 +796,7 @@ export function SidePanel() {
       setGeminiDebug(parsedResponse.debug);
       setAIResult(result);
       setAIStatus("success");
+      finishAnalysisProgress("complete");
       setSelectedPatternId(null);
       setSelectedTemplateId(null);
       setSelectedAnimationId(null);
@@ -663,20 +827,11 @@ export function SidePanel() {
         message: fallbackError.message
       });
       setAIStatus("error");
-      const fallbackResult = buildFallbackAIResultFromCapture(targetCapture);
-      setAIResult(fallbackResult);
-      await chrome.storage.session.set({ [LATEST_AI_RESULT_STORAGE_KEY]: fallbackResult });
+      finishAnalysisProgress("error");
       setAIError(
         simpleMode ? simpleGeminiErrorMessage(fallbackError) : formatGeminiError(fallbackError)
       );
     }
-  }
-
-  async function selectPattern(pattern: LayoutPattern) {
-    setSelectedPatternId(pattern.id);
-    await chrome.storage.session.set({
-      [SELECTED_PATTERN_STORAGE_KEY]: pattern.id
-    });
   }
 
   async function openTemplateReference(reference: TemplateReference) {
@@ -699,21 +854,6 @@ export function SidePanel() {
     }
 
     await chrome.tabs.create({ url: targetUrl });
-  }
-
-  async function copyCursorPrompt() {
-    const prompt = cursorPromptText;
-    logPromptSafely("cursor", prompt, {
-      designDirectionSelected,
-      includedFixCount: includedUncodixRuleIds.length,
-      hasTemplate: Boolean(selectedTemplate),
-      hasAnimation: Boolean(selectedAnimation)
-    });
-    await navigator.clipboard.writeText(prompt);
-    setCopiedMainPrompt(true);
-    window.setTimeout(() => {
-      setCopiedMainPrompt(false);
-    }, 1800);
   }
 
   async function openFullPreview() {
@@ -740,7 +880,7 @@ export function SidePanel() {
         pattern: selectedPattern,
         previewContent,
         styleContext: nextCapture.styleContext,
-        sectionType: effectiveAIResult?.sectionType ?? capture.detected.sectionType,
+        sectionType: effectiveAIResult?.sectionType ?? "unknown",
         aiResult: effectiveAIResult,
         templateReference: selectedTemplate,
         animationReference: selectedAnimation,
@@ -792,22 +932,31 @@ export function SidePanel() {
     setPagePreviewStatus("Preview shown on page.");
   }
 
-  async function generateAIPreview() {
-    if (!capture || !selectedPattern || !capture.screenshotBase64) {
+  async function generateAIPreview(options: { openResult?: boolean } = {}) {
+    const openResult = options.openResult ?? true;
+    if (!capture || !capture.screenshotBase64) {
       setAIPreviewStatus("error");
-      setAIPreviewError("Select an area and a pattern before generating AI preview.");
+      setAIPreviewError("Select an area before generating AI preview.");
       return;
     }
 
+    const previewPattern = explicitSelectedPattern;
     const previewContent = extractPreviewContent({ capture, aiResult: effectiveAIResult });
     setAIPreviewStatus("loading");
     setAIPreviewError("");
     setAIPreviewDebug({
       screenshotLength: capture.screenshotBase64.length,
       templateMode: "text-only",
-      hasTemplateImage: false
+      hasTemplateImage: false,
+      recommendationCounts: buildAIPreviewRecommendationCounts({
+        analysis: uncodixifyResult,
+        suggestions,
+        templateReferences: allSuggestedTemplates,
+        animationReferences: suggestedAnimations,
+        uncodixifyRecommendations: allUncodixRecommendations
+      })
     });
-    setPagePreviewStatus("Generating visual preview...");
+    setPagePreviewStatus("Planning fixes, humanizing text, then generating visual preview...");
 
     try {
       const response = await fetch(AI_PREVIEW_URL, {
@@ -818,22 +967,30 @@ export function SidePanel() {
           url: capture.url,
           title: capture.title,
           aiResult: effectiveAIResult,
-          selectedPattern: {
-            id: selectedPattern.id,
-            name: selectedPattern.name,
-            description: selectedPattern.problemSolved.join(" "),
-            bestFor: selectedPattern.bestFor,
-            tailwindHint: selectedPattern.tailwindHint,
-            promptInstruction: selectedPattern.promptInstruction,
-            exampleStructure: selectedPattern.exampleStructure
-          },
+          selectedPattern: previewPattern
+            ? {
+                id: previewPattern.id,
+                name: previewPattern.name,
+                description: previewPattern.problemSolved.join(" "),
+                bestFor: previewPattern.bestFor,
+                tailwindHint: previewPattern.tailwindHint,
+                promptInstruction: previewPattern.promptInstruction,
+                exampleStructure: previewPattern.exampleStructure
+              }
+            : undefined,
           selectedTemplateReference: selectedTemplate,
           selectedAnimationReference: selectedAnimation,
+          recommendationContext: buildAIPreviewRecommendationContext({
+            analysis: uncodixifyResult,
+            suggestions,
+            templateReferences: allSuggestedTemplates,
+            animationReferences: suggestedAnimations
+          }),
           previewContent,
           styleContext: capture.styleContext,
           templateMode: "text-only",
-          uncodixify: includedUncodixRecommendations.length
-            ? { recommendations: includedUncodixRecommendations }
+          uncodixify: allUncodixRecommendations.length
+            ? { recommendations: allUncodixRecommendations }
             : undefined
         })
       });
@@ -890,6 +1047,14 @@ export function SidePanel() {
         callMode: body.debug?.callMode,
         responseTopLevelKeys: body.debug?.responseTopLevelKeys,
         imageInlineDataFound: body.debug?.imageInlineDataFound,
+        recommendationCounts: body.debug?.recommendationCounts,
+        solutionStatus: body.debug?.solutionStatus,
+        solutionModel: body.debug?.solutionModel,
+        solutionDurationMs: body.debug?.solutionDurationMs,
+        solutionPromptChars: body.debug?.solutionPromptChars,
+        solutionTextEditCount: body.debug?.solutionTextEditCount,
+        solutionSummary: body.debug?.solutionSummary,
+        solutionError: body.debug?.solutionError,
         promptUsed: body.promptUsed
       });
 
@@ -898,8 +1063,8 @@ export function SidePanel() {
           requestId: body.requestId,
           model: body.model,
           durationMs: body.durationMs,
-          patternId: selectedPattern.id,
-          patternName: selectedPattern.name,
+          patternId: previewPattern?.id,
+          patternName: previewPattern?.name ?? "Recommendation fixes",
           previewImageBase64: body.previewImageBase64,
           previewId: body.requestId,
           debug: body.debug
@@ -911,10 +1076,10 @@ export function SidePanel() {
         createdAt: new Date().toISOString(),
         sourceUrl: capture.url,
         sourceTitle: capture.title,
-        patternId: selectedPattern.id,
-        patternName: selectedPattern.name,
-        sectionType: effectiveAIResult?.sectionType ?? capture.detected.sectionType,
-        layoutType: effectiveAIResult?.layoutType ?? capture.detected.layoutType,
+        patternId: previewPattern?.id,
+        patternName: previewPattern?.name ?? "Recommendation fixes",
+        sectionType: effectiveAIResult?.sectionType ?? "unknown",
+        layoutType: effectiveAIResult?.layoutType ?? "unknown",
         imageBase64: body.previewImageBase64,
         sourceScreenshotBase64: capture.screenshotBase64,
         promptUsed: body.promptUsed,
@@ -922,15 +1087,18 @@ export function SidePanel() {
         provider: "gemini",
         uncodixifyScore: uncodixifyResult?.score,
         uncodixifyFindings: uncodixifyResult?.findings
-          .filter((finding) => includedUncodixRuleIds.includes(finding.ruleId))
           .map((finding) => finding.title)
       };
 
       await addGeneratedPreview(generatedPreview);
       setGeneratedPreviews(await getGeneratedPreviews());
-      await openGeneratedPreviewWindow(generatedPreview.id);
+      if (openResult) {
+        await openGeneratedPreviewWindow(generatedPreview.id);
+      }
 
-      setPagePreviewStatus("AI preview generated.");
+      setPagePreviewStatus(
+        openResult ? "AI preview generated." : "AI preview generated in Recommendations."
+      );
       addGeminiLog("success", "AI preview generated", {
         previewId: generatedPreview.id,
         requestId: body.requestId,
@@ -1018,7 +1186,6 @@ export function SidePanel() {
     setSelectedTemplateId(null);
     setSelectedAnimationId(null);
     setExcludedUncodixRuleIds([]);
-    setCopiedMainPrompt(false);
     setAIPreviewStatus("idle");
     setAIPreviewError("");
     setAIPreviewDebug({});
@@ -1100,10 +1267,11 @@ export function SidePanel() {
             details: geminiDebug.error.details
           }
         : undefined,
-      debug: {
-        screenshotLength: geminiDebug.screenshotLength,
-        matchedElementsCount: geminiDebug.matchedElementsCount,
-        jsonParseStrategy: geminiDebug.jsonParseStrategy,
+        debug: {
+          screenshotLength: geminiDebug.screenshotLength,
+          sourceContextChars: geminiDebug.sourceContextChars,
+          matchedElementsCount: geminiDebug.matchedElementsCount,
+          jsonParseStrategy: geminiDebug.jsonParseStrategy,
         aiPreview: {
           requestId: aiPreviewDebug.requestId,
           model: aiPreviewDebug.model,
@@ -1121,6 +1289,13 @@ export function SidePanel() {
           callMode: aiPreviewDebug.callMode,
           responseTopLevelKeys: aiPreviewDebug.responseTopLevelKeys,
           imageInlineDataFound: aiPreviewDebug.imageInlineDataFound,
+          solutionStatus: aiPreviewDebug.solutionStatus,
+          solutionModel: aiPreviewDebug.solutionModel,
+          solutionDurationMs: aiPreviewDebug.solutionDurationMs,
+          solutionPromptChars: aiPreviewDebug.solutionPromptChars,
+          solutionTextEditCount: aiPreviewDebug.solutionTextEditCount,
+          solutionSummary: aiPreviewDebug.solutionSummary,
+          solutionError: aiPreviewDebug.solutionError,
           error: aiPreviewDebug.error
             ? {
                 code: aiPreviewDebug.error.code,
@@ -1134,7 +1309,8 @@ export function SidePanel() {
         },
         usedCssRuleCount: capture?.usedCssRules?.ruleCount,
         skippedStyleSheets: capture?.usedCssRules?.skippedStyleSheets,
-        styleTokensAvailable: Boolean(capture?.styleTokens)
+        styleTokensAvailable: Boolean(capture?.styleTokens),
+        objectInventory: capture ? buildCaptureObjectInventory(capture) : undefined
       }
     };
 
@@ -1260,14 +1436,6 @@ export function SidePanel() {
     );
   }
 
-  const includedFixCount = includedUncodixRuleIds.length;
-  const canCopyCursorPrompt = Boolean(capture || effectiveAIResult || includedFixCount);
-  const copyPromptLabel =
-    copiedMainPrompt
-      ? "Copied"
-      : includedFixCount
-        ? `Copy Prompt (${includedFixCount} ${includedFixCount === 1 ? "fix" : "fixes"})`
-        : "Copy Cursor Prompt";
   const analysisStatusLabel =
     aiStatus === "loading"
       ? "Analyzing"
@@ -1409,10 +1577,16 @@ export function SidePanel() {
               : "Select an area to analyze."}
           </p>
         )}
+        <AnalysisProcessTrail
+          aiResult={effectiveAIResult}
+          capture={capture}
+          status={aiStatus}
+          step={analysisStep}
+        />
         {aiStatus === "error" ? (
           <p className="mt-3 whitespace-pre-line text-sm leading-6 text-pilot-danger">
             {mode === "simple"
-              ? "AI analysis is unavailable. Local recommendations are ready."
+              ? "AI analysis is unavailable. Style checks are still available."
               : aiError}
           </p>
         ) : null}
@@ -1442,47 +1616,32 @@ export function SidePanel() {
         onToggleRule={toggleUncodixRule}
       />
 
-      <LayoutIdeasPanel
-        patterns={suggestedPatterns}
-        selectedPatternId={selectedPatternId}
-        onOpenAll={() => void openDesignIdeasWindow()}
-        onSelect={(pattern) => void selectPattern(pattern)}
-      />
-
       <section className="dh-card mt-4 p-4">
         <h2 className="text-lg font-black text-pilot-text">Actions</h2>
         <div className="mt-3 grid gap-2">
           <button
-            className="dh-button-secondary w-full px-3 py-3 text-sm"
+            className="dh-button-primary w-full px-3 py-3.5 text-base"
             disabled={!uncodixifyResult}
             onClick={() => void openRecommendationsWindow()}
             type="button"
           >
-            Open Recommendations
+            Open Recommendation
           </button>
           <button
             className="dh-button-secondary w-full px-3 py-3 text-sm"
-            disabled={!suggestedPatterns.length}
-            onClick={() => void openDesignIdeasWindow()}
+            disabled={!effectiveAIResult || !cursorPromptText}
+            onClick={() => void copyCursorPromptFromSidePanel()}
             type="button"
           >
-            Open Design Ideas
+            {promptCopied ? "Copied" : "Copy Prompt"}
           </button>
           <button
             className="dh-button-secondary w-full px-3 py-3 text-sm"
-            disabled={!capture || aiPreviewStatus === "loading"}
-            onClick={() => void openAIPreviewWindow()}
+            disabled={!capture}
+            onClick={() => void openCodeChangeTab()}
             type="button"
           >
-            {aiPreviewStatus === "loading" ? "Generating AI Preview…" : "Open AI Preview"}
-          </button>
-          <button
-            className="dh-button-primary w-full px-3 py-3.5 text-base"
-            disabled={!canCopyCursorPrompt}
-            onClick={() => void copyCursorPrompt()}
-            type="button"
-          >
-            {copyPromptLabel}
+            Generate Code Change
           </button>
         </div>
         {aiPreviewStatus === "error" && aiPreviewError ? (
@@ -1504,8 +1663,8 @@ export function SidePanel() {
           <div className="mt-3 grid grid-cols-2 gap-2">
             <button
               className="dh-button-secondary px-3 py-2 text-xs"
-              disabled={!capture || !selectedPattern || aiPreviewStatus === "loading"}
-              onClick={() => void generateAIPreview()}
+              disabled={!capture || aiPreviewStatus === "loading"}
+              onClick={() => void generateAIPreview({ openResult: false })}
               type="button"
             >
               {aiPreviewStatus === "loading" ? "Generating…" : "Generate AI Preview"}
@@ -1585,6 +1744,242 @@ export function SidePanel() {
         </details>
       ) : null}
     </main>
+  );
+}
+
+function buildAIPreviewRecommendationCounts({
+  analysis,
+  suggestions,
+  templateReferences,
+  animationReferences,
+  uncodixifyRecommendations
+}: {
+  analysis: UncodixifyAnalysisResult | null;
+  suggestions: HumanizerSuggestions | null;
+  templateReferences: TemplateReference[];
+  animationReferences: AnimationReference[];
+  uncodixifyRecommendations: string[];
+}) {
+  return {
+    designChecks: analysis?.findings.length ?? 0,
+    layoutIdeas: suggestions?.layoutPatterns.length ?? 0,
+    templateReferences: templateReferences.length,
+    animationReferences: animationReferences.length,
+    uncodixifyRecommendations: uncodixifyRecommendations.length
+  };
+}
+
+function buildAIPreviewRecommendationContext({
+  analysis,
+  suggestions,
+  templateReferences,
+  animationReferences
+}: {
+  analysis: UncodixifyAnalysisResult | null;
+  suggestions: HumanizerSuggestions | null;
+  templateReferences: TemplateReference[];
+  animationReferences: AnimationReference[];
+}) {
+  return {
+    designChecks:
+      analysis?.findings.map((finding, index) => ({
+        index: index + 1,
+        ruleId: finding.ruleId,
+        title: previewContextText(finding.title, 96),
+        category: finding.category,
+        severity: finding.severity,
+        recommendation: previewContextText(finding.recommendation, 220),
+        betterDirection: previewContextText(finding.betterDirection, 180),
+        evidence: previewContextText(finding.evidence[0], 160)
+      })) ?? [],
+    layoutIdeas:
+      suggestions?.layoutPatterns.map((pattern, index) => ({
+        index: index + 1,
+        id: pattern.id,
+        name: previewContextText(pattern.name, 96),
+        category: pattern.category,
+        instruction: previewContextText(pattern.promptInstruction, 240),
+        solves: pattern.solvesProblems.slice(0, 5)
+      })) ?? [],
+    templateReferences: templateReferences.map((reference, index) => ({
+      index: index + 1,
+      id: reference.id,
+      title: previewContextText(reference.title, 120),
+      source: reference.source,
+      category: reference.category,
+      tags: reference.tags.slice(0, 8),
+      description: previewContextText(reference.description, 180),
+      usageNote: previewContextText(reference.usageNote, 180)
+    })),
+    animationReferences: animationReferences.map((reference, index) => ({
+      index: index + 1,
+      id: reference.id,
+      title: previewContextText(reference.title, 120),
+      source: reference.source,
+      category: reference.category,
+      tags: reference.tags.slice(0, 8),
+      bestFor: previewContextText(reference.bestFor, 180),
+      avoidWhen: previewContextText(reference.avoidWhen, 180)
+    }))
+  };
+}
+
+function previewContextText(value: string | undefined, maxLength: number) {
+  const clean = (value ?? "").replace(/\s+/g, " ").trim();
+  if (!clean) return undefined;
+  return clean.length > maxLength ? `${clean.slice(0, maxLength - 3)}...` : clean;
+}
+
+const ANALYSIS_PROCESS_STEPS: Array<{
+  id: Exclude<AnalysisProcessStepId, "idle" | "complete" | "error">;
+  label: string;
+  detail: string;
+}> = [
+  {
+    id: "capture",
+    label: "Capture screenshot",
+    detail: "Selected pixels are ready."
+  },
+  {
+    id: "prepare",
+    label: "Prepare image",
+    detail: "Screenshot is packaged for vision analysis."
+  },
+  {
+    id: "send",
+    label: "Send to Gemini",
+    detail: "Only the screenshot is sent."
+  },
+  {
+    id: "read",
+    label: "Read text and components",
+    detail: "Gemini scans visible words, buttons, cards, inputs, and media."
+  },
+  {
+    id: "reason",
+    label: "Analyze visible context",
+    detail: "Text and components drive the section decision."
+  },
+  {
+    id: "recommend",
+    label: "Build recommendations",
+    detail: "Layout, template, animation, and style findings are prepared."
+  }
+];
+
+function AnalysisProcessTrail({
+  aiResult,
+  capture,
+  status,
+  step
+}: {
+  aiResult: AIUnderstandingResult | null;
+  capture: RectangleCapture | null;
+  status: AIStatus;
+  step: AnalysisProcessStepId;
+}) {
+  if (status !== "loading" || !capture) {
+    return null;
+  }
+
+  const activeStep = step === "idle" && capture ? "capture" : step;
+  const activeIndex =
+    activeStep === "complete"
+      ? ANALYSIS_PROCESS_STEPS.length
+      : activeStep === "error"
+        ? Math.max(0, ANALYSIS_PROCESS_STEPS.findIndex((item) => item.id === "recommend"))
+        : ANALYSIS_PROCESS_STEPS.findIndex((item) => item.id === activeStep);
+  const safeActiveIndex = activeIndex < 0 ? 0 : activeIndex;
+  const keywordSignals = aiResult?.detectedKeywords.slice(0, 8) ?? [];
+  const blockSignals =
+    aiResult?.detectedBlocks
+      .filter((block) => block.count > 0)
+      .slice(0, 6)
+      .map((block) => `${block.count} ${block.type.replace("_", " ")}`) ?? [];
+
+  return (
+    <div
+      aria-live="polite"
+      className="mt-4 rounded-xl border border-pilot-border bg-pilot-card/60 p-3"
+    >
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-xs font-black uppercase tracking-[0.08em] text-pilot-text">
+          AI process
+        </p>
+        <span className="text-xs font-semibold text-pilot-muted">
+          Thinking
+        </span>
+      </div>
+
+      <ol className="mt-3 grid gap-2">
+        {ANALYSIS_PROCESS_STEPS.map((item, index) => {
+          const isDone = index < safeActiveIndex;
+          const isActive = index === safeActiveIndex;
+
+          return (
+            <li
+              className={`flex gap-3 rounded-lg border px-3 py-2 ${
+                isActive
+                  ? "border-pilot-borderStrong bg-pilot-bg"
+                  : "border-pilot-border bg-transparent"
+              }`}
+              key={item.id}
+            >
+              <span
+                className={`mt-1 flex h-3 w-3 shrink-0 rounded-full ${
+                  isActive
+                    ? "animate-pulse bg-pilot-primary"
+                    : isDone
+                      ? "bg-pilot-primary"
+                      : "bg-pilot-surface2"
+                }`}
+              />
+              <span className="min-w-0">
+                <span className="block text-sm font-bold text-pilot-text">
+                  {item.label}
+                </span>
+                <span className="block text-xs leading-5 text-pilot-muted">
+                  {item.detail}
+                </span>
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+
+      {aiResult ? (
+        <div className="mt-3 grid gap-2">
+          {keywordSignals.length ? (
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-pilot-muted">
+                Text signals
+              </p>
+              <div className="mt-1 flex flex-wrap gap-1.5">
+                {keywordSignals.map((keyword) => (
+                  <span className="dh-chip text-[11px]" key={keyword}>
+                    {keyword}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : null}
+          {blockSignals.length ? (
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-pilot-muted">
+                Component signals
+              </p>
+              <div className="mt-1 flex flex-wrap gap-1.5">
+                {blockSignals.map((signal) => (
+                  <span className="dh-chip text-[11px]" key={signal}>
+                    {signal}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+    </div>
   );
 }
 
@@ -1748,7 +2143,6 @@ function buildAnalysisPromptSummary(
   if (!capture) {
     return "No capture yet. Select an area to send a UI analysis request.";
   }
-  const counts = capture.counts;
   return [
     "Gemini UI analysis request (system prompt is built server-side).",
     "[screenshot image attached separately]",
@@ -1756,9 +2150,10 @@ function buildAnalysisPromptSummary(
     `Selected area: ${Math.round(capture.selectedRect.width)}x${Math.round(
       capture.selectedRect.height
     )}`,
-    `Matched elements: ${debug.matchedElementsCount ?? capture.matchedElements.length}`,
-    `Counts: ${counts.headings} headings, ${counts.buttons} buttons, ${counts.images} images, ${counts.cardsEstimate} cards`,
-    `Local detection: ${capture.detected.sectionType} / ${capture.detected.layoutType}`,
+    "Gemini input: screenshot plus capped source context from the selected area.",
+    `Source context: selected HTML=${Boolean(capture.selectedSourceSection?.htmlPreview)}, section candidates=${capture.sourceSections?.length ?? 0}, matched elements=${capture.matchedElements.length}, used CSS rules=${capture.usedCssRules?.ruleCount ?? 0}, page design sample=${capture.pageDesignContext?.sampledElements ?? 0} elements.`,
+    `Object inventory: ${formatObjectInventorySummary(capture)}.`,
+    "Gemini instruction: inspect the screen first, then use HTML/CSS context to confirm visible text, structure, and style problems.",
     `Includes Uncodixify visual-quality check: yes`,
     `Result section/layout: ${aiResult?.sectionType ?? "?"} / ${aiResult?.layoutType ?? "?"}`,
     "Expected output: strict JSON (AIUnderstandingResult + uncodixify block)."
@@ -1826,13 +2221,21 @@ function GeminiDebugPanel({
           <Metric label="Duration" value={debug.durationMs ? `${debug.durationMs}ms` : "none"} />
           <Metric label="Retries" value={debug.retryCount ?? 0} />
           <Metric label="Screenshot" value={debug.screenshotLength ?? 0} />
-          <Metric label="Elements" value={debug.matchedElementsCount ?? 0} />
+          <Metric label="Source Context" value={debug.sourceContextChars ?? 0} />
+          <Metric label="Input" value={debug.sourceContextChars ? "screenshot + source" : "screenshot"} />
           <Metric label="JSON" value={debug.jsonParseStrategy ?? "none"} />
           <Metric label="Error Code" value={debug.error?.code ?? "none"} />
           <Metric label="Error Stage" value={debug.error?.stage ?? "none"} />
           <Metric label="AI Preview" value={aiPreviewStatus} />
           <Metric label="AI Preview ID" value={aiPreviewDebug.requestId ?? "none"} />
           <Metric label="AI Preview Model" value={aiPreviewDebug.model ?? "unknown"} />
+          <Metric label="Solution" value={aiPreviewDebug.solutionStatus ?? "none"} />
+          <Metric label="Solution Model" value={aiPreviewDebug.solutionModel ?? "none"} />
+          <Metric
+            label="Solution Time"
+            value={aiPreviewDebug.solutionDurationMs ? `${aiPreviewDebug.solutionDurationMs}ms` : "none"}
+          />
+          <Metric label="Text Edits" value={aiPreviewDebug.solutionTextEditCount ?? 0} />
           <Metric label="Selected Image Model" value={aiPreviewDebug.selectedModel ?? "none"} />
           <Metric label="SDK Model Name" value={aiPreviewDebug.sdkModelName ?? "none"} />
           <Metric label="Image Models" value={aiPreviewDebug.availableImageModels?.length ?? 0} />
@@ -1864,7 +2267,10 @@ function GeminiDebugPanel({
           <Metric label="Used CSS" value={capture?.usedCssRules?.ruleCount ?? 0} />
           <Metric label="Skipped CSS" value={capture?.usedCssRules?.skippedStyleSheets ?? 0} />
           <Metric label="Style Tokens" value={capture?.styleTokens ? "available" : "missing"} />
+          <Metric label="Page Tokens" value={capture?.pageDesignContext?.sampledElements ?? 0} />
         </div>
+
+        {capture ? <ObjectInventoryDebug capture={capture} /> : null}
 
         {debug.error ? (
           <div className="mt-3 rounded-lg border border-red-300/20 bg-red-950/20 p-3">
@@ -1888,6 +2294,21 @@ function GeminiDebugPanel({
               </p>
             ) : null}
           </div>
+        ) : null}
+
+        {aiPreviewDebug.solutionError ? (
+          <div className="mt-3 rounded-lg border border-amber-300/20 bg-amber-950/20 p-3">
+            <p className="text-xs font-bold text-amber-800">
+              Solution prepass: {aiPreviewDebug.solutionError}
+            </p>
+          </div>
+        ) : null}
+
+        {aiPreviewDebug.solutionSummary ? (
+          <DebugDetails
+            title="AI preview solution summary"
+            value={aiPreviewDebug.solutionSummary}
+          />
         ) : null}
 
         {aiPreviewDebug.modelSelectionWarning ? (
@@ -2012,6 +2433,49 @@ function GeminiDebugPanel({
   );
 }
 
+function ObjectInventoryDebug({ capture }: { capture: RectangleCapture }) {
+  const inventory = buildCaptureObjectInventory(capture);
+  const summary = inventory.summary;
+
+  return (
+    <details className="mt-3 rounded-lg border border-pilot-border bg-pilot-card/50 p-3" open>
+      <summary className="cursor-pointer text-xs font-bold text-pilot-text">
+        Object Inventory
+      </summary>
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        <Metric label="Headings" value={summary.headings} />
+        <Metric label="Actions" value={summary.actions} />
+        <Metric label="Cards" value={summary.cards} />
+        <Metric label="Inputs" value={summary.inputs} />
+        <Metric label="Media" value={summary.media} />
+        <Metric label="Metrics" value={summary.metrics} />
+        <Metric label="Prices" value={summary.priceTokens} />
+        <Metric label="Testimonials" value={summary.testimonials} />
+        <Metric label="Long Text" value={summary.longTextBlocks} />
+      </div>
+      <DebugDetails
+        title="Inventory JSON"
+        value={JSON.stringify(
+          {
+            primaryHeading: inventory.primaryHeading,
+            headings: inventory.headings,
+            actions: inventory.actions.slice(0, 8),
+            cards: inventory.cards.slice(0, 10),
+            metrics: inventory.metrics,
+            priceTokens: inventory.priceTokens,
+            repeatedGroups: inventory.repeatedGroups,
+            styleSignals: inventory.styleSignals,
+            layoutSignals: inventory.layoutSignals,
+            keywords: inventory.keywords
+          },
+          null,
+          2
+        )}
+      />
+    </details>
+  );
+}
+
 function PreviewDebugLogEntry({ log }: { log: PreviewDebugLog }) {
   return (
     <article className="rounded-lg border border-pilot-border bg-pilot-card/45 p-3">
@@ -2062,95 +2526,6 @@ function Metric({ label, value }: { label: string; value: number | string }) {
       </p>
       <p className="mt-1 break-words text-sm font-bold text-pilot-text">{value}</p>
     </div>
-  );
-}
-
-function LayoutIdeasPanel({
-  patterns,
-  selectedPatternId,
-  onOpenAll,
-  onSelect
-}: {
-  patterns: LayoutPattern[];
-  selectedPatternId: LayoutPatternId | null;
-  onOpenAll: () => void;
-  onSelect: (pattern: LayoutPattern) => void;
-}) {
-  const visiblePatterns = patterns.slice(0, 3);
-
-  return (
-    <section className="dh-card mt-4 p-4">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <h2 className="text-lg font-black text-pilot-text">Layout Ideas</h2>
-          <p className="mt-1 text-sm leading-6 text-pilot-muted">
-            Pick a structure to include in the Cursor prompt.
-          </p>
-        </div>
-        <span className="dh-chip">{patterns.length ? `${patterns.length} ideas` : "Waiting"}</span>
-      </div>
-
-      {visiblePatterns.length ? (
-        <div className="mt-3 space-y-2">
-          {visiblePatterns.map((pattern) => {
-            const selected = selectedPatternId === pattern.id;
-
-            return (
-              <article
-                className={`rounded-lg border p-3 transition ${
-                  selected
-                    ? "border-pilot-primary/80 bg-pilot-primary/10"
-                    : "border-pilot-border bg-pilot-card/45"
-                }`}
-                key={pattern.id}
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <h3 className="text-sm font-black text-pilot-text">{pattern.name}</h3>
-                    <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.08em] text-pilot-primary/80">
-                      {pattern.category}
-                    </p>
-                  </div>
-                  {selected ? (
-                    <span className="shrink-0 rounded-full border border-pilot-primary/40 bg-pilot-primary/15 px-2 py-0.5 text-[10px] font-semibold text-pilot-primaryDeep">
-                      Selected
-                    </span>
-                  ) : null}
-                </div>
-                <p className="mt-2 line-clamp-2 text-xs leading-5 text-pilot-muted">
-                  {pattern.problemSolved[0] ?? pattern.bestFor}
-                </p>
-                <button
-                  className={`mt-3 w-full rounded-lg px-2.5 py-2 text-xs font-semibold transition ${
-                    selected
-                      ? "bg-pilot-primary text-white hover:bg-pilot-primaryDeep"
-                      : "bg-pilot-card text-pilot-text hover:bg-pilot-card"
-                  }`}
-                  onClick={() => onSelect(pattern)}
-                  type="button"
-                >
-                  {selected ? "Selected for prompt" : "Use layout"}
-                </button>
-              </article>
-            );
-          })}
-
-          {patterns.length > visiblePatterns.length ? (
-            <button
-              className="dh-button-secondary w-full px-3 py-2.5 text-sm"
-              onClick={onOpenAll}
-              type="button"
-            >
-              Open all layout ideas
-            </button>
-          ) : null}
-        </div>
-      ) : (
-        <p className="mt-3 rounded-lg border border-pilot-border bg-pilot-card/45 p-3 text-sm leading-6 text-pilot-muted">
-          Select an area to generate layout ideas.
-        </p>
-      )}
-    </section>
   );
 }
 
@@ -2399,6 +2774,7 @@ function parseAnalyzeSuccess(body: unknown): {
         durationMs: body.durationMs,
         retryCount: body.debug?.retryCount,
         screenshotLength: body.debug?.screenshotLength,
+        sourceContextChars: body.debug?.sourceContextChars,
         matchedElementsCount: body.debug?.matchedElementsCount,
         jsonParseStrategy: body.debug?.jsonParseStrategy
       }
@@ -2440,6 +2816,7 @@ function debugFromErrorResponse(body: unknown, error: GeminiApiError): GeminiDeb
       durationMs: body.debug?.durationMs,
       retryCount: body.debug?.retryCount,
       screenshotLength: body.debug?.screenshotLength,
+      sourceContextChars: body.debug?.sourceContextChars,
       matchedElementsCount: body.debug?.matchedElementsCount,
       error
     };
@@ -2529,168 +2906,178 @@ function getScreenshotImageSrc(screenshotBase64: string | undefined): string {
 }
 
 function buildAnalyzePayload(capture: RectangleCapture) {
-  const {
-    usedCssRules: _usedCssRules,
-    styleTokens: _styleTokens,
-    previewDebugLogs: _previewDebugLogs,
-    ...payload
-  } = capture;
-  return payload;
-}
-
-function buildFallbackAIResultFromCapture(capture: RectangleCapture): AIUnderstandingResult {
-  const counts = capture.counts;
-  const sectionType = capture.detected.sectionType;
-  const layoutType = capture.detected.layoutType;
-  const detectedKeywords = buildLocalKeywords(capture);
-  const uiProblems = inferLocalProblems(capture);
-
   return {
-    sectionType,
-    layoutType,
-    contentType: inferContentType(capture),
-    confidence: Math.max(0.25, capture.detected.confidence * 0.8),
-    detectedBlocks: [
-      counts.headings ? { type: "heading", count: counts.headings, description: "Headings detected locally." } : null,
-      counts.buttons ? { type: "button", count: counts.buttons, description: "Buttons detected locally." } : null,
-      counts.images ? { type: "image", count: counts.images, description: "Images detected locally." } : null,
-      counts.inputs ? { type: "input", count: counts.inputs, description: "Inputs detected locally." } : null,
-      counts.cardsEstimate ? { type: "card", count: counts.cardsEstimate, description: "Card-like groups detected locally." } : null,
-      counts.textLength ? { type: "text", count: counts.textLength, description: "Visible text detected locally." } : null
-    ].filter(Boolean) as AIUnderstandingResult["detectedBlocks"],
-    detectedKeywords,
-    designIntent: inferDesignIntent(sectionType),
-    uiProblems,
-    recommendedCategories: {
-      layoutCategories: [sectionType],
-      templateCategories: [sectionType],
-      animationCategories: inferAnimationCategories(sectionType, counts)
-    },
-    animationKeywords: inferAnimationKeywords(sectionType, counts),
-    designerDescription: `Local fallback classified this as ${sectionType} with ${layoutType} layout.`,
-    currentLayoutProblem: uiProblems.includes("unknown")
-      ? "Local fallback did not detect a specific UI problem."
-      : `Local fallback detected: ${uiProblems.join(", ")}.`,
-    reasoning: [
-      "Built from local DOM, CSS, text, and element counts.",
-      "Used because Gemini has not completed or failed."
-    ]
+    screenshotBase64: capture.screenshotBase64,
+    sourceContext: buildAnalyzeSourceContext(capture)
   };
 }
 
-function buildLocalKeywords(capture: RectangleCapture) {
-  const text = capture.matchedElements
-    .slice(0, 40)
-    .map((element) =>
-      [
-        element.tagName,
-        element.className,
-        element.role,
-        element.ariaLabel,
-        element.text
-      ]
-        .filter(Boolean)
-        .join(" ")
-    )
-    .join(" ");
-  const rawKeywords = [
-    capture.detected.sectionType,
-    capture.detected.layoutType,
-    ...capture.detected.reasons,
-    capture.counts.cardsEstimate ? "cards" : "",
-    capture.counts.buttons ? "button cta" : "",
-    capture.counts.inputs ? "form input lead-capture" : "",
-    capture.counts.images ? "image product-preview" : "",
-    capture.counts.svgs ? "icon" : "",
-    text
-  ].join(" ");
+function buildAnalyzeSourceContext(capture: RectangleCapture) {
+  const objectInventory = buildCaptureObjectInventory(capture);
 
-  return [...new Set(
-    rawKeywords
-      .split(/[^a-zA-Z0-9_-]+/)
-      .map((keyword) =>
-        keyword
-          .toLowerCase()
-          .trim()
-          .replace(/[\s_]+/g, "-")
-          .replace(/[^a-z0-9-]+/g, "")
-      )
-      .filter(Boolean)
-  )].slice(0, 30);
+  return {
+    url: capture.url,
+    title: capture.title,
+    selectedArea: {
+      width: Math.round(capture.selectedRect.width),
+      height: Math.round(capture.selectedRect.height),
+      top: Math.round(capture.selectedRect.top),
+      left: Math.round(capture.selectedRect.left),
+      viewportWidth: Math.round(capture.selectedRect.viewportWidth),
+      viewportHeight: Math.round(capture.selectedRect.viewportHeight)
+    },
+    visibleText: summarizeVisibleText(capture.matchedElements),
+    counts: capture.counts,
+    objectInventory,
+    selectedSourceSection: capture.selectedSourceSection
+      ? serializeSourceSectionForGemini(capture.selectedSourceSection, 2400)
+      : null,
+    sourceSectionCandidates: (capture.sourceSections ?? [])
+      .slice(0, 8)
+      .map((section) => serializeSourceSectionForGemini(section, 1200)),
+    matchedElements: capture.matchedElements.slice(0, 50).map((element) => ({
+      tagName: element.tagName,
+      id: element.id,
+      className: element.className,
+      role: element.role,
+      ariaLabel: element.ariaLabel,
+      text: truncateDebugText(element.text, 220),
+      rect: {
+        width: Math.round(element.rect.width),
+        height: Math.round(element.rect.height),
+        top: Math.round(element.rect.top),
+        left: Math.round(element.rect.left)
+      },
+      style: {
+        display: element.style.display,
+        position: element.style.position,
+        backgroundColor: element.style.backgroundColor,
+        color: element.style.color,
+        fontSize: element.style.fontSize,
+        fontWeight: element.style.fontWeight,
+        borderRadius: element.style.borderRadius,
+        boxShadow: truncateDebugText(element.style.boxShadow, 180),
+        padding: element.style.padding,
+        margin: element.style.margin
+      }
+    })),
+    styleContext: capture.styleContext,
+    styleTokens: capture.styleTokens,
+    pageDesignContext: capture.pageDesignContext
+      ? serializePageDesignContextForGemini(capture.pageDesignContext)
+      : undefined,
+    usedCssRules: capture.usedCssRules
+      ? {
+          cssText: truncateDebugText(sanitizeDebugCss(capture.usedCssRules.cssText), 10000),
+          ruleCount: capture.usedCssRules.ruleCount,
+          skippedStyleSheets: capture.usedCssRules.skippedStyleSheets,
+          errors: capture.usedCssRules.errors.slice(0, 5),
+          matchedSelectors: capture.usedCssRules.debug?.matchedSelectors.slice(0, 80),
+          mediaRuleCount: capture.usedCssRules.debug?.mediaRuleCount
+        }
+      : undefined
+  };
 }
 
-function inferContentType(capture: RectangleCapture): AIUnderstandingResult["contentType"] {
-  if (capture.detected.sectionType === "pricing") return "pricing_plans";
-  if (capture.detected.sectionType === "stats") return "metrics";
-  if (capture.detected.sectionType === "form" || capture.counts.inputs > 0) return "form";
-  if (capture.counts.cardsEstimate > 0) return "cards";
-  if (capture.counts.textLength > 0) return "text_block";
-  return "unknown";
+function formatObjectInventorySummary(capture: RectangleCapture) {
+  const inventory = buildCaptureObjectInventory(capture);
+  const summary = inventory.summary;
+
+  return [
+    `${summary.headings} headings`,
+    `${summary.actions} actions`,
+    `${summary.cards} cards`,
+    `${summary.inputs} inputs`,
+    `${summary.media} media`,
+    `${summary.metrics} metrics`,
+    `${summary.priceTokens} price tokens`
+  ].join(", ");
 }
 
-function inferDesignIntent(sectionType: RectangleCapture["detected"]["sectionType"]): AIUnderstandingResult["designIntent"] {
-  if (sectionType === "hero" || sectionType === "cta" || sectionType === "pricing") return "conversion";
-  if (sectionType === "features" || sectionType === "cards") return "explanation";
-  if (sectionType === "stats") return "data_summary";
-  if (sectionType === "form") return "lead_capture";
-  return "unknown";
-}
-
-function inferLocalProblems(capture: RectangleCapture): AIUnderstandingResult["uiProblems"] {
-  const problems = new Set<AIUnderstandingResult["uiProblems"][number]>();
-
-  if (capture.detected.layoutType === "equal_grid") problems.add("cards_too_equal");
-  if (capture.detected.layoutType === "equal_grid" || capture.detected.sectionType === "cards") problems.add("flat_layout");
-  if (capture.counts.cardsEstimate >= 3) problems.add("too_repetitive");
-  if (capture.counts.textLength > 500) problems.add("too_text_heavy");
-  if (capture.counts.buttons === 0 && (capture.detected.sectionType === "hero" || capture.detected.sectionType === "cta")) problems.add("cta_not_clear");
-  if (capture.detected.sectionType === "hero" || capture.detected.sectionType === "features") problems.add("weak_hierarchy");
-
-  return problems.size ? [...problems] : ["unknown"];
-}
-
-function inferAnimationCategories(
-  sectionType: RectangleCapture["detected"]["sectionType"],
-  counts: RectangleCapture["counts"]
-): AIUnderstandingResult["recommendedCategories"]["animationCategories"] {
-  const categories = new Set<AIUnderstandingResult["recommendedCategories"]["animationCategories"][number]>();
-
-  if (sectionType === "hero" || sectionType === "cta") {
-    categories.add("text");
-    categories.add("button");
-    categories.add("background");
-  }
-  if (sectionType === "features" || sectionType === "cards" || sectionType === "pricing") {
-    categories.add("card");
-    categories.add("hover");
-    categories.add("scroll");
-  }
-  if (sectionType === "form" || counts.inputs > 0) {
-    categories.add("button");
-    categories.add("loader");
-  }
-
-  return categories.size ? [...categories] : ["other"];
-}
-
-function inferAnimationKeywords(
-  sectionType: RectangleCapture["detected"]["sectionType"],
-  counts: RectangleCapture["counts"]
+function serializeSourceSectionForGemini(
+  section: RectangleCapture["selectedSourceSection"],
+  htmlLimit: number
 ) {
-  const keywords = new Set<string>();
+  if (!section) return null;
 
-  if (sectionType === "hero") {
-    keywords.add("text-reveal");
-    keywords.add("background");
-  }
-  if (counts.cardsEstimate > 0) {
-    keywords.add("card-hover");
-    keywords.add("stagger");
-  }
-  if (counts.buttons > 0) keywords.add("button-microinteraction");
-  if (sectionType === "features" || sectionType === "pricing") keywords.add("reveal");
+  return {
+    domPath: section.domPath,
+    tagName: section.tagName,
+    id: section.id,
+    className: section.className,
+    role: section.role,
+    ariaLabel: section.ariaLabel,
+    textSummary: truncateDebugText(section.textSummary, 500),
+    childElementCount: section.childElementCount,
+    selectionOverlap: Number(section.selectionOverlap.toFixed(3)),
+    counts: section.counts,
+    headingSnippets: section.headingSnippets.slice(0, 5),
+    ctaSnippets: section.ctaSnippets.slice(0, 5),
+    mediaSnippets: section.mediaSnippets.slice(0, 5),
+    htmlPreview: truncateDebugText(sanitizeDebugHtml(section.htmlPreview), htmlLimit)
+  };
+}
 
-  return [...keywords];
+function serializePageDesignContextForGemini(
+  context: NonNullable<RectangleCapture["pageDesignContext"]>
+) {
+  return {
+    sampledAt: context.sampledAt,
+    totalElements: context.totalElements,
+    sampledElements: context.sampledElements,
+    typography: {
+      fontFamilies: context.typography.fontFamilies.slice(0, 4),
+      fontSizes: context.typography.fontSizes.slice(0, 8),
+      fontWeights: context.typography.fontWeights.slice(0, 6),
+      lineHeights: context.typography.lineHeights.slice(0, 6),
+      letterSpacing: context.typography.letterSpacing.slice(0, 4)
+    },
+    colors: {
+      text: context.colors.text.slice(0, 6),
+      backgrounds: context.colors.backgrounds.slice(0, 6),
+      borders: context.colors.borders.slice(0, 6),
+      focus: context.colors.focus.slice(0, 3)
+    },
+    spacing: {
+      scale: context.spacing.scale.slice(0, 8),
+      margin: context.spacing.margin.slice(0, 6),
+      padding: context.spacing.padding.slice(0, 6)
+    },
+    radius: context.radius.slice(0, 6),
+    shadows: context.shadows.slice(0, 4),
+    motion: {
+      durations: context.motion.durations.slice(0, 5),
+      easings: context.motion.easings.slice(0, 5)
+    },
+    components: context.components.slice(0, 8),
+    siteSignals: {
+      title: context.siteSignals.title,
+      description: truncateDebugText(context.siteSignals.description, 360),
+      keywords: truncateDebugText(context.siteSignals.keywords, 240),
+      ogType: context.siteSignals.ogType,
+      ogSiteName: context.siteSignals.ogSiteName,
+      appName: context.siteSignals.appName,
+      pathname: context.siteSignals.pathname,
+      hostname: context.siteSignals.hostname,
+      headings: context.siteSignals.headings.slice(0, 8),
+      navTexts: context.siteSignals.navTexts.slice(0, 16),
+      ctaTexts: context.siteSignals.ctaTexts.slice(0, 16),
+      textSample: truncateDebugText(context.siteSignals.textSample, 1200),
+      elementCounts: context.siteSignals.elementCounts
+    },
+    diagnostics: context.diagnostics.slice(0, 5)
+  };
+}
+
+function summarizeVisibleText(elements: RectangleCapture["matchedElements"]) {
+  const unique = new Set<string>();
+
+  elements.forEach((element) => {
+    const text = element.text.replace(/\s+/g, " ").trim();
+    if (text) unique.add(text);
+  });
+
+  return truncateDebugText(Array.from(unique).slice(0, 80).join("\n"), 5000);
 }
 
 function isFetchFailure(error: unknown) {

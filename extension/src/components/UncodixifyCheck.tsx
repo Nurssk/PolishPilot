@@ -11,7 +11,7 @@ type UncodixifyCheckProps = {
   geminiRaw?: GeminiUncodixifyResult | null;
   includedRuleIds: string[];
   onToggleRule: (ruleId: string) => void;
-  // "summary" = compact control-center card (score + summary + top 3).
+  // "summary" = compact control-center card (score + summary + top fixes).
   // "full" = detailed recommendation cards + developer panel.
   variant?: "summary" | "full";
 };
@@ -36,8 +36,8 @@ export function UncodixifyCheck({
   }
 
   const included = new Set(includedRuleIds);
-  const topIssues = result.findings.slice(0, 3);
-  const topFixes = result.topFixes.slice(0, 3);
+  const topIssues = result.findings.slice(0, 5);
+  const topFixes = result.topFixes.slice(0, 5);
 
   return (
     <section className="dh-card mt-4 p-4">
@@ -50,13 +50,13 @@ export function UncodixifyCheck({
             </p>
           ) : null}
         </div>
-        <ScoreBadge score={result.score} />
+        <ScoreBadge score={result.aiLikeScore} />
       </div>
 
       {variant === "full" || mode === "developer" ? (
         <div className="mt-3 grid grid-cols-2 gap-2">
-          <ScoreMetric label="Human-designed" value={`${result.score}/100`} tone="good" />
-          <ScoreMetric label="AI-like signals" value={`${result.aiLikeScore}/100`} tone="warn" />
+          <ScoreMetric label="AI Detect" value={`${result.aiLikeScore}/100`} tone="warn" />
+          <ScoreMetric label="Clean score" value={`${result.score}/100`} tone="good" />
         </div>
       ) : null}
 
@@ -66,7 +66,7 @@ export function UncodixifyCheck({
 
       {result.findings.length === 0 ? (
         <p className="mt-3 rounded-lg border border-pilot-border bg-pilot-card/45 p-3 text-sm leading-6 text-pilot-success">
-          This block reads as human-designed.
+          AI Detect is low. No strong AI/Codex UI patterns were found.
         </p>
       ) : (
         <>
@@ -258,15 +258,16 @@ function UncodixifyDeveloperPanel({
 }
 
 function ScoreBadge({ score }: { score: number }) {
+  const clamped = Math.max(0, Math.min(100, Math.round(score)));
   const tone =
-    score >= 80
-      ? "bg-emerald-100/80 text-emerald-700"
-      : score >= 55
+    clamped >= 60
+      ? "bg-red-100/80 text-red-700"
+      : clamped >= 25
         ? "bg-amber-100/80 text-amber-800"
-        : "bg-red-100/80 text-red-700";
+        : "bg-emerald-100/80 text-emerald-700";
   return (
     <span className={`shrink-0 rounded-full px-2 py-1 text-[11px] font-black ${tone}`}>
-      {score}/100
+      AI Detect {clamped}/100
     </span>
   );
 }

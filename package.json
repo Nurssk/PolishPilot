@@ -6,6 +6,7 @@
   "scripts": {
     "scrape:21st": "tsx scripts/scrape-21st-dev.ts",
     "scrape:reactbits": "tsx scripts/scrape-reactbits.ts",
+    "scrape:watermelon": "tsx scripts/scrape-watermelon.ts",
     "check:template-links": "tsx scripts/check-template-links.ts",
     "export:panel-mockup": "tsx mockups/extension-panel/export-panel-mockup.ts"
   },

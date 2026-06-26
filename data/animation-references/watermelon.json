@@ -1,0 +1,6239 @@
+[
+  {
+    "id": "watermelon-aave-swap-component",
+    "source": "watermelon-ui",
+    "title": "Aave Swap Component",
+    "url": "https://registry.watermelon.sh/r/aave-swap-component.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "aave",
+      "swap",
+      "interactive",
+      "cryptocurrency"
+    ],
+    "keywords": [
+      "aave",
+      "swap",
+      "micro-interaction",
+      "interactive",
+      "cryptocurrency",
+      "exchange",
+      "interface",
+      "number",
+      "inputs",
+      "value",
+      "calculations"
+    ],
+    "description": "Interactive cryptocurrency exchange interface with animated number inputs and value calculations.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta",
+      "form"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "form-benefits-sidebar",
+      "compact-lead-form"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-activities-card",
+    "source": "watermelon-ui",
+    "title": "Activities Card",
+    "url": "https://registry.watermelon.sh/r/activities-card.json",
+    "category": "card",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "disclosure",
+      "activities",
+      "card",
+      "expandable",
+      "smooth"
+    ],
+    "keywords": [
+      "activities",
+      "card",
+      "disclosure",
+      "expandable",
+      "smooth",
+      "spring",
+      "animations",
+      "premium",
+      "header",
+      "aesthetic"
+    ],
+    "description": "An expandable activities card with smooth spring animations and a premium 3D header aesthetic.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Card groups, pricing plans, and repeated content that need hover or reveal treatment.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "cards_too_equal",
+      "no_visual_rhythm",
+      "flat_layout"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-adaptive-slider",
+    "source": "watermelon-ui",
+    "title": "Adaptive Slider",
+    "url": "https://registry.watermelon.sh/r/adaptive-slider.json",
+    "category": "scroll",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "sliders",
+      "adaptive",
+      "slider",
+      "smooth",
+      "color-shifting"
+    ],
+    "keywords": [
+      "adaptive",
+      "slider",
+      "sliders",
+      "smooth",
+      "color-shifting",
+      "caloric",
+      "value",
+      "tracking"
+    ],
+    "description": "A smooth, color-shifting slider with caloric value tracking.",
+    "dependencies": [
+      "motion/react",
+      "number-flow/react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Selected sliders UI that needs a specific Watermelon motion reference.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "unknown"
+    ],
+    "relatedSectionTypes": [
+      "unknown"
+    ],
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-add-cash-disclosure",
+    "source": "watermelon-ui",
+    "title": "Add Cash Disclosure",
+    "url": "https://registry.watermelon.sh/r/add-cash-disclosure.json",
+    "category": "list",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "disclosure",
+      "add",
+      "cash",
+      "panel",
+      "explaining"
+    ],
+    "keywords": [
+      "add",
+      "cash",
+      "disclosure",
+      "panel",
+      "explaining",
+      "add-cash",
+      "details",
+      "limits",
+      "fees",
+      "confirmation"
+    ],
+    "description": "Disclosure panel explaining add-cash details, limits, fees, and confirmation.",
+    "dependencies": [
+      "motion/react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Selected disclosure UI that needs a specific Watermelon motion reference.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "unknown"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-budget-card",
+    "source": "watermelon-ui",
+    "title": "Budget Card",
+    "url": "https://registry.watermelon.sh/r/budget-card.json",
+    "category": "card",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "cards",
+      "budget",
+      "card",
+      "overview",
+      "tracking"
+    ],
+    "keywords": [
+      "budget",
+      "card",
+      "cards",
+      "overview",
+      "tracking",
+      "spending",
+      "limits",
+      "remaining",
+      "balance"
+    ],
+    "description": "Budget overview card tracking spending, limits, and remaining balance.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Card groups, pricing plans, and repeated content that need hover or reveal treatment.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "cards_too_equal",
+      "no_visual_rhythm",
+      "flat_layout"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-calendar-widget",
+    "source": "watermelon-ui",
+    "title": "Calendar Widget",
+    "url": "https://registry.watermelon.sh/r/calendar-widget.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "widgets",
+      "calendar",
+      "widget",
+      "featuring",
+      "progressive"
+    ],
+    "keywords": [
+      "calendar",
+      "widget",
+      "widgets",
+      "featuring",
+      "progressive",
+      "blur",
+      "effects",
+      "enhance",
+      "depth",
+      "focus",
+      "during",
+      "interaction"
+    ],
+    "description": "An animated calendar widget featuring progressive blur effects that enhance depth and focus during interaction.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta",
+      "stats",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-card-split-accordian",
+    "source": "watermelon-ui",
+    "title": "Card Split Accordian",
+    "url": "https://registry.watermelon.sh/r/card-split-accordian.json",
+    "category": "card",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "accordian",
+      "card",
+      "split",
+      "accordion",
+      "smoothly"
+    ],
+    "keywords": [
+      "card",
+      "split",
+      "accordian",
+      "accordion",
+      "smoothly",
+      "expands",
+      "reveal",
+      "detailed",
+      "information"
+    ],
+    "description": "An animated card split accordion that smoothly expands to reveal detailed information.",
+    "dependencies": [
+      "motion/react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Card groups, pricing plans, and repeated content that need hover or reveal treatment.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "cards_too_equal",
+      "no_visual_rhythm",
+      "flat_layout"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "form"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "form-benefits-sidebar",
+      "compact-lead-form"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-card-swipe",
+    "source": "watermelon-ui",
+    "title": "Card Swipe",
+    "url": "https://registry.watermelon.sh/r/card-swipe.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "interaction",
+      "card",
+      "swipe",
+      "tactile",
+      "gesture-driven"
+    ],
+    "keywords": [
+      "card",
+      "swipe",
+      "interaction",
+      "tactile",
+      "gesture-driven",
+      "stack",
+      "supports",
+      "velocity-based",
+      "swiping",
+      "smooth",
+      "pagination"
+    ],
+    "description": "A tactile, gesture-driven card stack that supports velocity-based swiping and smooth pagination.",
+    "dependencies": [
+      "motion",
+      "@hugeicons/react",
+      "@hugeicons/core-free-icons"
+    ],
+    "framework": "react",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-carousel-navigator",
+    "source": "watermelon-ui",
+    "title": "Carousel Navigator",
+    "url": "https://registry.watermelon.sh/r/carousel-navigator.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "carousel",
+      "navigator",
+      "dynamic",
+      "theme-adaptive"
+    ],
+    "keywords": [
+      "carousel",
+      "navigator",
+      "micro-interaction",
+      "dynamic",
+      "theme-adaptive",
+      "background",
+      "transitions",
+      "progress-syncing",
+      "indicators"
+    ],
+    "description": "A dynamic carousel navigator with theme-adaptive background transitions and progress-syncing indicators.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-carousel-slider",
+    "source": "watermelon-ui",
+    "title": "Carousel Slider",
+    "url": "https://registry.watermelon.sh/r/carousel-slider.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "interaction",
+      "carousel",
+      "slider",
+      "playful",
+      "gesture-driven"
+    ],
+    "keywords": [
+      "carousel",
+      "slider",
+      "interaction",
+      "playful",
+      "gesture-driven",
+      "card",
+      "spring-based",
+      "rotation",
+      "smooth",
+      "scaling"
+    ],
+    "description": "A playful, gesture-driven card carousel with spring-based rotation and smooth scaling.",
+    "dependencies": [
+      "motion",
+      "@hugeicons/react",
+      "@hugeicons/core-free-icons"
+    ],
+    "framework": "react",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-changeable-pricing-section",
+    "source": "watermelon-ui",
+    "title": "Changeable Pricing Section",
+    "url": "https://registry.watermelon.sh/r/changeable-pricing-section.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "marketing",
+      "changeable",
+      "pricing",
+      "section",
+      "premium"
+    ],
+    "keywords": [
+      "changeable",
+      "pricing",
+      "section",
+      "marketing",
+      "premium",
+      "interactive",
+      "selector",
+      "billing",
+      "toggle",
+      "expandable",
+      "plan",
+      "details"
+    ],
+    "description": "A premium interactive pricing selector with animated billing toggle, expandable plan details, and smooth spring-driven transitions for modern SaaS checkout flows.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "hero",
+      "pricing"
+    ],
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "pricing-emphasis",
+      "pricing-toggle"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-collection-grid-disclosure",
+    "source": "watermelon-ui",
+    "title": "Collection Grid Disclosure",
+    "url": "https://registry.watermelon.sh/r/collection-grid-disclosure.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "collection",
+      "grid",
+      "disclosure",
+      "smoothly"
+    ],
+    "keywords": [
+      "collection",
+      "grid",
+      "disclosure",
+      "micro-interaction",
+      "smoothly",
+      "expands",
+      "reveal",
+      "additional",
+      "content",
+      "interaction"
+    ],
+    "description": "An animated collection grid that smoothly expands to reveal additional content on interaction.",
+    "dependencies": [
+      "motion/react",
+      "react-icons",
+      "react-use-measure"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-command-search",
+    "source": "watermelon-ui",
+    "title": "Command Search",
+    "url": "https://registry.watermelon.sh/r/command-search.json",
+    "category": "navigation",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "navigation",
+      "command",
+      "search",
+      "premium",
+      "palette"
+    ],
+    "keywords": [
+      "command",
+      "search",
+      "navigation",
+      "premium",
+      "palette",
+      "sectioned",
+      "results",
+      "keyboard",
+      "smooth",
+      "animations"
+    ],
+    "description": "A premium command palette with sectioned results, keyboard navigation, and smooth animations.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Navigation, tabs, pagination, and wayfinding controls that need smoother state changes.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "unknown"
+    ],
+    "relatedSectionTypes": [
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-compose-email-card",
+    "source": "watermelon-ui",
+    "title": "Compose Email Card",
+    "url": "https://registry.watermelon.sh/r/compose-email-card.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "cards",
+      "compose",
+      "email",
+      "card",
+      "compact"
+    ],
+    "keywords": [
+      "compose",
+      "email",
+      "card",
+      "cards",
+      "compact",
+      "interface",
+      "composing",
+      "emails",
+      "recipient",
+      "subject",
+      "actions"
+    ],
+    "description": "Compact card interface for composing emails with recipient, subject, actions.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-contextual-ai-bar",
+    "source": "watermelon-ui",
+    "title": "Contextual AI Bar",
+    "url": "https://registry.watermelon.sh/r/contextual-ai-bar.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "contextual",
+      "bar",
+      "sleek",
+      "adaptive"
+    ],
+    "keywords": [
+      "contextual",
+      "bar",
+      "micro-interaction",
+      "sleek",
+      "adaptive",
+      "action",
+      "toggles",
+      "between",
+      "tool",
+      "icons",
+      "ai-powered",
+      "input"
+    ],
+    "description": "A sleek, adaptive action bar that toggles between tool icons and an AI-powered input field with smooth morphing transitions.",
+    "dependencies": [
+      "motion",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "react",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta",
+      "form"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "form-benefits-sidebar",
+      "compact-lead-form"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-continuous-pagination",
+    "source": "watermelon-ui",
+    "title": "Continuous Pagination",
+    "url": "https://registry.watermelon.sh/r/continuous-pagination.json",
+    "category": "navigation",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "pagination",
+      "continuous",
+      "premium",
+      "fully",
+      "responsive"
+    ],
+    "keywords": [
+      "continuous",
+      "pagination",
+      "premium",
+      "fully",
+      "responsive",
+      "featuring",
+      "spring",
+      "animations",
+      "3d-styled",
+      "active",
+      "state",
+      "dynamic"
+    ],
+    "description": "A premium, fully responsive pagination component featuring spring animations and a 3D-styled active state with a dynamic shimmer effect.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Navigation, tabs, pagination, and wayfinding controls that need smoother state changes.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "unknown"
+    ],
+    "relatedSectionTypes": [
+      "stats",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-continuous-tabs",
+    "source": "watermelon-ui",
+    "title": "Continuous Tabs",
+    "url": "https://registry.watermelon.sh/r/continuous-tabs.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "tabs",
+      "continuous",
+      "button-like",
+      "smooth",
+      "sliding"
+    ],
+    "keywords": [
+      "continuous",
+      "tabs",
+      "button-like",
+      "smooth",
+      "sliding",
+      "background",
+      "pill"
+    ],
+    "description": "Button-like tabs with a smooth sliding background pill.",
+    "dependencies": [
+      "motion/react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-create-community",
+    "source": "watermelon-ui",
+    "title": "Create Community",
+    "url": "https://registry.watermelon.sh/r/create-community.json",
+    "category": "transition",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "dialog",
+      "create",
+      "community",
+      "creating",
+      "communities"
+    ],
+    "keywords": [
+      "create",
+      "community",
+      "dialog",
+      "creating",
+      "communities",
+      "name",
+      "description",
+      "settings"
+    ],
+    "description": "Dialog for creating communities with name, description, and settings.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Dialogs, popovers, inputs, and stateful controls that need polished entrance/exit motion.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "unknown"
+    ],
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-create-new-disclosure",
+    "source": "watermelon-ui",
+    "title": "Create New Disclosure",
+    "url": "https://registry.watermelon.sh/r/create-new-disclosure.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "disclosure",
+      "create",
+      "new",
+      "stylish",
+      "expands"
+    ],
+    "keywords": [
+      "create",
+      "new",
+      "disclosure",
+      "stylish",
+      "expands",
+      "pill-shaped",
+      "button",
+      "rich",
+      "grid",
+      "actions"
+    ],
+    "description": "A stylish \"Create New\" disclosure component that expands from a pill-shaped button into a rich grid of actions.",
+    "dependencies": [
+      "motion/react",
+      "@hugeicons/react",
+      "@hugeicons/core-free-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-credit-usage-card",
+    "source": "watermelon-ui",
+    "title": "Credit Usage Card",
+    "url": "https://registry.watermelon.sh/r/credit-usage-card.json",
+    "category": "card",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "cards",
+      "credit",
+      "usage",
+      "card",
+      "displays"
+    ],
+    "keywords": [
+      "credit",
+      "usage",
+      "card",
+      "cards",
+      "displays",
+      "consumption",
+      "progress",
+      "clear",
+      "limits",
+      "breakdown"
+    ],
+    "description": "Displays credit consumption progress with clear limits and usage breakdown.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Card groups, pricing plans, and repeated content that need hover or reveal treatment.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "cards_too_equal",
+      "no_visual_rhythm",
+      "flat_layout"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-deployment-card",
+    "source": "watermelon-ui",
+    "title": "Deployment Card",
+    "url": "https://registry.watermelon.sh/r/deployment-card.json",
+    "category": "card",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "cards",
+      "deployment",
+      "card",
+      "showing",
+      "environment"
+    ],
+    "keywords": [
+      "deployment",
+      "card",
+      "cards",
+      "showing",
+      "environment",
+      "progress",
+      "logs",
+      "duration",
+      "commit",
+      "details"
+    ],
+    "description": "Deployment card showing environment, progress, logs, duration, and commit details.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Card groups, pricing plans, and repeated content that need hover or reveal treatment.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "cards_too_equal",
+      "no_visual_rhythm",
+      "flat_layout"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-dialog-stack",
+    "source": "watermelon-ui",
+    "title": "Dialog Stack",
+    "url": "https://registry.watermelon.sh/r/dialog-stack.json",
+    "category": "transition",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "dialog",
+      "stack",
+      "layered",
+      "modal",
+      "stacks"
+    ],
+    "keywords": [
+      "dialog",
+      "stack",
+      "layered",
+      "modal",
+      "stacks",
+      "multiple",
+      "dialogs",
+      "smooth",
+      "spring-weighted",
+      "transitions"
+    ],
+    "description": "A layered modal component that stacks multiple dialogs with smooth spring-weighted transitions.",
+    "dependencies": [
+      "motion",
+      "lucide-react",
+      "@hugeicons/react"
+    ],
+    "framework": "react",
+    "bestFor": "Dialogs, popovers, inputs, and stateful controls that need polished entrance/exit motion.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "unknown"
+    ],
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-discrete-tabs",
+    "source": "watermelon-ui",
+    "title": "Discrete Tabs",
+    "url": "https://registry.watermelon.sh/r/discrete-tabs.json",
+    "category": "navigation",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "tabs",
+      "discrete",
+      "smooth",
+      "morphing",
+      "transitions"
+    ],
+    "keywords": [
+      "discrete",
+      "tabs",
+      "smooth",
+      "morphing",
+      "transitions",
+      "between",
+      "active",
+      "states"
+    ],
+    "description": "Animated tabs component with smooth morphing transitions between active states.",
+    "dependencies": [
+      "motion/react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Navigation, tabs, pagination, and wayfinding controls that need smoother state changes.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "unknown"
+    ],
+    "relatedSectionTypes": [
+      "stats",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-dock-component",
+    "source": "watermelon-ui",
+    "title": "Dock Component",
+    "url": "https://registry.watermelon.sh/r/dock.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "dock",
+      "inspired",
+      "macos",
+      "smooth"
+    ],
+    "keywords": [
+      "dock",
+      "micro-interaction",
+      "inspired",
+      "macos",
+      "smooth",
+      "scaling",
+      "hover",
+      "interactions",
+      "icons",
+      "respond",
+      "dynamically",
+      "cursor"
+    ],
+    "description": "An animated dock component inspired by the macOS dock with smooth scaling and hover interactions. Icons respond dynamically to cursor movement, creating a lively and responsive feel.",
+    "dependencies": [
+      "motion/react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-draw-signature",
+    "source": "watermelon-ui",
+    "title": "Draw Signature",
+    "url": "https://registry.watermelon.sh/r/draw-signature.json",
+    "category": "transition",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "inputs",
+      "draw",
+      "signature",
+      "premium",
+      "interactive"
+    ],
+    "keywords": [
+      "draw",
+      "signature",
+      "inputs",
+      "premium",
+      "interactive",
+      "captures",
+      "fluid",
+      "strokes",
+      "custom",
+      "pen",
+      "cursor",
+      "step-based"
+    ],
+    "description": "A premium interactive signature component that captures fluid strokes with a custom pen cursor and step-based workflow.",
+    "dependencies": [
+      "motion",
+      "lucide-react",
+      "react-icons",
+      "next-themes"
+    ],
+    "framework": "react",
+    "bestFor": "Dialogs, popovers, inputs, and stateful controls that need polished entrance/exit motion.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "form"
+    ],
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-dropdown-disclosure",
+    "source": "watermelon-ui",
+    "title": "Dropdown Disclosure",
+    "url": "https://registry.watermelon.sh/r/dropdown-disclosure.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "dropdown",
+      "disclosure",
+      "sophisticated",
+      "menu"
+    ],
+    "keywords": [
+      "dropdown",
+      "disclosure",
+      "micro-interaction",
+      "sophisticated",
+      "menu",
+      "shared",
+      "layout",
+      "transitions",
+      "spring-driven",
+      "animations",
+      "item",
+      "selection"
+    ],
+    "description": "A sophisticated dropdown menu with shared layout transitions and spring-driven animations for item selection.",
+    "dependencies": [
+      "motion",
+      "lucide-react",
+      "react-icons",
+      "@hugeicons/react",
+      "@hugeicons/core-free-icons"
+    ],
+    "framework": "react",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-edit-badge",
+    "source": "watermelon-ui",
+    "title": "Edit Badge",
+    "url": "https://registry.watermelon.sh/r/edit-badge.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "interaction",
+      "edit",
+      "badge",
+      "premium",
+      "interactive"
+    ],
+    "keywords": [
+      "edit",
+      "badge",
+      "interaction",
+      "premium",
+      "interactive",
+      "inline",
+      "editor",
+      "real-time",
+      "text",
+      "icon",
+      "color",
+      "customization"
+    ],
+    "description": "A premium interactive badge component with an inline editor for real-time text, icon, and color customization.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-edit-profile",
+    "source": "watermelon-ui",
+    "title": "Edit Profile",
+    "url": "https://registry.watermelon.sh/r/edit-profile.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "dialog",
+      "edit",
+      "profile",
+      "editing",
+      "fields"
+    ],
+    "keywords": [
+      "edit",
+      "profile",
+      "dialog",
+      "editing",
+      "fields",
+      "validation",
+      "save",
+      "actions"
+    ],
+    "description": "Profile editing dialog with fields, validation, and save actions.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-editable-chip",
+    "source": "watermelon-ui",
+    "title": "Editable Chip",
+    "url": "https://registry.watermelon.sh/r/editable-chip.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "editable",
+      "chip",
+      "interactive",
+      "smooth"
+    ],
+    "keywords": [
+      "editable",
+      "chip",
+      "micro-interaction",
+      "interactive",
+      "smooth",
+      "animations",
+      "editing"
+    ],
+    "description": "An interactive editable chip component with smooth animations for editing.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-emoji-spree-choice-chips",
+    "source": "watermelon-ui",
+    "title": "Emoji Spree Choice Chips",
+    "url": "https://registry.watermelon.sh/r/emoji-spree-choice-chips.json",
+    "category": "hover",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "choice-chips",
+      "emoji",
+      "spree",
+      "choice",
+      "chips"
+    ],
+    "keywords": [
+      "emoji",
+      "spree",
+      "choice",
+      "chips",
+      "choice-chips",
+      "playful",
+      "multi-select",
+      "exploding",
+      "particles",
+      "smooth",
+      "spring",
+      "animations"
+    ],
+    "description": "A playful multi-select component with exploding emoji particles and smooth spring animations.",
+    "dependencies": [
+      "motion",
+      "lucide-react"
+    ],
+    "framework": "react",
+    "bestFor": "Selected choice-chips UI that needs a specific Watermelon motion reference.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "unknown"
+    ],
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-event-reminders",
+    "source": "watermelon-ui",
+    "title": "Event Reminders",
+    "url": "https://registry.watermelon.sh/r/event-reminders.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "event",
+      "reminders",
+      "set",
+      "manage"
+    ],
+    "keywords": [
+      "event",
+      "reminders",
+      "micro-interaction",
+      "set",
+      "manage",
+      "lightweight",
+      "interactive",
+      "scheduling",
+      "controls"
+    ],
+    "description": "Set and manage event reminders with lightweight interactive scheduling controls.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-extended-toolbar",
+    "source": "watermelon-ui",
+    "title": "Extended Toolbar",
+    "url": "https://registry.watermelon.sh/r/extended-toolbar.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "extended",
+      "toolbar",
+      "responsive",
+      "enhances"
+    ],
+    "keywords": [
+      "extended",
+      "toolbar",
+      "micro-interaction",
+      "responsive",
+      "enhances",
+      "usability",
+      "smooth",
+      "micro-interactions",
+      "contextual",
+      "actions",
+      "instant",
+      "visual"
+    ],
+    "description": "A responsive extended toolbar component that enhances usability with smooth micro-interactions, contextual actions, and instant visual feedback for quick and confident user interactions.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-family-receive-button",
+    "source": "watermelon-ui",
+    "title": "Family Receive Button",
+    "url": "https://registry.watermelon.sh/r/family-receive-button.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "buttons",
+      "family",
+      "receive",
+      "button",
+      "features"
+    ],
+    "keywords": [
+      "family",
+      "receive",
+      "button",
+      "buttons",
+      "features",
+      "toggle",
+      "transforms",
+      "full",
+      "confirmation",
+      "modal",
+      "backdrop",
+      "blur"
+    ],
+    "description": "Features a toggle button that transforms into a full confirmation modal with backdrop blur and elegant motion design.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta",
+      "form"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta",
+      "form-benefits-sidebar",
+      "compact-lead-form"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-family-wallet",
+    "source": "watermelon-ui",
+    "title": "Family Wallet",
+    "url": "https://registry.watermelon.sh/r/family-wallet.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "family",
+      "wallet",
+      "interface",
+      "inspired"
+    ],
+    "keywords": [
+      "family",
+      "wallet",
+      "micro-interaction",
+      "interface",
+      "inspired",
+      "account",
+      "interactions",
+      "smooth",
+      "card",
+      "transitions"
+    ],
+    "description": "An animated wallet interface inspired by family account interactions with smooth card transitions.",
+    "dependencies": [
+      "motion/react",
+      "react-icons",
+      "react-use-measure",
+      "shadcn"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-feature-tour",
+    "source": "watermelon-ui",
+    "title": "Feature Tour",
+    "url": "https://registry.watermelon.sh/r/feature-tour.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "feature",
+      "tour",
+      "premium",
+      "guided"
+    ],
+    "keywords": [
+      "feature",
+      "tour",
+      "micro-interaction",
+      "premium",
+      "guided",
+      "blur",
+      "animations",
+      "shining",
+      "titles",
+      "intuitive",
+      "navigation"
+    ],
+    "description": "A premium guided tour component with blur animations, shining titles, and intuitive navigation.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-feedback",
+    "source": "watermelon-ui",
+    "title": "Feedback",
+    "url": "https://registry.watermelon.sh/r/feedback.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "feedback",
+      "premium",
+      "morphing",
+      "icons"
+    ],
+    "keywords": [
+      "feedback",
+      "micro-interaction",
+      "premium",
+      "morphing",
+      "icons",
+      "smooth",
+      "transitions",
+      "refined",
+      "dark",
+      "mode",
+      "experience"
+    ],
+    "description": "A premium feedback component with morphing icons, smooth transitions, and a refined dark mode experience.",
+    "dependencies": [
+      "motion",
+      "lucide-react",
+      "react-icons",
+      "@hugeicons/react"
+    ],
+    "framework": "react",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-feedback-action",
+    "source": "watermelon-ui",
+    "title": "Feedback Action",
+    "url": "https://registry.watermelon.sh/r/feedback-action.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "feedback",
+      "action",
+      "trigger",
+      "quick"
+    ],
+    "keywords": [
+      "feedback",
+      "action",
+      "micro-interaction",
+      "trigger",
+      "quick",
+      "user",
+      "actions",
+      "through",
+      "subtle",
+      "interaction",
+      "buttons"
+    ],
+    "description": "Trigger quick user feedback actions through subtle animated interaction buttons.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-filter-disclosure",
+    "source": "watermelon-ui",
+    "title": "Filter Disclosure",
+    "url": "https://registry.watermelon.sh/r/filter-disclosure.json",
+    "category": "list",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "filters",
+      "filter",
+      "disclosure",
+      "smooth",
+      "expanding"
+    ],
+    "keywords": [
+      "filter",
+      "disclosure",
+      "filters",
+      "smooth",
+      "expanding",
+      "active",
+      "state",
+      "indicators"
+    ],
+    "description": "A smooth expanding filter component with active state indicators.",
+    "dependencies": [
+      "motion/react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Selected filters UI that needs a specific Watermelon motion reference.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "unknown"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "stats",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-floating-disclosure",
+    "source": "watermelon-ui",
+    "title": "Floating Disclosure",
+    "url": "https://registry.watermelon.sh/r/floating-disclosure.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "popover",
+      "floating",
+      "disclosure",
+      "compact",
+      "expandable"
+    ],
+    "keywords": [
+      "floating",
+      "disclosure",
+      "popover",
+      "compact",
+      "expandable",
+      "action",
+      "menu",
+      "resizing",
+      "close",
+      "button",
+      "spring-based",
+      "item"
+    ],
+    "description": "A compact expandable action menu with animated resizing, floating close button, and spring-based item reveal.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-floating-input",
+    "source": "watermelon-ui",
+    "title": "Floating Input",
+    "url": "https://registry.watermelon.sh/r/floating-input.json",
+    "category": "transition",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "inputs",
+      "floating",
+      "input",
+      "field",
+      "label"
+    ],
+    "keywords": [
+      "floating",
+      "input",
+      "inputs",
+      "field",
+      "label",
+      "animation"
+    ],
+    "description": "An input field with floating label animation.",
+    "dependencies": [
+      "motion/react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Dialogs, popovers, inputs, and stateful controls that need polished entrance/exit motion.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "form"
+    ],
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-fluid-tabs",
+    "source": "watermelon-ui",
+    "title": "Fluid Tabs",
+    "url": "https://registry.watermelon.sh/r/fluid-tabs.json",
+    "category": "navigation",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "tabs",
+      "fluid",
+      "spring-animated",
+      "tab",
+      "floating"
+    ],
+    "keywords": [
+      "fluid",
+      "tabs",
+      "spring-animated",
+      "tab",
+      "floating",
+      "active",
+      "indicator",
+      "icon",
+      "scaling"
+    ],
+    "description": "A fluid, spring-animated tab component with floating active indicator and icon scaling.",
+    "dependencies": [
+      "motion/react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Navigation, tabs, pagination, and wayfinding controls that need smoother state changes.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "unknown"
+    ],
+    "relatedSectionTypes": [
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-fractional-picker",
+    "source": "watermelon-ui",
+    "title": "Fractional Picker",
+    "url": "https://registry.watermelon.sh/r/fractional-picker.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "fractional",
+      "picker",
+      "smooth",
+      "draggable"
+    ],
+    "keywords": [
+      "fractional",
+      "picker",
+      "micro-interaction",
+      "smooth",
+      "draggable",
+      "ruler-style",
+      "selecting",
+      "numeric",
+      "values",
+      "spring",
+      "snapping"
+    ],
+    "description": "A smooth draggable ruler-style picker for selecting numeric values with spring snapping.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-frequency-selector",
+    "source": "watermelon-ui",
+    "title": "Frequency Selector",
+    "url": "https://registry.watermelon.sh/r/frequency-selector.json",
+    "category": "navigation",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "tabs",
+      "frequency",
+      "selector",
+      "select",
+      "recurring"
+    ],
+    "keywords": [
+      "frequency",
+      "selector",
+      "tabs",
+      "select",
+      "recurring",
+      "time",
+      "intervals",
+      "using",
+      "contextual",
+      "sub",
+      "options"
+    ],
+    "description": "Select recurring time intervals using animated tabs and contextual sub options.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Navigation, tabs, pagination, and wayfinding controls that need smoother state changes.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "unknown"
+    ],
+    "relatedSectionTypes": [
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-fund-widget",
+    "source": "watermelon-ui",
+    "title": "Fund Widget",
+    "url": "https://registry.watermelon.sh/r/fund-widget.json",
+    "category": "card",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "widgets",
+      "fund",
+      "widget",
+      "featuring",
+      "smooth"
+    ],
+    "keywords": [
+      "fund",
+      "widget",
+      "widgets",
+      "featuring",
+      "smooth",
+      "transforms",
+      "progressive",
+      "blur",
+      "effects"
+    ],
+    "description": "An animated fund widget featuring smooth 3D transforms and progressive blur effects.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Card groups, pricing plans, and repeated content that need hover or reveal treatment.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "cards_too_equal",
+      "no_visual_rhythm",
+      "flat_layout"
+    ],
+    "relatedSectionTypes": [
+      "stats",
+      "dashboard",
+      "form"
+    ],
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-gooey-menu",
+    "source": "watermelon-ui",
+    "title": "Gooey Menu",
+    "url": "https://registry.watermelon.sh/r/gooey-menu.json",
+    "category": "transition",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "tooltip",
+      "gooey",
+      "menu",
+      "interactive",
+      "next"
+    ],
+    "keywords": [
+      "gooey",
+      "menu",
+      "tooltip",
+      "interactive",
+      "next",
+      "logo",
+      "expandable",
+      "shows",
+      "framework",
+      "information"
+    ],
+    "description": "An interactive Next.js logo with expandable tooltip that shows framework information.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Dialogs, popovers, inputs, and stateful controls that need polished entrance/exit motion.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "form",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-inline-action",
+    "source": "watermelon-ui",
+    "title": "Inline Action",
+    "url": "https://registry.watermelon.sh/r/inline-action.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "action",
+      "inline",
+      "actions",
+      "enabling",
+      "quick"
+    ],
+    "keywords": [
+      "inline",
+      "action",
+      "actions",
+      "enabling",
+      "quick",
+      "edits",
+      "without",
+      "leaving",
+      "current",
+      "context",
+      "view"
+    ],
+    "description": "Inline actions enabling quick edits without leaving current context view.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-inline-disclosure-menu",
+    "source": "watermelon-ui",
+    "title": "Inline Disclosure Menu",
+    "url": "https://registry.watermelon.sh/r/inline-disclosure-menu.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "dropdown",
+      "inline",
+      "disclosure",
+      "menu",
+      "action"
+    ],
+    "keywords": [
+      "inline",
+      "disclosure",
+      "menu",
+      "dropdown",
+      "action",
+      "contextul",
+      "options",
+      "two-step",
+      "delete",
+      "confirmation",
+      "flow"
+    ],
+    "description": "An animated inline action menu with contextul Options and a two-step delete confirmation flow.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-inline-edit",
+    "source": "watermelon-ui",
+    "title": "Inline Edit",
+    "url": "https://registry.watermelon.sh/r/inline-edit.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "inline",
+      "edit",
+      "sleek",
+      "interactive"
+    ],
+    "keywords": [
+      "inline",
+      "edit",
+      "micro-interaction",
+      "sleek",
+      "interactive",
+      "editor",
+      "transitions",
+      "seamlessly",
+      "between",
+      "display",
+      "modes",
+      "using"
+    ],
+    "description": "A sleek, interactive editor that transitions seamlessly between display and edit modes using smooth layout animations.",
+    "dependencies": [
+      "motion",
+      "@hugeicons/react",
+      "@hugeicons/core-free-icons"
+    ],
+    "framework": "react",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-inline-overflow",
+    "source": "watermelon-ui",
+    "title": "Inline Overflow",
+    "url": "https://registry.watermelon.sh/r/inline-overflow.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "disclosure",
+      "inline",
+      "overflow",
+      "interactive",
+      "menu"
+    ],
+    "keywords": [
+      "inline",
+      "overflow",
+      "disclosure",
+      "interactive",
+      "menu",
+      "reveals",
+      "additional",
+      "actions",
+      "spring",
+      "animations"
+    ],
+    "description": "An interactive inline overflow menu that reveals additional actions with spring animations.",
+    "dependencies": [
+      "motion/react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-inline-table-control",
+    "source": "watermelon-ui",
+    "title": "Inline Table Control",
+    "url": "https://registry.watermelon.sh/r/inline-table-control.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "inline",
+      "table",
+      "control",
+      "controls"
+    ],
+    "keywords": [
+      "inline",
+      "table",
+      "control",
+      "micro-interaction",
+      "controls",
+      "editing",
+      "rows",
+      "without",
+      "breaking",
+      "user",
+      "focus"
+    ],
+    "description": "Inline controls for editing table rows without breaking user focus.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-inline-toast",
+    "source": "watermelon-ui",
+    "title": "Inline Toast",
+    "url": "https://registry.watermelon.sh/r/inline-toast.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "inline",
+      "toast",
+      "provides",
+      "instant"
+    ],
+    "keywords": [
+      "inline",
+      "toast",
+      "micro-interaction",
+      "provides",
+      "instant",
+      "feedback",
+      "built-in",
+      "copy",
+      "action"
+    ],
+    "description": "An animated inline toast that provides instant feedback with a built-in copy action.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-integration-card",
+    "source": "watermelon-ui",
+    "title": "Integration Card",
+    "url": "https://registry.watermelon.sh/r/integration-card.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "cards",
+      "integration",
+      "card",
+      "show",
+      "connected"
+    ],
+    "keywords": [
+      "integration",
+      "card",
+      "cards",
+      "show",
+      "connected",
+      "services",
+      "status",
+      "actions",
+      "simple",
+      "management"
+    ],
+    "description": "Show connected services with status, actions, and simple integration management.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta",
+      "stats",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-invite-disclosure",
+    "source": "watermelon-ui",
+    "title": "Invite Disclosure",
+    "url": "https://registry.watermelon.sh/r/invite-disclosure.json",
+    "category": "list",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "disclosure",
+      "invite",
+      "sleek",
+      "morphing",
+      "managing"
+    ],
+    "keywords": [
+      "invite",
+      "disclosure",
+      "sleek",
+      "morphing",
+      "managing",
+      "invitations",
+      "interactive",
+      "badge",
+      "counts",
+      "spring",
+      "animations"
+    ],
+    "description": "A sleek, morphing disclosure component for managing invitations with interactive badge counts and spring animations.",
+    "dependencies": [
+      "motion",
+      "react-icons"
+    ],
+    "framework": "react",
+    "bestFor": "Selected disclosure UI that needs a specific Watermelon motion reference.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "unknown"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-journal-navigation",
+    "source": "watermelon-ui",
+    "title": "Journal Navigation",
+    "url": "https://registry.watermelon.sh/r/journal-navigation.json",
+    "category": "navigation",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "navigation",
+      "journal",
+      "organized",
+      "enabling",
+      "quick"
+    ],
+    "keywords": [
+      "journal",
+      "navigation",
+      "organized",
+      "enabling",
+      "quick",
+      "section",
+      "switching",
+      "smooth",
+      "transitions"
+    ],
+    "description": "Organized journal navigation enabling quick section switching with smooth animated transitions.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Navigation, tabs, pagination, and wayfinding controls that need smoother state changes.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "unknown"
+    ],
+    "relatedSectionTypes": [
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-knob-slider",
+    "source": "watermelon-ui",
+    "title": "Knob Slider",
+    "url": "https://registry.watermelon.sh/r/knob-slider.json",
+    "category": "scroll",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "sliders",
+      "knob",
+      "slider",
+      "premium",
+      "radial"
+    ],
+    "keywords": [
+      "knob",
+      "slider",
+      "sliders",
+      "premium",
+      "radial",
+      "dial",
+      "tactile",
+      "feedback",
+      "blur",
+      "animations",
+      "full",
+      "theme"
+    ],
+    "description": "A premium radial dial component with tactile feedback, blur animations, and full theme integration.",
+    "dependencies": [
+      "motion",
+      "lucide-react",
+      "next-themes"
+    ],
+    "framework": "react",
+    "bestFor": "Selected sliders UI that needs a specific Watermelon motion reference.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "unknown"
+    ],
+    "relatedSectionTypes": [
+      "unknown"
+    ],
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-labeled-progress-indicator",
+    "source": "watermelon-ui",
+    "title": "Labeled Progress Indicator",
+    "url": "https://registry.watermelon.sh/r/labeled-progress-indicator.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "labeled",
+      "progress",
+      "indicator",
+      "dynamic"
+    ],
+    "keywords": [
+      "labeled",
+      "progress",
+      "indicator",
+      "micro-interaction",
+      "dynamic",
+      "labels",
+      "update",
+      "smoothly"
+    ],
+    "description": "An animated progress indicator with dynamic labels that update smoothly.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-layered-progressive-disclosure",
+    "source": "watermelon-ui",
+    "title": "Layered Progressive Disclosure",
+    "url": "https://registry.watermelon.sh/r/layered-progressive-disclosure.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "interaction",
+      "layered",
+      "progressive",
+      "disclosure",
+      "premium"
+    ],
+    "keywords": [
+      "layered",
+      "progressive",
+      "disclosure",
+      "interaction",
+      "premium",
+      "panel",
+      "feature",
+      "toggles",
+      "asymmetric",
+      "controls",
+      "tabbed",
+      "micro-interactions"
+    ],
+    "description": "A premium layered progressive disclosure panel with animated feature toggles, asymmetric controls, and tabbed micro-interactions for advanced configuration workflows.",
+    "dependencies": [
+      "motion/react",
+      "@hugeicons/react",
+      "@hugeicons/core-free-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta",
+      "stats",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-list-stack",
+    "source": "watermelon-ui",
+    "title": "List Stack",
+    "url": "https://registry.watermelon.sh/r/list-stack.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "list",
+      "stack",
+      "stacked",
+      "smoothly"
+    ],
+    "keywords": [
+      "list",
+      "stack",
+      "micro-interaction",
+      "stacked",
+      "smoothly",
+      "expands",
+      "collapses",
+      "reveal",
+      "hide",
+      "items"
+    ],
+    "description": "An animated stacked list that smoothly expands and collapses to reveal or hide items.",
+    "dependencies": [
+      "motion/react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-macos-sidebar",
+    "source": "watermelon-ui",
+    "title": "macOS Sidebar",
+    "url": "https://registry.watermelon.sh/r/macos-sidebar.json",
+    "category": "navigation",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "navigation",
+      "macos",
+      "sidebar",
+      "premium",
+      "macos-style"
+    ],
+    "keywords": [
+      "macos",
+      "sidebar",
+      "navigation",
+      "premium",
+      "macos-style",
+      "collapsible",
+      "smooth",
+      "spring-driven",
+      "width",
+      "transitions",
+      "hover",
+      "morphing"
+    ],
+    "description": "A premium macOS-style collapsible sidebar with smooth spring-driven width transitions, hover morphing, and tactile selection feedback.",
+    "dependencies": [
+      "motion/react",
+      "@hugeicons/react",
+      "@hugeicons/core-free-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Navigation, tabs, pagination, and wayfinding controls that need smoother state changes.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "unknown"
+    ],
+    "relatedSectionTypes": [
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-meeting-card",
+    "source": "watermelon-ui",
+    "title": "Meeting Card",
+    "url": "https://registry.watermelon.sh/r/meeting-card.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "cards",
+      "meeting",
+      "card",
+      "summarize",
+      "details"
+    ],
+    "keywords": [
+      "meeting",
+      "card",
+      "cards",
+      "summarize",
+      "details",
+      "time",
+      "participants",
+      "quick",
+      "action",
+      "controls"
+    ],
+    "description": "Summarize meeting details with time, participants, and quick action controls.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-minimal-carousel",
+    "source": "watermelon-ui",
+    "title": "Minimal Carousel",
+    "url": "https://registry.watermelon.sh/r/minimal-carousel.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "carousel",
+      "minimal",
+      "interactive",
+      "wallet",
+      "interface"
+    ],
+    "keywords": [
+      "minimal",
+      "carousel",
+      "interactive",
+      "wallet",
+      "interface",
+      "expandable",
+      "cards",
+      "featuring",
+      "smooth",
+      "layout",
+      "animations",
+      "micro-interactions"
+    ],
+    "description": "Interactive wallet interface with expandable cards featuring smooth layout animations and micro-interactions.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-morphing-button",
+    "source": "watermelon-ui",
+    "title": "Morphing Button",
+    "url": "https://registry.watermelon.sh/r/morphing-button.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "buttons",
+      "morphing",
+      "button",
+      "smoothly",
+      "morphs"
+    ],
+    "keywords": [
+      "morphing",
+      "button",
+      "buttons",
+      "smoothly",
+      "morphs",
+      "expanded",
+      "interactive",
+      "state"
+    ],
+    "description": "An animated button that smoothly morphs into an expanded interactive state.",
+    "dependencies": [
+      "motion/react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta",
+      "stats",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-morphing-discovery-bar",
+    "source": "watermelon-ui",
+    "title": "Morphing Discovery Bar",
+    "url": "https://registry.watermelon.sh/r/morphing-discovery-bar.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "tabs",
+      "morphing",
+      "discovery",
+      "bar",
+      "responsive"
+    ],
+    "keywords": [
+      "morphing",
+      "discovery",
+      "bar",
+      "tabs",
+      "responsive",
+      "extended",
+      "toolbar",
+      "enhances",
+      "usability",
+      "smooth",
+      "micro-interactions",
+      "contextual"
+    ],
+    "description": "A responsive extended toolbar component that enhances usability with smooth micro-interactions, contextual actions, and instant visual feedback for quick and confident user interactions.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-morphing-sidebar-controls",
+    "source": "watermelon-ui",
+    "title": "Morphing Sidebar Controls",
+    "url": "https://registry.watermelon.sh/r/morphing-sidebar-controls.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "interaction",
+      "morphing",
+      "sidebar",
+      "controls",
+      "premium"
+    ],
+    "keywords": [
+      "morphing",
+      "sidebar",
+      "controls",
+      "interaction",
+      "premium",
+      "control",
+      "panel",
+      "progressive",
+      "configuration",
+      "motion",
+      "presets",
+      "layout"
+    ],
+    "description": "A premium morphing sidebar control panel with progressive configuration, motion presets, and animated layout transitions for advanced animation workflows.",
+    "dependencies": [
+      "motion/react",
+      "@hugeicons/react",
+      "@hugeicons/core-free-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-onboarding-checklist",
+    "source": "watermelon-ui",
+    "title": "Onboarding Checklist",
+    "url": "https://registry.watermelon.sh/r/onboarding-checklist.json",
+    "category": "card",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "cards",
+      "onboarding",
+      "checklist",
+      "step-by-step",
+      "progress"
+    ],
+    "keywords": [
+      "onboarding",
+      "checklist",
+      "cards",
+      "step-by-step",
+      "progress",
+      "tracking",
+      "completion",
+      "feedback"
+    ],
+    "description": "Step-by-step onboarding checklist with progress tracking and completion feedback.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Card groups, pricing plans, and repeated content that need hover or reveal treatment.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "cards_too_equal",
+      "no_visual_rhythm",
+      "flat_layout"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-onboarding-screen",
+    "source": "watermelon-ui",
+    "title": "Onboarding Screen",
+    "url": "https://registry.watermelon.sh/r/onboarding-screen.json",
+    "category": "card",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "cards",
+      "onboarding",
+      "screen",
+      "clean",
+      "guiding"
+    ],
+    "keywords": [
+      "onboarding",
+      "screen",
+      "cards",
+      "clean",
+      "guiding",
+      "users",
+      "through",
+      "setup",
+      "visual",
+      "steps"
+    ],
+    "description": "Clean onboarding screen guiding users through setup with visual steps.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Card groups, pricing plans, and repeated content that need hover or reveal treatment.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "cards_too_equal",
+      "no_visual_rhythm",
+      "flat_layout"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-onboarding-setup",
+    "source": "watermelon-ui",
+    "title": "Onboarding Setup",
+    "url": "https://registry.watermelon.sh/r/onboarding-setup.json",
+    "category": "card",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "cards",
+      "onboarding",
+      "setup",
+      "card",
+      "guiding"
+    ],
+    "keywords": [
+      "onboarding",
+      "setup",
+      "cards",
+      "card",
+      "guiding",
+      "users",
+      "through",
+      "initial",
+      "configuration",
+      "steps"
+    ],
+    "description": "Onboarding setup card guiding users through initial configuration steps.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Card groups, pricing plans, and repeated content that need hover or reveal treatment.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "cards_too_equal",
+      "no_visual_rhythm",
+      "flat_layout"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-pin-item",
+    "source": "watermelon-ui",
+    "title": "Pin Item",
+    "url": "https://registry.watermelon.sh/r/pin-item.json",
+    "category": "list",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "lists",
+      "pin",
+      "item",
+      "sleek",
+      "list"
+    ],
+    "keywords": [
+      "pin",
+      "item",
+      "lists",
+      "sleek",
+      "list",
+      "shared-layout",
+      "transitions",
+      "pinning",
+      "items",
+      "managing",
+      "priority",
+      "views"
+    ],
+    "description": "A sleek list component with shared-layout transitions for pinning items and managing priority views.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Selected lists UI that needs a specific Watermelon motion reference.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "unknown"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-predictive-text",
+    "source": "watermelon-ui",
+    "title": "Predictive Text",
+    "url": "https://registry.watermelon.sh/r/predictive-text.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "predictive",
+      "text",
+      "suggests",
+      "next"
+    ],
+    "keywords": [
+      "predictive",
+      "text",
+      "micro-interaction",
+      "suggests",
+      "next",
+      "words",
+      "real",
+      "time",
+      "while",
+      "users",
+      "type",
+      "naturally"
+    ],
+    "description": "Suggests next words in real time while users type naturally.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-pricing-widget",
+    "source": "watermelon-ui",
+    "title": "Pricing Widget",
+    "url": "https://registry.watermelon.sh/r/pricing-widget.json",
+    "category": "card",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "widgets",
+      "pricing",
+      "widget",
+      "smooth",
+      "transitions"
+    ],
+    "keywords": [
+      "pricing",
+      "widget",
+      "widgets",
+      "smooth",
+      "transitions",
+      "dynamic",
+      "value",
+      "updates"
+    ],
+    "description": "An animated pricing widget with smooth transitions and dynamic value updates.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "@number-flow/react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Card groups, pricing plans, and repeated content that need hover or reveal treatment.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "cards_too_equal",
+      "no_visual_rhythm",
+      "flat_layout"
+    ],
+    "relatedSectionTypes": [
+      "pricing",
+      "stats",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "pricing-emphasis",
+      "pricing-toggle",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-profile-card",
+    "source": "watermelon-ui",
+    "title": "Profile Card",
+    "url": "https://registry.watermelon.sh/r/profile-card.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "cards",
+      "profile",
+      "card",
+      "compact",
+      "displaying"
+    ],
+    "keywords": [
+      "profile",
+      "card",
+      "cards",
+      "compact",
+      "displaying",
+      "user",
+      "details",
+      "quick",
+      "actions"
+    ],
+    "description": "Compact profile card displaying user details with quick actions.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-progressive-input-stack",
+    "source": "watermelon-ui",
+    "title": "Progressive Input Stack",
+    "url": "https://registry.watermelon.sh/r/progressive-input-stack.json",
+    "category": "card",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "widgets",
+      "progressive",
+      "input",
+      "stack",
+      "progressively"
+    ],
+    "keywords": [
+      "progressive",
+      "input",
+      "stack",
+      "widgets",
+      "progressively",
+      "layers",
+      "form",
+      "fields",
+      "users",
+      "complete",
+      "each",
+      "step"
+    ],
+    "description": "An animated input stack that progressively layers form fields as users complete each step.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Card groups, pricing plans, and repeated content that need hover or reveal treatment.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "cards_too_equal",
+      "no_visual_rhythm",
+      "flat_layout"
+    ],
+    "relatedSectionTypes": [
+      "stats",
+      "dashboard",
+      "form"
+    ],
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-quick-feedback",
+    "source": "watermelon-ui",
+    "title": "Quick Feedback",
+    "url": "https://registry.watermelon.sh/r/quick-feedback.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "quick",
+      "feedback",
+      "responsive",
+      "built"
+    ],
+    "keywords": [
+      "quick",
+      "feedback",
+      "micro-interaction",
+      "responsive",
+      "built",
+      "instant",
+      "user",
+      "responses",
+      "using",
+      "subtle",
+      "micro-interactions",
+      "snappy"
+    ],
+    "description": "A responsive feedback component built for instant user responses, using subtle micro-interactions and snappy visual cues to confirm actions in real time.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-quick-option-picker",
+    "source": "watermelon-ui",
+    "title": "Quick Option Picker",
+    "url": "https://registry.watermelon.sh/r/quick-option-picker.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "quick",
+      "option",
+      "picker",
+      "sleek"
+    ],
+    "keywords": [
+      "quick",
+      "option",
+      "picker",
+      "micro-interaction",
+      "sleek",
+      "interactive",
+      "smooth",
+      "roll",
+      "animations",
+      "premium",
+      "feel"
+    ],
+    "description": "A sleek, interactive option picker with smooth roll animations and a premium feel.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-quick-paste",
+    "source": "watermelon-ui",
+    "title": "Quick Paste",
+    "url": "https://registry.watermelon.sh/r/quick-paste.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "quick",
+      "paste",
+      "instantly",
+      "copied"
+    ],
+    "keywords": [
+      "quick",
+      "paste",
+      "micro-interaction",
+      "instantly",
+      "copied",
+      "content",
+      "using",
+      "shortcut-triggered",
+      "micro",
+      "interaction",
+      "panel"
+    ],
+    "description": "Instantly paste copied content using shortcut-triggered micro interaction panel.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-quick-switcher",
+    "source": "watermelon-ui",
+    "title": "Quick Switcher",
+    "url": "https://registry.watermelon.sh/r/quick-switcher.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "quick",
+      "switcher",
+      "premium",
+      "dual-mode"
+    ],
+    "keywords": [
+      "quick",
+      "switcher",
+      "micro-interaction",
+      "premium",
+      "dual-mode",
+      "action",
+      "bar",
+      "enables",
+      "fast",
+      "switching",
+      "between",
+      "two"
+    ],
+    "description": "A premium, dual-mode action bar that enables fast switching between two distinct modes with fluid animations and spring physics.",
+    "dependencies": [
+      "motion",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "react",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-radial-carousel",
+    "source": "watermelon-ui",
+    "title": "Radial Carousel",
+    "url": "https://registry.watermelon.sh/r/radial-carousel.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "carousel",
+      "radial",
+      "stunning",
+      "spring",
+      "animations"
+    ],
+    "keywords": [
+      "radial",
+      "carousel",
+      "stunning",
+      "spring",
+      "animations",
+      "drag-to-rotate",
+      "interaction",
+      "adaptive",
+      "layout"
+    ],
+    "description": "A stunning radial carousel component with spring animations, drag-to-rotate interaction, and adaptive layout.",
+    "dependencies": [
+      "motion",
+      "lucide-react"
+    ],
+    "framework": "react",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-range-selection-slider",
+    "source": "watermelon-ui",
+    "title": "Range Selection Slider",
+    "url": "https://registry.watermelon.sh/r/range-selection-slider.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "widgets",
+      "range",
+      "selection",
+      "slider",
+      "responsive"
+    ],
+    "keywords": [
+      "range",
+      "selection",
+      "slider",
+      "widgets",
+      "responsive",
+      "widget",
+      "allows",
+      "users",
+      "precisely",
+      "choose",
+      "values",
+      "enhanced"
+    ],
+    "description": "A responsive range selection slider widget that allows users to precisely choose values, enhanced with smooth interactions and immediate visual feedback for accurate control.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons",
+      "number-flow/react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta",
+      "stats",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-returns-calculator-snippet",
+    "source": "watermelon-ui",
+    "title": "Returns Calculator Snippet",
+    "url": "https://registry.watermelon.sh/r/returns-calculator-snippet.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "cards",
+      "returns",
+      "calculator",
+      "snippet",
+      "responsive"
+    ],
+    "keywords": [
+      "returns",
+      "calculator",
+      "snippet",
+      "cards",
+      "responsive",
+      "card",
+      "lets",
+      "users",
+      "quickly",
+      "estimate",
+      "investment",
+      "outcomes"
+    ],
+    "description": "A responsive returns calculator card snippet that lets users quickly estimate investment outcomes, featuring clear inputs, smooth interactions, and instant visual feedback for confident decision-making.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons",
+      "number-flow/react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta",
+      "form"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta",
+      "form-benefits-sidebar",
+      "compact-lead-form"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-reveal-copy",
+    "source": "watermelon-ui",
+    "title": "Reveal Copy",
+    "url": "https://registry.watermelon.sh/r/reveal-copy.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "reveal",
+      "copy",
+      "smoothly",
+      "uncovers"
+    ],
+    "keywords": [
+      "reveal",
+      "copy",
+      "micro-interaction",
+      "smoothly",
+      "uncovers",
+      "content",
+      "interactive",
+      "motion"
+    ],
+    "description": "An animated reveal copy component that smoothly uncovers content with interactive motion.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-run-action-button",
+    "source": "watermelon-ui",
+    "title": "Run Action Button",
+    "url": "https://registry.watermelon.sh/r/run-action-button.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "buttons",
+      "run",
+      "action",
+      "button",
+      "executes"
+    ],
+    "keywords": [
+      "run",
+      "action",
+      "button",
+      "buttons",
+      "executes",
+      "sequence",
+      "steps",
+      "smooth",
+      "visual",
+      "transitions"
+    ],
+    "description": "An animated action button that executes a sequence of steps with smooth visual transitions.",
+    "dependencies": [
+      "motion/react",
+      "react-icons",
+      "lucide-react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-run-widget",
+    "source": "watermelon-ui",
+    "title": "Run Widget",
+    "url": "https://registry.watermelon.sh/r/run-widget.json",
+    "category": "card",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "widgets",
+      "run",
+      "widget",
+      "dynamically",
+      "displays"
+    ],
+    "keywords": [
+      "run",
+      "widget",
+      "widgets",
+      "dynamically",
+      "displays",
+      "distance",
+      "smooth",
+      "number",
+      "transitions"
+    ],
+    "description": "An animated run widget that dynamically displays distance with smooth number transitions",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "@number-flow/react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Card groups, pricing plans, and repeated content that need hover or reveal treatment.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "cards_too_equal",
+      "no_visual_rhythm",
+      "flat_layout"
+    ],
+    "relatedSectionTypes": [
+      "stats",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-save-toggle",
+    "source": "watermelon-ui",
+    "title": "Save Toggle",
+    "url": "https://registry.watermelon.sh/r/save-toggle.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "buttons",
+      "save",
+      "toggle",
+      "button",
+      "smoothly"
+    ],
+    "keywords": [
+      "save",
+      "toggle",
+      "buttons",
+      "button",
+      "smoothly",
+      "transitions",
+      "between",
+      "multiple",
+      "states"
+    ],
+    "description": "An animated save toggle button that smoothly transitions between multiple states.",
+    "dependencies": [
+      "motion/react",
+      "react-icons",
+      "react-use-measure"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta",
+      "stats",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-schedule-button",
+    "source": "watermelon-ui",
+    "title": "Schedule Button",
+    "url": "https://registry.watermelon.sh/r/schedule-button.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "interaction",
+      "schedule",
+      "button",
+      "tactile",
+      "interactive"
+    ],
+    "keywords": [
+      "schedule",
+      "button",
+      "interaction",
+      "tactile",
+      "interactive",
+      "scheduling",
+      "posts",
+      "date",
+      "time",
+      "selection"
+    ],
+    "description": "A tactile, interactive button for scheduling posts with date and time selection.",
+    "dependencies": [
+      "motion",
+      "@hugeicons/react",
+      "@hugeicons/core-free-icons",
+      "react-icons"
+    ],
+    "framework": "react",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-schedule-date",
+    "source": "watermelon-ui",
+    "title": "Schedule Date",
+    "url": "https://registry.watermelon.sh/r/schedule-date.json",
+    "category": "transition",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "scheduler",
+      "schedule",
+      "date",
+      "scheduling",
+      "dialog"
+    ],
+    "keywords": [
+      "schedule",
+      "date",
+      "scheduler",
+      "scheduling",
+      "dialog",
+      "calendar",
+      "selection",
+      "time",
+      "picking",
+      "confirmations"
+    ],
+    "description": "Date scheduling dialog with calendar selection, time picking, and confirmations.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Dialogs, popovers, inputs, and stateful controls that need polished entrance/exit motion.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "form"
+    ],
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-scroll-island",
+    "source": "watermelon-ui",
+    "title": "Scroll Island",
+    "url": "https://registry.watermelon.sh/r/scroll-island.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "scroll",
+      "island",
+      "floating",
+      "providing"
+    ],
+    "keywords": [
+      "scroll",
+      "island",
+      "micro-interaction",
+      "floating",
+      "providing",
+      "progress",
+      "actions",
+      "contextual",
+      "indicators"
+    ],
+    "description": "Floating scroll island providing progress, actions, and contextual indicators.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-scrub-slider",
+    "source": "watermelon-ui",
+    "title": "Scrub Slider",
+    "url": "https://registry.watermelon.sh/r/scrub-slider.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "scrub",
+      "slider",
+      "responds",
+      "smoothly"
+    ],
+    "keywords": [
+      "scrub",
+      "slider",
+      "micro-interaction",
+      "responds",
+      "smoothly",
+      "drag",
+      "interactions"
+    ],
+    "description": "An animated scrub slider that responds smoothly to drag and scrub interactions.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-select-ai-agent",
+    "source": "watermelon-ui",
+    "title": "Select AI Agent",
+    "url": "https://registry.watermelon.sh/r/select-ai-agent.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "select",
+      "agent",
+      "choose",
+      "quickly"
+    ],
+    "keywords": [
+      "select",
+      "agent",
+      "micro-interaction",
+      "choose",
+      "quickly",
+      "options",
+      "smooth",
+      "feedback"
+    ],
+    "description": "Choose an AI agent quickly with options and smooth feedback.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-send-money",
+    "source": "watermelon-ui",
+    "title": "Send Money",
+    "url": "https://registry.watermelon.sh/r/send-money.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "send",
+      "money",
+      "quick",
+      "interaction"
+    ],
+    "keywords": [
+      "send",
+      "money",
+      "micro-interaction",
+      "quick",
+      "interaction",
+      "confirmation",
+      "status",
+      "feedback",
+      "states"
+    ],
+    "description": "Quick send money interaction with confirmation, status, and feedback states.",
+    "dependencies": [
+      "motion/react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta",
+      "stats",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-share-sheet",
+    "source": "watermelon-ui",
+    "title": "share sheet",
+    "url": "https://registry.watermelon.sh/r/share-sheet.json",
+    "category": "card",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "widgets",
+      "share",
+      "sheet",
+      "widget",
+      "smoothly"
+    ],
+    "keywords": [
+      "share",
+      "sheet",
+      "widgets",
+      "widget",
+      "smoothly",
+      "expands",
+      "reveal",
+      "list",
+      "users",
+      "quick",
+      "link",
+      "sharing"
+    ],
+    "description": "An animated share sheet widget that smoothly expands to reveal a list of users for quick link sharing.",
+    "dependencies": [
+      "motion/react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Card groups, pricing plans, and repeated content that need hover or reveal treatment.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "cards_too_equal",
+      "no_visual_rhythm",
+      "flat_layout"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "stats",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-shimmer-button",
+    "source": "watermelon-ui",
+    "title": "Shimmer Button",
+    "url": "https://registry.watermelon.sh/r/shimmer-button.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "buttons",
+      "shimmer",
+      "button",
+      "effect",
+      "hover"
+    ],
+    "keywords": [
+      "shimmer",
+      "button",
+      "buttons",
+      "effect",
+      "hover"
+    ],
+    "description": "A button with an animated shimmer effect on hover.",
+    "dependencies": [
+      "motion/react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-show-qr",
+    "source": "watermelon-ui",
+    "title": "Show QR",
+    "url": "https://registry.watermelon.sh/r/show-qr.json",
+    "category": "card",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "widgets",
+      "show",
+      "widget",
+      "code"
+    ],
+    "keywords": [
+      "show",
+      "widgets",
+      "widget",
+      "code"
+    ],
+    "description": "A widget to show QR code.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Card groups, pricing plans, and repeated content that need hover or reveal treatment.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "cards_too_equal",
+      "no_visual_rhythm",
+      "flat_layout"
+    ],
+    "relatedSectionTypes": [
+      "stats",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-shuffle-pinned-list",
+    "source": "watermelon-ui",
+    "title": "Shuffle Pinned List",
+    "url": "https://registry.watermelon.sh/r/shuffle-pinned-item.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "lists",
+      "shuffle",
+      "pinned",
+      "list",
+      "dynamic"
+    ],
+    "keywords": [
+      "shuffle",
+      "pinned",
+      "list",
+      "lists",
+      "dynamic",
+      "promotes",
+      "items",
+      "shuffleable",
+      "hero",
+      "header",
+      "spring",
+      "animations"
+    ],
+    "description": "A dynamic list that promotes pinned items to a shuffleable hero header with spring animations and interactive pin toggles.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "hero",
+      "features",
+      "cards"
+    ],
+    "relatedPatternIds": [
+      "hero-product-preview",
+      "split-hero",
+      "feature-bento",
+      "feature-tabs"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-slot-picker",
+    "source": "watermelon-ui",
+    "title": "Slot Picker",
+    "url": "https://registry.watermelon.sh/r/slot-picker.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "interaction",
+      "slot",
+      "picker",
+      "premium",
+      "scheduling"
+    ],
+    "keywords": [
+      "slot",
+      "picker",
+      "interaction",
+      "premium",
+      "scheduling",
+      "managing",
+      "time",
+      "slots",
+      "fluid",
+      "spring",
+      "animations",
+      "tactile"
+    ],
+    "description": "A premium scheduling component for managing time slots with fluid spring animations and tactile toggles.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-split-button",
+    "source": "watermelon-ui",
+    "title": "Split Button",
+    "url": "https://registry.watermelon.sh/r/split-button.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "buttons",
+      "split",
+      "button",
+      "premium",
+      "spring-driven"
+    ],
+    "keywords": [
+      "split",
+      "button",
+      "buttons",
+      "premium",
+      "spring-driven",
+      "layout",
+      "transitions",
+      "tactile",
+      "expansion",
+      "behavior",
+      "quick",
+      "multi-action"
+    ],
+    "description": "A premium split button component with spring-driven layout transitions and tactile expansion behavior for quick multi-action workflows.",
+    "dependencies": [
+      "motion/react",
+      "@hugeicons/react",
+      "@hugeicons/core-free-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-split-to-edit",
+    "source": "watermelon-ui",
+    "title": "Split To edit",
+    "url": "https://registry.watermelon.sh/r/split-to-edit.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "split",
+      "edit",
+      "input",
+      "field"
+    ],
+    "keywords": [
+      "split",
+      "edit",
+      "micro-interaction",
+      "input",
+      "field",
+      "smoothly",
+      "splits",
+      "editable",
+      "segments",
+      "during",
+      "interaction"
+    ],
+    "description": "An animated input field that smoothly splits into editable segments during interaction",
+    "dependencies": [
+      "motion/react",
+      "lucide-react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta",
+      "form"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "form-benefits-sidebar",
+      "compact-lead-form"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-status-picker",
+    "source": "watermelon-ui",
+    "title": "Status Picker",
+    "url": "https://registry.watermelon.sh/r/status-picker.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "status",
+      "picker",
+      "smoothly",
+      "transitions"
+    ],
+    "keywords": [
+      "status",
+      "picker",
+      "micro-interaction",
+      "smoothly",
+      "transitions",
+      "between",
+      "selectable",
+      "states"
+    ],
+    "description": "An animated status picker that smoothly transitions between selectable states.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta",
+      "stats",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-step-indicator",
+    "source": "watermelon-ui",
+    "title": "Step Indicator",
+    "url": "https://registry.watermelon.sh/r/step-indicator.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "step",
+      "indicator",
+      "tooltip",
+      "highlights"
+    ],
+    "keywords": [
+      "step",
+      "indicator",
+      "micro-interaction",
+      "tooltip",
+      "highlights",
+      "current",
+      "progress",
+      "stage"
+    ],
+    "description": "An animated step indicator with a tooltip that highlights the current progress stage.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-step-pager",
+    "source": "watermelon-ui",
+    "title": "Step Pager",
+    "url": "https://registry.watermelon.sh/r/step-pager.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "step",
+      "pager",
+      "visually",
+      "highlights"
+    ],
+    "keywords": [
+      "step",
+      "pager",
+      "micro-interaction",
+      "visually",
+      "highlights",
+      "current",
+      "smooth",
+      "icon",
+      "transitions"
+    ],
+    "description": "An animated step pager that visually highlights the current step with smooth icon transitions.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-stepper",
+    "source": "watermelon-ui",
+    "title": "stepper",
+    "url": "https://registry.watermelon.sh/r/stepper.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "buttons",
+      "stepper",
+      "numeric",
+      "plu",
+      "minus"
+    ],
+    "keywords": [
+      "stepper",
+      "buttons",
+      "numeric",
+      "plu",
+      "minus",
+      "controls",
+      "spring-based",
+      "roling",
+      "digit",
+      "transitions"
+    ],
+    "description": "An animated numeric stepper with plu and minus controls and spring-based roling digit transitions.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-subscription-calendar",
+    "source": "watermelon-ui",
+    "title": "Subscription Calendar",
+    "url": "https://registry.watermelon.sh/r/subscription-calendar.json",
+    "category": "card",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "cards",
+      "subscription",
+      "calendar",
+      "card",
+      "showing"
+    ],
+    "keywords": [
+      "subscription",
+      "calendar",
+      "cards",
+      "card",
+      "showing",
+      "cycles",
+      "renewals",
+      "upcoming",
+      "billing",
+      "dates"
+    ],
+    "description": "Calendar card showing subscription cycles, renewals, and upcoming billing dates.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Card groups, pricing plans, and repeated content that need hover or reveal treatment.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "cards_too_equal",
+      "no_visual_rhythm",
+      "flat_layout"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-swap-currency-card",
+    "source": "watermelon-ui",
+    "title": "Swap Currency Card",
+    "url": "https://registry.watermelon.sh/r/swap-currency-card.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "widgets",
+      "swap",
+      "currency",
+      "card",
+      "responsive"
+    ],
+    "keywords": [
+      "swap",
+      "currency",
+      "card",
+      "widgets",
+      "responsive",
+      "interface",
+      "designed",
+      "instant",
+      "user",
+      "sentiment",
+      "featuring",
+      "snappy"
+    ],
+    "description": "A responsive interface component designed for instant user sentiment, featuring snappy visual cues that provide immediate confirmation upon interaction.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta",
+      "stats",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-swap-form",
+    "source": "watermelon-ui",
+    "title": "Swap Form",
+    "url": "https://registry.watermelon.sh/r/swap-form.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "interaction",
+      "swap",
+      "form",
+      "dynamic",
+      "authentication"
+    ],
+    "keywords": [
+      "swap",
+      "form",
+      "interaction",
+      "dynamic",
+      "authentication",
+      "transitions",
+      "between",
+      "sign",
+      "modes",
+      "elegant",
+      "blur",
+      "scale"
+    ],
+    "description": "A dynamic authentication form that transitions between Sign In and Sign Up modes with elegant blur and scale effects.",
+    "dependencies": [
+      "motion",
+      "react-icons"
+    ],
+    "framework": "react",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta",
+      "form"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "form-benefits-sidebar",
+      "compact-lead-form"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-switch-disclosure",
+    "source": "watermelon-ui",
+    "title": "Switch Disclosure",
+    "url": "https://registry.watermelon.sh/r/switch-disclosure.json",
+    "category": "list",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "disclosure",
+      "switch",
+      "premium",
+      "interactive",
+      "pairs"
+    ],
+    "keywords": [
+      "switch",
+      "disclosure",
+      "premium",
+      "interactive",
+      "pairs",
+      "primary",
+      "nested",
+      "behavioral",
+      "sub-options"
+    ],
+    "description": "A premium interactive disclosure component that pairs a primary switch with nested behavioral sub-options.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Selected disclosure UI that needs a specific Watermelon motion reference.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "unknown"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-switch-mode",
+    "source": "watermelon-ui",
+    "title": "Switch Mode",
+    "url": "https://registry.watermelon.sh/r/switch-mode.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "toggle",
+      "switch",
+      "mode",
+      "premium",
+      "theme"
+    ],
+    "keywords": [
+      "switch",
+      "mode",
+      "toggle",
+      "premium",
+      "theme",
+      "smooth",
+      "spring",
+      "physics",
+      "sliding",
+      "icon",
+      "states"
+    ],
+    "description": "A premium, animated theme toggle switch with smooth spring physics and sliding icon states.",
+    "dependencies": [
+      "motion/react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "stats",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-tags",
+    "source": "watermelon-ui",
+    "title": "Tags",
+    "url": "https://registry.watermelon.sh/r/tags.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "interaction",
+      "tags",
+      "dynamic",
+      "tag",
+      "management"
+    ],
+    "keywords": [
+      "tags",
+      "interaction",
+      "dynamic",
+      "tag",
+      "management",
+      "smooth",
+      "shared-layout",
+      "transitions",
+      "auto-scrolling"
+    ],
+    "description": "A dynamic tag management component with smooth shared-layout transitions and auto-scrolling.",
+    "dependencies": [
+      "motion",
+      "lucide-react"
+    ],
+    "framework": "react",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-task-widget-disclosure",
+    "source": "watermelon-ui",
+    "title": "Task Widget Disclosure",
+    "url": "https://registry.watermelon.sh/r/task-widget-disclosure.json",
+    "category": "card",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "disclosure",
+      "task",
+      "widget",
+      "interactive",
+      "smooth"
+    ],
+    "keywords": [
+      "task",
+      "widget",
+      "disclosure",
+      "interactive",
+      "smooth",
+      "animations",
+      "detailed",
+      "progress",
+      "tracking"
+    ],
+    "description": "An interactive task widget with smooth disclosure animations and detailed progress tracking.",
+    "dependencies": [
+      "motion",
+      "lucide-react",
+      "@hugeicons/react",
+      "react-icons"
+    ],
+    "framework": "react",
+    "bestFor": "Card groups, pricing plans, and repeated content that need hover or reveal treatment.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "cards_too_equal",
+      "no_visual_rhythm",
+      "flat_layout"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "stats",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-timed-undo-action",
+    "source": "watermelon-ui",
+    "title": "Timed Undo Action",
+    "url": "https://registry.watermelon.sh/r/time-undo-action.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "buttons",
+      "timed",
+      "undo",
+      "action",
+      "button"
+    ],
+    "keywords": [
+      "timed",
+      "undo",
+      "action",
+      "buttons",
+      "button",
+      "provides",
+      "visual",
+      "countdown",
+      "before",
+      "finalized"
+    ],
+    "description": "An animated timed undo button that provides a visual countdown before an action is finalized.",
+    "dependencies": [
+      "motion/react",
+      "react-icons",
+      "react-use-measure"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-tooltip-navbar",
+    "source": "watermelon-ui",
+    "title": "Tooltip Navbar",
+    "url": "https://registry.watermelon.sh/r/tooltip-navbar.json",
+    "category": "transition",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "tooltip",
+      "navbar",
+      "design",
+      "recreated",
+      "smooth"
+    ],
+    "keywords": [
+      "tooltip",
+      "navbar",
+      "design",
+      "recreated",
+      "smooth",
+      "animations",
+      "interactive",
+      "feedback"
+    ],
+    "description": "Tooltip design recreated with smooth animations and interactive feedback.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Dialogs, popovers, inputs, and stateful controls that need polished entrance/exit motion.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-trade-summary",
+    "source": "watermelon-ui",
+    "title": "Trade Summary",
+    "url": "https://registry.watermelon.sh/r/trade-summary.json",
+    "category": "card",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "cards",
+      "trade",
+      "summary",
+      "concise",
+      "card"
+    ],
+    "keywords": [
+      "trade",
+      "summary",
+      "cards",
+      "concise",
+      "card",
+      "showing",
+      "positions",
+      "performance",
+      "key",
+      "metrics"
+    ],
+    "description": "Concise trade summary card showing positions, performance, and key metrics.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Card groups, pricing plans, and repeated content that need hover or reveal treatment.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "cards_too_equal",
+      "no_visual_rhythm",
+      "flat_layout"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "stats",
+      "dashboard",
+      "form"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-transaction-list",
+    "source": "watermelon-ui",
+    "title": "Transaction List",
+    "url": "https://registry.watermelon.sh/r/transaction-list.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "transaction",
+      "list",
+      "smooth",
+      "expand"
+    ],
+    "keywords": [
+      "transaction",
+      "list",
+      "micro-interaction",
+      "smooth",
+      "expand",
+      "collapse",
+      "transitions",
+      "detailed",
+      "views"
+    ],
+    "description": "An animated transaction list with smooth expand and collapse transitions for detailed views.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-use-measure"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-tree-menu",
+    "source": "watermelon-ui",
+    "title": "Tree-menu",
+    "url": "https://registry.watermelon.sh/r/tree-menu.json",
+    "category": "navigation",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "navigation",
+      "tree-menu",
+      "nested",
+      "tree",
+      "menu"
+    ],
+    "keywords": [
+      "tree-menu",
+      "navigation",
+      "nested",
+      "tree",
+      "menu",
+      "level",
+      "transitions",
+      "breadcrumb"
+    ],
+    "description": "A nested tree navigation menu with animated level transitions and breadcrumb navigation.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Navigation, tabs, pagination, and wayfinding controls that need smoother state changes.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "unknown"
+    ],
+    "relatedSectionTypes": [
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-uniswap-dialog",
+    "source": "watermelon-ui",
+    "title": "Uniswap Dialog",
+    "url": "https://registry.watermelon.sh/r/uniswap-dialog.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "dialog",
+      "uniswap",
+      "interactive",
+      "wallet",
+      "interface"
+    ],
+    "keywords": [
+      "uniswap",
+      "dialog",
+      "interactive",
+      "wallet",
+      "interface",
+      "expandable",
+      "cards",
+      "featuring",
+      "smooth",
+      "layout",
+      "animations",
+      "micro-interactions"
+    ],
+    "description": "Interactive wallet interface with expandable cards featuring smooth layout animations and micro-interactions.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-vertical-tooltip-navbar",
+    "source": "watermelon-ui",
+    "title": "Vertical Tooltip Navbar",
+    "url": "https://registry.watermelon.sh/r/vertical-tooltip-navbar.json",
+    "category": "transition",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "tooltip",
+      "vertical",
+      "navbar",
+      "menu",
+      "smooth"
+    ],
+    "keywords": [
+      "vertical",
+      "tooltip",
+      "navbar",
+      "menu",
+      "smooth",
+      "clip-path",
+      "animations",
+      "reveal",
+      "tooltips",
+      "hover"
+    ],
+    "description": "A vertical tooltip menu with smooth clip-path animations that reveal tooltips on hover",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Dialogs, popovers, inputs, and stateful controls that need polished entrance/exit motion.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-view-on-map",
+    "source": "watermelon-ui",
+    "title": "View On Map",
+    "url": "https://registry.watermelon.sh/r/view-on-map.json",
+    "category": "image",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "map",
+      "view",
+      "displaying",
+      "locations",
+      "zoom"
+    ],
+    "keywords": [
+      "view",
+      "map",
+      "displaying",
+      "locations",
+      "zoom",
+      "pins",
+      "directions"
+    ],
+    "description": "Map view component displaying locations with zoom, pins, and directions.",
+    "dependencies": [
+      "motion/react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Selected map UI that needs a specific Watermelon motion reference.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "unknown"
+    ],
+    "relatedSectionTypes": [
+      "unknown"
+    ],
+    "relatedPatternIds": [],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-voice-chat-disclosure",
+    "source": "watermelon-ui",
+    "title": "Voice Chat Disclosure",
+    "url": "https://registry.watermelon.sh/r/voice-chat-disclosure.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "interaction",
+      "voice",
+      "chat",
+      "disclosure",
+      "interactive"
+    ],
+    "keywords": [
+      "voice",
+      "chat",
+      "disclosure",
+      "interaction",
+      "interactive",
+      "expandable",
+      "pill",
+      "avatar",
+      "stacking",
+      "indicators"
+    ],
+    "description": "An interactive, expandable voice chat pill with avatar stacking and animated voice indicators.",
+    "dependencies": [
+      "motion/react",
+      "react-icons",
+      "@hugeicons/react",
+      "@hugeicons/core-free-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-voice-note",
+    "source": "watermelon-ui",
+    "title": "Voice Note",
+    "url": "https://registry.watermelon.sh/r/voice-note.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "voice",
+      "note",
+      "interaction",
+      "recording"
+    ],
+    "keywords": [
+      "voice",
+      "note",
+      "micro-interaction",
+      "interaction",
+      "recording",
+      "previewing",
+      "managing",
+      "audio",
+      "snippets"
+    ],
+    "description": "Voice note interaction for recording, previewing, and managing audio snippets.",
+    "dependencies": [
+      "motion/react",
+      "tailwindcss"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta",
+      "testimonials"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta",
+      "testimonial-wall",
+      "featured-testimonial"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-voice-transcribe",
+    "source": "watermelon-ui",
+    "title": "Voice Transcribe",
+    "url": "https://registry.watermelon.sh/r/voice-transcribe.json",
+    "category": "button",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "micro-interaction",
+      "voice",
+      "transcribe",
+      "convert",
+      "speech"
+    ],
+    "keywords": [
+      "voice",
+      "transcribe",
+      "micro-interaction",
+      "convert",
+      "speech",
+      "text",
+      "instantly",
+      "smooth",
+      "responsive"
+    ],
+    "description": "Convert speech into text instantly with smooth, responsive Voice Transcribe.",
+    "dependencies": [
+      "motion/react",
+      "lucide-react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Calls to action, confirmations, and interactive controls that need clearer feedback.",
+    "avoidWhen": "Avoid when the interaction is critical, disabled, or would become less predictable with motion.",
+    "solvesProblems": [
+      "missing_microinteraction",
+      "cta_not_clear"
+    ],
+    "relatedSectionTypes": [
+      "cta"
+    ],
+    "relatedPatternIds": [
+      "banner-cta",
+      "split-cta"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-waveform-scrub",
+    "source": "watermelon-ui",
+    "title": "Waveform Scrub",
+    "url": "https://registry.watermelon.sh/r/waveform-scrub.json",
+    "category": "navigation",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "media",
+      "waveform",
+      "scrub",
+      "interactive",
+      "scrubber"
+    ],
+    "keywords": [
+      "waveform",
+      "scrub",
+      "media",
+      "interactive",
+      "scrubber",
+      "enabling",
+      "precise",
+      "audio",
+      "navigation",
+      "playback",
+      "control"
+    ],
+    "description": "Interactive waveform scrubber enabling precise audio navigation and playback control.",
+    "dependencies": [
+      "motion/react"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Navigation, tabs, pagination, and wayfinding controls that need smoother state changes.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "unknown"
+    ],
+    "relatedSectionTypes": [
+      "form",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-weight-widget",
+    "source": "watermelon-ui",
+    "title": "Weight Widget",
+    "url": "https://registry.watermelon.sh/r/weight-widget.json",
+    "category": "card",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "widgets",
+      "weight",
+      "widget",
+      "tactile",
+      "sliding"
+    ],
+    "keywords": [
+      "weight",
+      "widget",
+      "widgets",
+      "tactile",
+      "sliding",
+      "scale",
+      "designed",
+      "precise",
+      "input",
+      "premium",
+      "haptic",
+      "feel"
+    ],
+    "description": "A tactile, sliding scale component designed for precise weight input with a premium haptic feel.",
+    "dependencies": [
+      "motion",
+      "next-themes"
+    ],
+    "framework": "react",
+    "bestFor": "Card groups, pricing plans, and repeated content that need hover or reveal treatment.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "cards_too_equal",
+      "no_visual_rhythm",
+      "flat_layout"
+    ],
+    "relatedSectionTypes": [
+      "stats",
+      "dashboard",
+      "form"
+    ],
+    "relatedPatternIds": [
+      "form-benefits-sidebar",
+      "compact-lead-form",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  },
+  {
+    "id": "watermelon-wiggling-cards",
+    "source": "watermelon-ui",
+    "title": "Wiggling Cards",
+    "url": "https://registry.watermelon.sh/r/wiggling-cards.json",
+    "category": "card",
+    "tags": [
+      "watermelon-ui",
+      "animated",
+      "carousel",
+      "wiggling",
+      "cards",
+      "card",
+      "playful"
+    ],
+    "keywords": [
+      "wiggling",
+      "cards",
+      "carousel",
+      "card",
+      "playful",
+      "effect",
+      "during",
+      "navigation"
+    ],
+    "description": "An animated card carousel with a playful wiggling effect during navigation.",
+    "dependencies": [
+      "motion/react",
+      "react-icons"
+    ],
+    "framework": "framer-motion",
+    "bestFor": "Card groups, pricing plans, and repeated content that need hover or reveal treatment.",
+    "avoidWhen": "Avoid when the animation distracts from the primary task or conflicts with reduced-motion preferences.",
+    "solvesProblems": [
+      "cards_too_equal",
+      "no_visual_rhythm",
+      "flat_layout"
+    ],
+    "relatedSectionTypes": [
+      "features",
+      "cards",
+      "dashboard"
+    ],
+    "relatedPatternIds": [
+      "feature-bento",
+      "feature-tabs",
+      "metric-bento",
+      "dashboard-summary-rail"
+    ],
+    "usageNote": "Use as high-level Watermelon UI inspiration only. Do not copy exact code, text, assets, logos, or branding unless the project's license allows it.",
+    "scrapedAt": "2026-06-25T12:14:21.557Z"
+  }
+]

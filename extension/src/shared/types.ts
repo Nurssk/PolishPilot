@@ -134,6 +134,86 @@ export type DetectionSummary = {
   reasons: string[];
 };
 
+export type SourceSectionPart = {
+  domPath: string;
+  tagName: string;
+  id: string | null;
+  className: string | null;
+  role: string | null;
+  ariaLabel: string | null;
+  textSummary: string;
+  childElementCount: number;
+  rect: MatchedElement["rect"];
+  selectionOverlap: number;
+  counts: ElementCounts;
+  headingSnippets: string[];
+  ctaSnippets: string[];
+  mediaSnippets: string[];
+  htmlPreview: string;
+  sectionType: SectionType;
+  layoutType: LayoutType;
+  confidence: number;
+  score: number;
+  reasons: string[];
+};
+
+export type PageDesignContext = {
+  sampledAt: string;
+  totalElements: number;
+  sampledElements: number;
+  typography: {
+    fontFamilies: string[];
+    fontSizes: string[];
+    fontWeights: string[];
+    lineHeights: string[];
+    letterSpacing: string[];
+  };
+  colors: {
+    text: string[];
+    backgrounds: string[];
+    borders: string[];
+    focus: string[];
+  };
+  spacing: {
+    margin: string[];
+    padding: string[];
+    scale: string[];
+  };
+  radius: string[];
+  shadows: string[];
+  motion: {
+    durations: string[];
+    easings: string[];
+  };
+  components: Array<{ type: string; count: number }>;
+  siteSignals: {
+    title: string;
+    description: string;
+    keywords: string;
+    ogType: string;
+    ogSiteName: string;
+    appName: string;
+    pathname: string;
+    hostname: string;
+    headings: string[];
+    navTexts: string[];
+    ctaTexts: string[];
+    textSample: string;
+    elementCounts: {
+      forms: number;
+      inputs: number;
+      tables: number;
+      codeBlocks: number;
+      articles: number;
+      pricingSections: number;
+      productMarkers: number;
+      authMarkers: number;
+      checkoutMarkers: number;
+    };
+  };
+  diagnostics: string[];
+};
+
 export type RectangleCapture = {
   captureId: string;
   url: string;
@@ -146,6 +226,10 @@ export type RectangleCapture = {
   styleContext?: StyleContext;
   usedCssRules?: UsedCssExtractionResult;
   styleTokens?: StyleTokens;
+  pageDesignContext?: PageDesignContext;
+  fullPageHtmlPreview?: string;
+  sourceSections?: SourceSectionPart[];
+  selectedSourceSection?: SourceSectionPart;
   previewDebugLogs?: PreviewDebugLog[];
 };
 
@@ -210,6 +294,33 @@ export type ShowAIImagePreviewMessage = {
 
 export type RemoveInPagePreviewMessage = {
   type: "REMOVE_IN_PAGE_PREVIEW";
+};
+
+export type CodeChangeScope = "selected-block" | "whole-page";
+
+export type CodeChangeRequest = {
+  screenshotBase64: string;
+  scope: CodeChangeScope;
+  url?: string;
+  title?: string;
+  originalHtml: string;
+  selectedHtml?: string;
+  fullPageHtml?: string;
+  usedCss?: string;
+  styleContext?: unknown;
+  styleTokens?: unknown;
+  aiResult?: unknown;
+  recommendations?: string[];
+  selectedPattern?: unknown;
+  selectedTemplateReference?: unknown;
+  selectedAnimationReference?: unknown;
+};
+
+export type CodeChangeResult = {
+  modifiedHtml: string;
+  diffSummary: string;
+  cursorPrompt: string;
+  warnings: string[];
 };
 
 export type PolishPilotMessage =

@@ -18,6 +18,7 @@ const REQUIRED_SECTIONS: Array<{ heading: string; label: string }> = [
   { heading: "# Role", label: "Role" },
   { heading: "# Context", label: "Context" },
   { heading: "# Task", label: "Task" },
+  { heading: "# Implementation Plan", label: "Implementation Plan" },
   { heading: "# Style Preservation Rules", label: "Style Preservation Rules" },
   { heading: "# Constraints", label: "Constraints" },
   { heading: "# Expected Output", label: "Expected Output" }

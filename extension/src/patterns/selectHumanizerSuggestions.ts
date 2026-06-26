@@ -55,10 +55,12 @@ export function selectHumanizerSuggestions(args: {
     animations: args.limit?.animations ?? 3
   };
   const inputKeywords = buildInputKeywords(args.aiResult);
+  const disallowHeroRecommendations = args.aiResult.sectionType === "unknown";
 
   const scoredLayouts = layoutPatterns
     .map((pattern) => scoreLayout(pattern, args.aiResult, inputKeywords))
     .filter((scored) => scored.score > 0)
+    .filter((scored) => !disallowHeroRecommendations || scored.item.category !== "hero")
     .sort(sortScored);
   const selectedLayouts = ensureLayoutFallback(
     dedupeById(scoredLayouts).slice(0, limits.layouts),
@@ -71,9 +73,10 @@ export function selectHumanizerSuggestions(args: {
   const scoredTemplates = templateReferences
     .map((reference) => scoreTemplate(reference, args.aiResult, inputKeywords, selectedLayoutIds))
     .filter((scored) => scored.score > 0)
+    .filter((scored) => !disallowHeroRecommendations || scored.item.category !== "hero")
     .sort(sortScored);
   const selectedTemplates = ensureTemplateFallback(
-    dedupeById(scoredTemplates).slice(0, limits.templates),
+    selectSourceDiverse(dedupeById(scoredTemplates), limits.templates),
     args.aiResult,
     selectedLayoutIds,
     limits.templates
@@ -82,9 +85,15 @@ export function selectHumanizerSuggestions(args: {
   const scoredAnimations = animationReferences
     .map((reference) => scoreAnimation(reference, args.aiResult, inputKeywords))
     .filter((scored) => scored.score > 0)
+    .filter(
+      (scored) =>
+        !disallowHeroRecommendations ||
+        (!scored.item.relatedSectionTypes.includes("hero") &&
+          !scored.item.relatedPatternIds.some((id) => id.includes("hero")))
+    )
     .sort(sortScored);
   const selectedAnimations = ensureAnimationFallback(
-    dedupeById(scoredAnimations).slice(0, limits.animations),
+    selectSourceDiverse(dedupeById(scoredAnimations), limits.animations),
     args.aiResult,
     selectedLayoutIds,
     limits.animations
@@ -172,6 +181,8 @@ function scoreTemplate(
   if (aiResult.sectionType === "pricing" && reference.category === "pricing") score += 5;
   if (aiResult.sectionType === "hero" && reference.category === "hero") score += 5;
   if (aiResult.sectionType === "form" && (reference.category === "forms" || reference.category === "auth")) score += 5;
+  if (isCopywritingReference(reference) && hasCopywritingSignal(inputKeywords)) score += 6;
+  if (isRepoParsedReference(reference) && hasRepoParsedSignal(reference, inputKeywords)) score += 7;
 
   return { item: reference, score, matchedKeywords };
 }
@@ -241,6 +252,7 @@ function ensureTemplateFallback(
   const selectedLayoutSet = new Set<string>(selectedLayoutIds);
   const fallbackItems = templateReferences
     .filter((reference) => !existing.has(reference.id))
+    .filter((reference) => aiResult.sectionType !== "unknown" || reference.category !== "hero")
     .filter(
       (reference) =>
         reference.relatedPatternIds.some((id) => selectedLayoutSet.has(id)) ||
@@ -264,6 +276,12 @@ function ensureAnimationFallback(
   const selectedLayoutSet = new Set<string>(selectedLayoutIds);
   const sectionType = toAnimationSectionType(aiResult.sectionType);
   const fallbackItems = animationReferences
+    .filter(
+      (reference) =>
+        aiResult.sectionType !== "unknown" ||
+        (!reference.relatedSectionTypes.includes("hero") &&
+          !reference.relatedPatternIds.some((id) => id.includes("hero")))
+    )
     .filter(
       (reference) =>
         reference.relatedSectionTypes.includes(sectionType) ||
@@ -374,6 +392,27 @@ function getFallbackLayoutIds(
   if (sectionType === "footer") {
     return ["footer-link-hub", "mega-menu-topbar", "command-center-nav", "resource-card-grid"];
   }
+  if (sectionType === "unknown") {
+    if (hasAnyKeyword(["checkout", "cart", "order", "payment", "buy", "purchase"])) {
+      return ["checkout-summary-split", "product-detail-split", "product-card-grid", "comparison-spec-table"];
+    }
+    if (hasAnyKeyword(["product", "catalog", "marketplace", "shop", "ecommerce"])) {
+      return ["product-card-grid", "product-detail-split", "comparison-spec-table", "resource-card-grid"];
+    }
+    if (hasAnyKeyword(["faq", "question", "questions", "answer", "answers"])) {
+      return ["faq-sidebar", "resource-card-grid", "form-faq-sidebar", "comparison-matrix"];
+    }
+    if (hasAnyKeyword(["compare", "comparison", "versus", "vs", "spec", "matrix"])) {
+      return ["comparison-matrix", "comparison-spec-table", "feature-comparison-blocks", "plan-comparison-table"];
+    }
+    if (hasAnyKeyword(["article", "blog", "docs", "guide", "resource", "resources", "changelog", "release"])) {
+      return ["resource-card-grid", "editorial-feature-stack", "changelog-timeline", "faq-sidebar"];
+    }
+    if (hasAnyKeyword(["quote", "testimonial", "review", "customer", "case-study", "case"])) {
+      return ["quote-wall", "case-study-split", "testimonial-wall", "resource-card-grid"];
+    }
+    return ["bento-grid", "analytics-overview", "resource-card-grid", "featured-side-stack"];
+  }
 
   if (hasAnyKeyword(["checkout", "cart", "order", "payment", "buy", "purchase"])) {
     return ["checkout-summary-split", "product-detail-split", "product-card-grid", "comparison-spec-table"];
@@ -441,6 +480,296 @@ function categoryMatches(sectionType: string, category: string) {
   return false;
 }
 
+function isCopywritingReference(reference: TemplateReference): boolean {
+  return normalizeKeywords([
+    ...reference.tags,
+    ...(reference.keywords ?? []),
+    reference.description ?? ""
+  ]).includes("copywriting");
+}
+
+function hasCopywritingSignal(inputKeywords: string[]): boolean {
+  const keywords = new Set(inputKeywords);
+  return [
+    "copywriting",
+    "fake-premium-copy",
+    "formulaic-ai-copy",
+    "ai-slop-phrase-tells",
+    "ai-punctuation-tells",
+    "generic-copy"
+  ].some((keyword) => keywords.has(keyword));
+}
+
+function isRepoParsedReference(reference: TemplateReference): boolean {
+  return [
+    "hallmark",
+    "stop-slop",
+    "anti-ai-slop-pack",
+    "interface-design",
+    "nng-ux-guidelines",
+    "baymard-ux",
+    "wai-aria-apg",
+    "wcag-wai",
+    "govuk-design-system",
+    "material-design",
+    "carbon-design-system",
+    "apple-hig",
+    "carbon-data-viz",
+    "uswds",
+    "carbon-table",
+    "ons-design-system",
+    "carbon-navigation",
+    "material-navigation"
+  ].includes(reference.source);
+}
+
+function hasRepoParsedSignal(
+  reference: TemplateReference,
+  inputKeywords: string[]
+): boolean {
+  const keywords = new Set(inputKeywords);
+  const sourceSignals: Record<string, string[]> = {
+    hallmark: [
+      "hallmark",
+      "icon-tile-feature-cards",
+      "default-font-stack-template",
+      "decorative-status-dots",
+      "redrawn-ui-chrome",
+      "centered-stack-default",
+      "unbounded-sluggish-motion"
+    ],
+    "stop-slop": [
+      "stop-slop",
+      "copywriting",
+      "formulaic-ai-copy",
+      "ai-slop-phrase-tells",
+      "ai-punctuation-tells"
+    ],
+    "anti-ai-slop-pack": [
+      "anti-ai-slop-pack",
+      "generic-saas-composition",
+      "fake-charts",
+      "decorative-status-dots",
+      "default-font-stack-template",
+      "placeholder-proof-copy"
+    ],
+    "interface-design": [
+      "interface-design",
+      "design-system",
+      "inconsistent-spacing",
+      "oversized-radius",
+      "dramatic-shadows",
+      "settings",
+      "dashboard"
+    ],
+    "nng-ux-guidelines": [
+      "nng-ux-guidelines",
+      "layout-guideline",
+      "visual-hierarchy",
+      "weak-hierarchy",
+      "text-scanning",
+      "text-heavy",
+      "f-pattern",
+      "layer-cake",
+      "form-layout",
+      "single-column",
+      "field-grouping"
+    ],
+    "baymard-ux": [
+      "baymard-ux",
+      "layout-guideline",
+      "ecommerce",
+      "checkout",
+      "cart",
+      "payment",
+      "product-list",
+      "product-detail",
+      "filters",
+      "sorting",
+      "marketplace"
+    ],
+    "wai-aria-apg": [
+      "wai-aria-apg",
+      "interaction-guideline",
+      "aria",
+      "keyboard-navigation",
+      "table",
+      "grid",
+      "interactive-table",
+      "interactive-grid",
+      "tabs",
+      "tablist",
+      "tabpanel",
+      "dialog",
+      "modal",
+      "focus-trap",
+      "disclosure",
+      "accordion",
+      "aria-expanded",
+      "menubar",
+      "menu-button",
+      "menuitem",
+      "aria-haspopup",
+      "command-menu"
+    ],
+    "wcag-wai": [
+      "wcag-wai",
+      "interaction-guideline",
+      "wcag",
+      "target-size",
+      "touch-target",
+      "24px",
+      "focus-visible",
+      "keyboard-focus",
+      "focus-ring",
+      "accessibility"
+    ],
+    "govuk-design-system": [
+      "govuk-design-system",
+      "interaction-guideline",
+      "validation",
+      "error-summary",
+      "error-message",
+      "form-errors",
+      "field-errors",
+      "recover",
+      "plain-language",
+      "table-guideline",
+      "semantic-table",
+      "not-layout",
+      "navigation-guideline",
+      "breadcrumb",
+      "breadcrumbs",
+      "masthead",
+      "service-header",
+      "service-identity"
+    ],
+    "material-design": [
+      "material-design",
+      "visual-guideline",
+      "table-guideline",
+      "color-roles",
+      "semantic-color",
+      "type-scale",
+      "typography",
+      "data-table",
+      "filter-chips",
+      "pagination",
+      "default-sort",
+      "data-visualization",
+      "chart-accessibility",
+      "glanceable",
+      "shape-scale",
+      "corner-radius",
+      "oversized-radius",
+      "weak-hierarchy"
+    ],
+    "carbon-design-system": [
+      "carbon-design-system",
+      "visual-guideline",
+      "color-tokens",
+      "tokenized-color",
+      "spacing-scale",
+      "2x-grid",
+      "productive-type",
+      "expressive-type",
+      "design-system",
+      "inconsistent-spacing"
+    ],
+    "apple-hig": [
+      "apple-hig",
+      "visual-guideline",
+      "semantic-color",
+      "adaptive-color",
+      "dark-mode",
+      "contrast",
+      "data-visualization",
+      "charting-data",
+      "effective-chart",
+      "typography",
+      "legibility",
+      "dynamic-type",
+      "accessibility"
+    ],
+    "carbon-data-viz": [
+      "carbon-data-viz",
+      "data-viz-guideline",
+      "data-visualization",
+      "chart-type",
+      "chart-purpose",
+      "chart-anatomy",
+      "axis",
+      "legend",
+      "tooltip",
+      "accessible-chart",
+      "fake-charts"
+    ],
+    uswds: [
+      "uswds",
+      "data-viz-guideline",
+      "data-visualization",
+      "accessibility",
+      "usability",
+      "assistive-tooling",
+      "charts",
+      "relationships",
+      "data-set"
+    ],
+    "carbon-table": [
+      "carbon-table",
+      "table-guideline",
+      "data-table",
+      "sorting",
+      "filtering",
+      "pagination",
+      "row-selection",
+      "batch-actions",
+      "row-expansion",
+      "sort-indicator",
+      "dashboard-table",
+      "list-management"
+    ],
+    "ons-design-system": [
+      "ons-design-system",
+      "table-guideline",
+      "empty-state",
+      "empty-table",
+      "no-results",
+      "search-results",
+      "no-data",
+      "filter-empty",
+      "list-management"
+    ],
+    "carbon-navigation": [
+      "carbon-navigation",
+      "navigation-guideline",
+      "ui-shell",
+      "shell-header",
+      "global-header",
+      "persistent-navigation",
+      "side-nav",
+      "sidebar",
+      "secondary-navigation",
+      "active-state",
+      "app-shell"
+    ],
+    "material-navigation": [
+      "material-navigation",
+      "navigation-guideline",
+      "navigation-rail",
+      "navigation-drawer",
+      "responsive-navigation",
+      "primary-destinations",
+      "3-7-destinations",
+      "medium-window",
+      "expanded-window",
+      "app-destinations"
+    ]
+  };
+
+  return (sourceSignals[reference.source] ?? []).some((signal) => keywords.has(signal));
+}
+
 function matched(inputKeywords: string[], targetKeywords: string[]) {
   const normalizedInput = normalizeKeywords(inputKeywords);
   const normalizedTarget = normalizeKeywords(targetKeywords);
@@ -465,6 +794,40 @@ function dedupeById<T extends { id: string }>(items: Scored<T>[]) {
     seen.add(scored.item.id);
     return true;
   });
+}
+
+function selectSourceDiverse<T extends { id: string; source?: string }>(
+  items: Scored<T>[],
+  limit: number
+) {
+  if (items.length <= limit || limit <= 1) {
+    return items.slice(0, limit);
+  }
+
+  const selected: Scored<T>[] = [];
+  const first = items[0];
+  selected.push(first);
+
+  const selectedSources = new Set<string>();
+  if (first.item.source) selectedSources.add(first.item.source);
+  const sourceDiversitySlots = Math.min(limit, 4);
+
+  for (const item of items) {
+    if (selected.length >= sourceDiversitySlots) break;
+    const source = item.item.source;
+    if (!source || selectedSources.has(source)) continue;
+    if (item.score < first.score - 2) continue;
+    selected.push(item);
+    selectedSources.add(source);
+  }
+
+  for (const item of items) {
+    if (selected.length >= limit) break;
+    if (selected.some((selectedItem) => selectedItem.item.id === item.item.id)) continue;
+    selected.push(item);
+  }
+
+  return selected.slice(0, limit);
 }
 
 function debugScore(

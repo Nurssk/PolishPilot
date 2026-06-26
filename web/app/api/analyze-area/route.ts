@@ -4,15 +4,10 @@ export const runtime = "nodejs";
 
 type AnalyzeAreaRequest = {
   screenshotBase64: string;
-  url: string;
-  title: string;
-  selectedRect: unknown;
-  matchedElements: unknown[];
-  counts: unknown;
-  detected: unknown;
+  sourceContext?: unknown;
 };
 
-type JsonParseStrategy = "direct" | "extracted" | "repaired" | "fallback";
+type JsonParseStrategy = "direct" | "extracted" | "repaired";
 type ErrorStage =
   | "validation"
   | "gemini_request"
@@ -20,7 +15,7 @@ type ErrorStage =
   | "json_parse"
   | "unknown";
 
-type AIUnderstandingResult = {
+export type AIUnderstandingResult = {
   sectionType:
     | "hero"
     | "features"
@@ -238,27 +233,57 @@ const UNCODIXIFY_RULE_IDS = [
   "decorative-eyebrows",
   "uppercase-label-overuse",
   "fake-premium-copy",
+  "formulaic-ai-copy",
+  "ai-slop-phrase-tells",
+  "ai-punctuation-tells",
+  "default-font-stack-template",
+  "emoji-iconography",
+  "duplicate-cta-intent",
+  "cheap-section-meta-labels",
+  "centered-stack-default",
+  "mobile-viewport-height-risk",
+  "pure-black-surface",
+  "placeholder-dead-links",
+  "missing-image-alt",
+  "arbitrary-z-index",
+  "overwide-paragraph-measure",
   "hero-inside-dashboard",
   "hero-missing-clear-headline",
   "hero-supporting-copy-too-long",
   "hero-missing-primary-cta",
   "hero-competing-ctas",
+  "tiny-touch-targets",
+  "icon-button-missing-label",
+  "weak-primary-action",
   "hero-missing-relevant-visual",
+  "redrawn-ui-chrome",
   "hero-missing-trust-support",
   "hero-poor-scan-flow",
   "hero-performance-heavy-visual",
   "metric-card-grid-default",
   "fake-charts",
+  "placeholder-proof-copy",
+  "placeholder-only-form-labels",
+  "left-border-accent-cards",
   "blue-cyan-ai-dashboard",
   "overpadded-layout",
+  "text-heavy-block",
   "weak-hierarchy",
+  "monotonous-section-rhythm",
   "repetitive-equal-cards",
+  "icon-tile-feature-cards",
+  "pricing-plan-weak-emphasis",
   "nested-panel-overload",
   "decorative-badges",
   "transform-hover-overuse",
+  "unbounded-sluggish-motion",
+  "layout-property-animation",
+  "motion-reduced-accessibility-missing",
   "inconsistent-spacing",
   "sidebar-floating-shell",
+  "ai-nav-footer-template",
   "decorative-status-dots",
+  "decorative-announcement-bubble",
   "too-many-muted-labels",
   "random-glass-panels",
   "generic-saas-composition"
@@ -279,61 +304,10 @@ const BLOCK_TYPES = [
   "unknown"
 ] as const;
 
-const SYSTEM_PROMPT = `You are Design Humanizer, a senior UI/UX designer and frontend layout analyst.
-You analyze a selected screenshot area from the user's own website/app.
-You also receive DOM, CSS, visible text, element counts, and local detection summaries.
-Your job is to classify the selected UI block and extract signals that our local template engine can use.
-Do NOT generate implementation code.
-Do NOT suggest copying external websites.
-Do NOT directly choose third-party templates.
-Do NOT invent template names or output local database IDs.
-Do NOT rewrite user content.
-Analyze:
-1. What kind of UI block this is.
-2. What layout type it currently uses.
-3. What content type it contains.
-4. What visual/design problem it has.
-5. What keywords describe this block.
-6. What design intent it serves.
-7. What animation categories could improve it.
-8. What local pattern/template categories should be searched.
-9. Whether the selected UI looks like generic AI/Codex-generated UI (Uncodixify check).
-Return strict JSON only.
-Important:
-- Use keywords that help match local template and animation databases.
-- Useful examples: hero, product-preview, trust-bar, cta, button, gradient, dashboard, features, cards, equal-grid, icon-cards, bento, hierarchy, pricing, plan, comparison, stats, metric, social-proof, form, lead-capture, testimonial, logo-cloud, hover, card-hover, stagger, reveal, text-reveal, button-microinteraction.
-- Do not include markdown.
-- confidence must be between 0 and 1.
+const SYSTEM_PROMPT = `Analyze the attached screenshot first. Divide the visible UI into text and components yourself, then identify what kind of UI block it is and what recommendations fit it. Supplemental source context may include capped HTML snippets, visible text, an objectInventory of headings/actions/cards/forms/media/metrics, element styles, selected-section candidates, pageDesignContext tokens/site signals, and used CSS. Use that context to confirm visible text, structure, semantic containers, object counts, repeated groups, design-system tokens, and style problems. Do not let local or source-derived labels override the screenshot when they conflict.
 
-## Uncodixify visual quality check
-
-Evaluate whether the selected UI looks like generic AI/Codex-generated UI.
-
-Check for:
-- oversized rounded corners
-- pill overload
-- glow-heavy styling
-- glassmorphism
-- dramatic shadows
-- fake premium gradients
-- decorative eyebrow labels
-- uppercase label overuse
-- fake charts or metrics
-- weak hierarchy
-- repetitive equal cards
-- overpadded layouts
-- nested panels
-- generic dark SaaS composition
-- blue/cyan AI-dashboard colors
-- unnecessary decorative animation cues
-- hero-section issues: unclear headline, long supporting copy, missing/competing CTA, decorative or missing visual proof, missing trust support, poor scan flow, performance-heavy first viewport media
-
-Rules for the Uncodixify check:
-- Only report issues that are clearly visible in the screenshot or supported by the DOM/CSS data.
-- Do NOT produce generic advice. Every detectedRuleId must be backed by concrete visualEvidence.
-- detectedRuleIds MUST be chosen ONLY from this exact list (use these exact ids):
-${UNCODIXIFY_RULE_IDS.join(", ")}.
-- If the UI looks clean and human-designed, return an empty detectedRuleIds array.`;
+For uncodixify.detectedRuleIds, use only these ids when they are visibly supported:
+${UNCODIXIFY_RULE_IDS.join(", ")}.`;
 
 const RESPONSE_SHAPE = `Return exactly one JSON object with:
 {
@@ -381,7 +355,7 @@ export async function POST(request: Request) {
   let debugBase: {
     model?: string;
     screenshotLength?: number;
-    matchedElementsCount?: number;
+    sourceContextChars?: number;
     retryCount?: number;
   } = {};
 
@@ -400,13 +374,12 @@ export async function POST(request: Request) {
     const body = (await request.json()) as Partial<AnalyzeAreaRequest>;
     const screenshotLength =
       typeof body.screenshotBase64 === "string" ? body.screenshotBase64.length : 0;
-    const matchedElements = Array.isArray(body.matchedElements)
-      ? body.matchedElements
-      : [];
+    const sourceContext = sanitizeSourceContext(body.sourceContext);
+    const sourceContextChars = sourceContext ? JSON.stringify(sourceContext).length : 0;
     debugBase = {
       ...debugBase,
       screenshotLength,
-      matchedElementsCount: matchedElements.length
+      sourceContextChars
     };
 
     logGemini(requestId, `screenshot exists: ${Boolean(body.screenshotBase64)}`);
@@ -416,11 +389,10 @@ export async function POST(request: Request) {
         body.screenshotBase64.startsWith("data:image"),
       length: screenshotLength
     });
-    logGemini(requestId, `matchedElements count: ${matchedElements.length}`, {
-      sample: matchedElements.slice(0, 3).map(compactMatchedElementLog)
+    logGemini(requestId, "analysis input mode", {
+      mode: sourceContext ? "screenshot+source-context" : "screenshot-only",
+      sourceContextChars
     });
-    logGemini(requestId, "counts summary", body.counts ?? null);
-    logGemini(requestId, "selectedRect size", summarizeSelectedRect(body.selectedRect));
 
     if (!body.screenshotBase64 || typeof body.screenshotBase64 !== "string") {
       return errorResponse(requestId, startedAt, 400, {
@@ -443,12 +415,7 @@ export async function POST(request: Request) {
 
     const payload: AnalyzeAreaRequest = {
       screenshotBase64: body.screenshotBase64,
-      url: typeof body.url === "string" ? body.url : "",
-      title: typeof body.title === "string" ? body.title : "",
-      selectedRect: body.selectedRect ?? null,
-      matchedElements: Array.isArray(body.matchedElements) ? body.matchedElements : [],
-      counts: body.counts ?? null,
-      detected: body.detected ?? null
+      sourceContext
     };
 
     const ai = new GoogleGenAI({ apiKey });
@@ -457,7 +424,8 @@ export async function POST(request: Request) {
       // Safe summary only — no screenshot base64, no keys.
       logGemini(requestId, "analysis prompt summary", {
         promptChars: prompt.length,
-        matchedElements: payload.matchedElements.length,
+        inputMode: sourceContext ? "screenshot+source-context" : "screenshot-only",
+        sourceContextChars,
         includesUncodixifyCheck: true
       });
     }
@@ -477,7 +445,10 @@ export async function POST(request: Request) {
       const parsedResult = parseGeminiJson(generated.text);
       jsonParseStrategy = parsedResult.strategy;
       const normalized = normalizeAIUnderstandingCandidate(parsedResult.value);
-      result = sanitizeAIUnderstandingResult(normalized);
+      result = enrichResultFromSourceContext(
+        sanitizeAIUnderstandingResult(normalized),
+        sourceContext
+      );
       logGemini(requestId, "JSON parse success", {
         strategy: jsonParseStrategy,
         parsedShape: describeJsonShape(parsedResult.value),
@@ -487,10 +458,14 @@ export async function POST(request: Request) {
       logGemini(requestId, "JSON parse or shape failure", {
         error: safeErrorMessage(error)
       });
-      result = buildFallbackAIUnderstandingResult(payload);
-      jsonParseStrategy = "fallback";
-      logGemini(requestId, "using local fallback result after Gemini JSON failure", {
-        error: safeErrorMessage(error)
+      return errorResponse(requestId, startedAt, 502, {
+        code: "GEMINI_INVALID_JSON",
+        message: "Gemini returned invalid JSON.",
+        details: safeErrorMessage(error),
+        stage: "json_parse"
+      }, {
+        ...debugBase,
+        rawResponseLength: generated.text.length
       });
     }
 
@@ -506,8 +481,7 @@ export async function POST(request: Request) {
         result,
         debug: {
           screenshotLength,
-          matchedElementsCount: matchedElements.length,
-          localDetected: body.detected ?? null,
+          sourceContextChars,
           rawResponseLength: generated.text.length,
           jsonParseStrategy,
           retryCount: generated.retryCount
@@ -548,7 +522,8 @@ function errorResponse(
     model?: string;
     durationMs?: number;
     screenshotLength?: number;
-    matchedElementsCount?: number;
+    sourceContextChars?: number;
+    rawResponseLength?: number;
     retryCount?: number;
   }
 ) {
@@ -578,55 +553,83 @@ function normalizeBase64Image(input: string) {
   return input.replace(/^data:image\/\w+;base64,/, "").trim();
 }
 
-function buildGeminiPrompt(payload: AnalyzeAreaRequest) {
-  const compactContext = {
-    url: payload.url,
-    title: payload.title,
-    selectedRect: payload.selectedRect,
-    counts: payload.counts,
-    detected: payload.detected,
-    matchedElements: payload.matchedElements.slice(0, 30).map(compactMatchedElement)
-  };
+function buildGeminiPrompt(_payload: AnalyzeAreaRequest) {
+  const contextBlock = _payload.sourceContext
+    ? `\n\nSUPPLEMENTAL SOURCE CONTEXT (capped and sanitized; use only as supporting evidence):\n${JSON.stringify(_payload.sourceContext, null, 2)}`
+    : "";
 
-  return `${SYSTEM_PROMPT}
-
-Selected area context:
-${JSON.stringify(compactContext, null, 2)}
+  return `${SYSTEM_PROMPT}${contextBlock}
 
 ${RESPONSE_SHAPE}`;
 }
 
-function compactMatchedElement(element: unknown) {
-  if (!isRecord(element)) {
-    return element;
+function sanitizeSourceContext(value: unknown) {
+  if (!isRecord(value)) return undefined;
+  const sanitized = deepSanitizeSourceContext(value, 0) as Record<string, unknown>;
+  const text = JSON.stringify(sanitized);
+
+  if (text.length <= 24_000) {
+    return sanitized;
   }
 
-  const rect = isRecord(element.rect) ? element.rect : null;
-  const style = isRecord(element.style) ? element.style : null;
-
   return {
-    tagName: stringOrNull(element.tagName),
-    id: stringOrNull(element.id),
-    className: truncate(stringOrNull(element.className), 140),
-    role: stringOrNull(element.role),
-    ariaLabel: truncate(stringOrNull(element.ariaLabel), 120),
-    text: truncate(stringOrNull(element.text), 180),
-    rect,
-    style: style
-      ? {
-          display: style.display,
-          position: style.position,
-          backgroundColor: style.backgroundColor,
-          color: style.color,
-          fontSize: style.fontSize,
-          fontWeight: style.fontWeight,
-          borderRadius: style.borderRadius,
-          boxShadow: style.boxShadow,
-          padding: style.padding,
-          margin: style.margin
-        }
-      : null
+    ...sanitized,
+    usedCssRules: undefined,
+    matchedElements: Array.isArray(sanitized.matchedElements)
+      ? sanitized.matchedElements.slice(0, 24)
+      : undefined,
+    sourceSectionCandidates: Array.isArray(sanitized.sourceSectionCandidates)
+      ? sanitized.sourceSectionCandidates.slice(0, 4)
+      : undefined,
+    truncated: `Source context was reduced from ${text.length} chars.`
   };
+}
+
+function deepSanitizeSourceContext(value: unknown, depth: number): unknown {
+  if (depth > 6) return "[max depth omitted]";
+
+  if (typeof value === "string") {
+    return sanitizeContextString(value, depth);
+  }
+
+  if (typeof value === "number" || typeof value === "boolean" || value == null) {
+    return value;
+  }
+
+  if (Array.isArray(value)) {
+    return value.slice(0, depth <= 2 ? 80 : 40).map((item) =>
+      deepSanitizeSourceContext(item, depth + 1)
+    );
+  }
+
+  if (!isRecord(value)) {
+    return undefined;
+  }
+
+  const output: Record<string, unknown> = {};
+  const entries = Object.entries(value).slice(0, 80);
+
+  for (const [key, item] of entries) {
+    if (/screenshot|base64|token|secret|password|authorization|cookie/i.test(key)) {
+      output[key] = "[omitted]";
+      continue;
+    }
+
+    output[key] = deepSanitizeSourceContext(item, depth + 1);
+  }
+
+  return output;
+}
+
+function sanitizeContextString(value: string, depth: number) {
+  const withoutBinary = value
+    .replace(/data:image\/[a-zA-Z]+;base64,[A-Za-z0-9+/=]+/g, "[image omitted]")
+    .replace(/[A-Za-z0-9+/=]{500,}/g, "[long encoded value omitted]");
+  const maxLength = depth <= 2 ? 6000 : 1800;
+
+  return withoutBinary.length <= maxLength
+    ? withoutBinary
+    : `${withoutBinary.slice(0, maxLength)}\n/* truncated ${withoutBinary.length - maxLength} chars */`;
 }
 
 async function generateGeminiText(
@@ -906,71 +909,6 @@ function describeJsonShape(value: unknown) {
   return typeof value;
 }
 
-function buildFallbackAIUnderstandingResult(payload: AnalyzeAreaRequest): AIUnderstandingResult {
-  const detected = isRecord(payload.detected) ? payload.detected : {};
-  const counts = isRecord(payload.counts) ? payload.counts : {};
-  const sectionType = oneOf(detected.sectionType, SECTION_TYPES, "unknown");
-  const layoutType = oneOf(detected.layoutType, LAYOUT_TYPES, "unknown");
-  const blocks: AIUnderstandingResult["detectedBlocks"] = [];
-  const blockCountMap: Array<[AIUnderstandingResult["detectedBlocks"][number]["type"], unknown]> = [
-    ["heading", counts.headings],
-    ["button", counts.buttons],
-    ["image", counts.images],
-    ["icon", counts.svgs],
-    ["input", counts.inputs],
-    ["card", counts.cardsEstimate],
-    ["text", counts.textLength]
-  ];
-
-  blockCountMap.forEach(([type, value]) => {
-    const count = numberOrZero(value);
-
-    if (count <= 0) {
-      return;
-    }
-
-    blocks.push({
-      type,
-      count,
-      description: `${count} ${type} ${count === 1 ? "block" : "blocks"} detected locally.`
-    });
-  });
-
-  return {
-    sectionType,
-    layoutType,
-    contentType: inferContentType(sectionType, counts),
-    confidence: 0.35,
-    detectedBlocks: blocks.slice(0, 10),
-    detectedKeywords: extractLocalKeywords(payload),
-    designIntent: inferDesignIntent(sectionType),
-    uiProblems: inferLocalProblems(sectionType, layoutType, counts),
-    recommendedCategories: {
-      layoutCategories: [sectionType],
-      templateCategories: [sectionType],
-      animationCategories: inferAnimationCategories(sectionType, counts)
-    },
-    animationKeywords: inferAnimationKeywords(sectionType, counts),
-    designerDescription:
-      sectionType === "unknown"
-        ? "PolishPilot could not parse Gemini JSON, so this uses local DOM and screenshot metadata."
-        : `This appears to be a ${sectionType} section using a ${layoutType} layout.`,
-    currentLayoutProblem:
-      "Gemini returned malformed JSON, so PolishPilot used a local fallback classification.",
-    reasoning: [
-      "Gemini response JSON could not be parsed.",
-      "Fallback result was built from local DOM counts and detected layout metadata."
-    ],
-    uncodixify: {
-      summary:
-        "Gemini visual evaluation was unavailable; Uncodixify relies on local DOM/CSS rules for this block.",
-      detectedRuleIds: [],
-      visualEvidence: [],
-      topRecommendations: []
-    }
-  };
-}
-
 function sanitizeAIUnderstandingResult(value: unknown): AIUnderstandingResult {
   if (!isRecord(value)) {
     throw new Error("Gemini JSON result must be an object.");
@@ -996,6 +934,438 @@ function sanitizeAIUnderstandingResult(value: unknown): AIUnderstandingResult {
       : [],
     uncodixify: sanitizeUncodixify(value.uncodixify)
   };
+}
+
+export function enrichResultFromSourceContext(
+  result: AIUnderstandingResult,
+  sourceContext: unknown
+): AIUnderstandingResult {
+  const inventory = getObjectInventory(sourceContext);
+  if (!inventory) return result;
+
+  const summary = getInventorySummary(inventory);
+  const sectionType = chooseSectionTypeFromInventory(result, inventory, summary);
+  const detectedBlocks = enrichDetectedBlocks(result.detectedBlocks, summary, inventory);
+  const inferredProblems = inferProblemsFromInventory(summary, inventory);
+  const inferredAnimationCategories = inferAnimationCategories(summary);
+  const detectedKeywords = mergeUniqueStrings(
+    result.detectedKeywords,
+    getStringArray(inventory.keywords).map(normalizeKeyword),
+    getStringArray(inventory.priceTokens).map(normalizeKeyword),
+    getStringArray(inventory.metrics).map(normalizeKeyword)
+  ).slice(0, 30);
+  const uiProblems = mergeUniqueEnums(
+    inferredProblems.length
+      ? result.uiProblems.filter((problem) => problem !== "unknown")
+      : result.uiProblems,
+    inferredProblems,
+    UI_PROBLEMS,
+    8
+  );
+  const recommendedCategories: AIUnderstandingResult["recommendedCategories"] = {
+    layoutCategories: mergeUniqueEnums(
+      sectionType === "unknown"
+        ? result.recommendedCategories.layoutCategories
+        : result.recommendedCategories.layoutCategories.filter((category) => category !== "unknown"),
+      sectionType === "unknown" ? [] : [sectionType],
+      SECTION_TYPES,
+      6
+    ),
+    templateCategories: mergeUniqueEnums(
+      sectionType === "unknown"
+        ? result.recommendedCategories.templateCategories
+        : result.recommendedCategories.templateCategories.filter((category) => category !== "unknown"),
+      sectionType === "unknown" ? [] : [sectionType],
+      SECTION_TYPES,
+      6
+    ),
+    animationCategories: mergeUniqueEnums(
+      inferredAnimationCategories.some((category) => category !== "other")
+        ? result.recommendedCategories.animationCategories.filter((category) => category !== "other")
+        : result.recommendedCategories.animationCategories,
+      inferredAnimationCategories,
+      ANIMATION_CATEGORIES,
+      6
+    )
+  };
+
+  return {
+    ...result,
+    sectionType,
+    layoutType: chooseLayoutTypeFromInventory(result, summary, inventory),
+    contentType: chooseContentTypeFromInventory(result, sectionType, summary),
+    designIntent: chooseDesignIntentFromInventory(result, sectionType),
+    confidence:
+      result.sectionType === "unknown" && sectionType !== "unknown"
+        ? Math.max(result.confidence, 0.62)
+        : result.confidence,
+    detectedBlocks,
+    detectedKeywords,
+    uiProblems,
+    recommendedCategories,
+    animationKeywords: result.animationKeywords.length
+      ? result.animationKeywords
+      : inferAnimationKeywordsFromInventory(sectionType, summary),
+    designerDescription:
+      result.designerDescription ||
+      describeInventorySection(sectionType, summary, inventory),
+    currentLayoutProblem:
+      result.currentLayoutProblem ||
+      describeInventoryProblem(summary, inventory),
+    reasoning: mergeUniqueStrings(
+      result.reasoning,
+      ["Source object inventory filled sparse Gemini fields."]
+    ).slice(0, 12),
+    uncodixify: enrichUncodixifyFromInventory(result.uncodixify, summary, inventory)
+  };
+}
+
+function getObjectInventory(sourceContext: unknown): Record<string, unknown> | null {
+  if (!isRecord(sourceContext)) return null;
+  const inventory = sourceContext.objectInventory;
+  return isRecord(inventory) ? inventory : null;
+}
+
+function getInventorySummary(inventory: Record<string, unknown>) {
+  const summary = isRecord(inventory.summary) ? inventory.summary : {};
+  return {
+    totalElements: numberFromRecord(summary, "totalElements"),
+    headings: numberFromRecord(summary, "headings"),
+    actions: numberFromRecord(summary, "actions"),
+    cards: numberFromRecord(summary, "cards"),
+    inputs: numberFromRecord(summary, "inputs"),
+    media: numberFromRecord(summary, "media"),
+    metrics: numberFromRecord(summary, "metrics"),
+    priceTokens: numberFromRecord(summary, "priceTokens"),
+    testimonials: numberFromRecord(summary, "testimonials"),
+    navItems: numberFromRecord(summary, "navItems"),
+    longTextBlocks: numberFromRecord(summary, "longTextBlocks")
+  };
+}
+
+function chooseSectionTypeFromInventory(
+  result: AIUnderstandingResult,
+  inventory: Record<string, unknown>,
+  summary: ReturnType<typeof getInventorySummary>
+): AIUnderstandingResult["sectionType"] {
+  if (result.sectionType !== "unknown" && result.confidence >= 0.55) {
+    return result.sectionType;
+  }
+
+  const keywords = getInventoryKeywordText(inventory);
+  if (summary.priceTokens >= 2 || /\b(pricing|billing|plan|starter|pro|enterprise|credits?)\b/i.test(keywords)) return "pricing";
+  if (summary.inputs >= 2 && /\b(password|login|sign-in|signin|sign up|signup|auth)\b/i.test(keywords)) return "auth";
+  if (summary.inputs >= 1 || /\b(form|email|waitlist|newsletter|contact)\b/i.test(keywords)) return "form";
+  if (summary.navItems >= 3 || /\b(nav|navigation|menu|navbar)\b/i.test(keywords)) return "navigation";
+  if (summary.testimonials >= 1 || /\b(testimonial|review|rating|customer|quote)\b/i.test(keywords)) return "testimonials";
+  if (summary.metrics >= 2 || /\b(metric|kpi|analytics|dashboard)\b/i.test(keywords)) return summary.cards >= 3 ? "dashboard" : "stats";
+  if (summary.cards >= 3 || /\b(feature|workflow|steps?|process|benefit)\b/i.test(keywords)) return "features";
+  if (summary.actions >= 1 && summary.totalElements <= 12) return "cta";
+
+  return result.sectionType;
+}
+
+function chooseLayoutTypeFromInventory(
+  result: AIUnderstandingResult,
+  summary: ReturnType<typeof getInventorySummary>,
+  inventory: Record<string, unknown>
+): AIUnderstandingResult["layoutType"] {
+  if (result.layoutType !== "unknown") return result.layoutType;
+  const repeatedGroups = getRepeatedGroups(inventory);
+  const cardGroup = repeatedGroups.find((group) => group.type === "card");
+  if (summary.priceTokens >= 2 && summary.cards >= 2) return "pricing_columns";
+  if ((cardGroup?.count ?? 0) >= 3 && cardGroup?.similarSize) return "equal_grid";
+  if (summary.inputs >= 1) return "form_layout";
+  const layoutSignals = isRecord(inventory.layoutSignals) ? inventory.layoutSignals : {};
+  const columns = numberFromRecord(layoutSignals, "columnsEstimate");
+  const rows = numberFromRecord(layoutSignals, "rowsEstimate");
+  if (columns >= 3 && rows <= 3) return "equal_grid";
+  if (columns >= 2 && rows >= 2) return "two_column";
+  if (rows >= 3 && columns <= 2) return "vertical_stack";
+  if (columns >= 3 && rows <= 2) return "horizontal_row";
+  return result.layoutType;
+}
+
+function chooseContentTypeFromInventory(
+  result: AIUnderstandingResult,
+  sectionType: AIUnderstandingResult["sectionType"],
+  summary: ReturnType<typeof getInventorySummary>
+): AIUnderstandingResult["contentType"] {
+  if (result.contentType !== "unknown") return result.contentType;
+  if (sectionType === "pricing" || summary.priceTokens >= 2) return "pricing_plans";
+  if (summary.inputs >= 1) return "form";
+  if (summary.metrics >= 2) return "metrics";
+  if (sectionType === "testimonials" || summary.testimonials >= 1) return "testimonial_cards";
+  if (sectionType === "navigation" || summary.navItems >= 3) return "navigation_links";
+  if (sectionType === "dashboard") return "dashboard_widgets";
+  if (summary.cards >= 2) return "cards";
+  return result.contentType;
+}
+
+function chooseDesignIntentFromInventory(
+  result: AIUnderstandingResult,
+  sectionType: AIUnderstandingResult["sectionType"]
+): AIUnderstandingResult["designIntent"] {
+  if (result.designIntent !== "unknown") return result.designIntent;
+  if (sectionType === "hero" || sectionType === "pricing" || sectionType === "cta") return "conversion";
+  if (sectionType === "features" || sectionType === "cards") return "explanation";
+  if (sectionType === "stats" || sectionType === "dashboard") return "data_summary";
+  if (sectionType === "form" || sectionType === "auth") return "lead_capture";
+  if (sectionType === "testimonials") return "social_proof";
+  if (sectionType === "navigation" || sectionType === "footer") return "navigation";
+  return result.designIntent;
+}
+
+function enrichDetectedBlocks(
+  current: AIUnderstandingResult["detectedBlocks"],
+  summary: ReturnType<typeof getInventorySummary>,
+  inventory: Record<string, unknown>
+): AIUnderstandingResult["detectedBlocks"] {
+  const sourceHasObjects = Object.values(summary).some((value) => value > 0);
+  const initialBlocks = sourceHasObjects
+    ? current.filter((block) => block.type !== "unknown")
+    : current;
+  const byType = new Map(initialBlocks.map((block) => [block.type, block]));
+  const add = (
+    type: AIUnderstandingResult["detectedBlocks"][number]["type"],
+    count: number,
+    description: string
+  ) => {
+    if (count <= 0 || byType.has(type)) return;
+    byType.set(type, { type, count, description });
+  };
+
+  add("heading", summary.headings, `Headings from source inventory: ${getStringArray(inventory.headings).slice(0, 3).join(", ")}`);
+  add("button", summary.actions, `Actions from source inventory: ${getLabels(inventory.actions).slice(0, 4).join(", ")}`);
+  add("card", summary.cards, "Card-like objects from DOM/source inventory.");
+  add("input", summary.inputs, "Form controls from DOM/source inventory.");
+  add("image", summary.media, "Media/visual objects from DOM/source inventory.");
+  add("stat", summary.metrics, `Metric values: ${getStringArray(inventory.metrics).slice(0, 4).join(", ")}`);
+  add("price", summary.priceTokens, `Pricing tokens: ${getStringArray(inventory.priceTokens).slice(0, 4).join(", ")}`);
+  add("testimonial", summary.testimonials, "Testimonial/review language from source inventory.");
+  add("nav_item", summary.navItems, "Navigation items from source inventory.");
+
+  return [...byType.values()].slice(0, 20);
+}
+
+function inferProblemsFromInventory(
+  summary: ReturnType<typeof getInventorySummary>,
+  inventory: Record<string, unknown>
+): AIUnderstandingResult["uiProblems"] {
+  const problems: AIUnderstandingResult["uiProblems"] = [];
+  const repeatedGroups = getRepeatedGroups(inventory);
+  const styleSignals = isRecord(inventory.styleSignals) ? inventory.styleSignals : {};
+  if (repeatedGroups.some((group) => group.type === "card" && group.count >= 3 && group.similarSize)) {
+    problems.push("cards_too_equal", "no_visual_rhythm");
+  }
+  if (summary.longTextBlocks >= 1) problems.push("too_text_heavy");
+  if (summary.actions === 0 && ["pricing", "form", "cta"].some((keyword) => getInventoryKeywordText(inventory).includes(keyword))) {
+    problems.push("cta_not_clear");
+  }
+  if (numberFromRecord(styleSignals, "largeRadiusCount") >= 3 || numberFromRecord(styleSignals, "glowCount") >= 1) {
+    problems.push("flat_layout");
+  }
+  return problems;
+}
+
+function inferAnimationCategories(
+  summary: ReturnType<typeof getInventorySummary>
+): AIUnderstandingResult["recommendedCategories"]["animationCategories"] {
+  const categories: AIUnderstandingResult["recommendedCategories"]["animationCategories"] = [];
+  if (summary.cards >= 2) categories.push("card", "hover");
+  if (summary.actions >= 1) categories.push("button");
+  if (summary.headings >= 1) categories.push("text");
+  if (summary.media >= 1) categories.push("image");
+  return categories.length ? categories.slice(0, 6) : ["other"];
+}
+
+function inferAnimationKeywordsFromInventory(
+  sectionType: AIUnderstandingResult["sectionType"],
+  summary: ReturnType<typeof getInventorySummary>
+) {
+  const keywords: string[] = [];
+  if (summary.cards >= 2) keywords.push("card-hover", "staggered-reveal");
+  if (summary.actions >= 1) keywords.push("button-microinteraction");
+  if (summary.headings >= 1) keywords.push("text-reveal");
+  if (summary.media >= 1) keywords.push("image-reveal");
+  if (summary.inputs >= 1) keywords.push("form-feedback");
+  if (sectionType === "navigation") keywords.push("navigation-transition");
+  if (sectionType === "pricing") keywords.push("plan-emphasis");
+  return mergeUniqueStrings(keywords).slice(0, 8);
+}
+
+function enrichUncodixifyFromInventory(
+  uncodixify: AIUnderstandingResult["uncodixify"],
+  summary: ReturnType<typeof getInventorySummary>,
+  inventory: Record<string, unknown>
+): AIUnderstandingResult["uncodixify"] {
+  const detectedRuleIds = [...(uncodixify?.detectedRuleIds ?? [])];
+  const visualEvidence = [...(uncodixify?.visualEvidence ?? [])];
+  const topRecommendations = [...(uncodixify?.topRecommendations ?? [])];
+  const add = (ruleId: string, evidence: string, recommendation: string) => {
+    if (!detectedRuleIds.includes(ruleId)) {
+      detectedRuleIds.push(ruleId as (typeof UNCODIXIFY_RULE_IDS)[number]);
+      visualEvidence.push(evidence);
+      topRecommendations.push(recommendation);
+    }
+  };
+  const repeatedGroups = getRepeatedGroups(inventory);
+  const styleSignals = isRecord(inventory.styleSignals) ? inventory.styleSignals : {};
+
+  if (repeatedGroups.some((group) => group.type === "card" && group.count >= 3 && group.similarSize)) {
+    add("repetitive-equal-cards", "Source inventory found repeated equal card-like objects.", "Create a featured card and quieter supporting cards.");
+    add("monotonous-section-rhythm", "Source inventory found a monotonous repeated card rhythm.", "Introduce one clear focal point and grouped supporting content.");
+  }
+  if (summary.priceTokens >= 2 && summary.cards >= 2) {
+    add("pricing-plan-weak-emphasis", "Source inventory found pricing tokens inside similar plan cards.", "Make one recommended plan dominant and align price, benefits, and CTA rows.");
+  }
+  if (summary.longTextBlocks >= 1) {
+    add("text-heavy-block", "Source inventory found long text blocks.", "Break dense copy into scannable groups while preserving meaning.");
+  }
+  if (numberFromRecord(styleSignals, "largeRadiusCount") >= 3) {
+    add("oversized-radius", "Source inventory found several large-radius elements.", "Reduce excessive radii and reserve large corners for intentional large containers.");
+  }
+  if (numberFromRecord(styleSignals, "glowCount") >= 1) {
+    add("glow-heavy-ui", "Source inventory found colored glow shadows.", "Replace glows with simpler borders, spacing, and neutral shadows.");
+  }
+  if (
+    numberFromRecord(styleSignals, "pillCount") >= 1 &&
+    hasAnnouncementBubbleCopy(getInventoryKeywordText(inventory))
+  ) {
+    add(
+      "decorative-announcement-bubble",
+      "Source inventory found a pill-shaped announcement/location badge.",
+      "Replace the decorative announcement bubble with plain availability copy or a compact functional status badge."
+    );
+  }
+
+  return {
+    summary: uncodixify?.summary ?? "",
+    detectedRuleIds,
+    visualEvidence: visualEvidence.slice(0, 12),
+    topRecommendations: topRecommendations.slice(0, 8)
+  };
+}
+
+function describeInventorySection(
+  sectionType: AIUnderstandingResult["sectionType"],
+  summary: ReturnType<typeof getInventorySummary>,
+  inventory: Record<string, unknown>
+) {
+  const heading = String(inventory.primaryHeading ?? "").trim();
+  return `${sectionType} block${heading ? ` headed by "${heading}"` : ""} with ${summary.cards} card(s), ${summary.actions} action(s), ${summary.inputs} input(s), and ${summary.media} media item(s).`;
+}
+
+function describeInventoryProblem(
+  summary: ReturnType<typeof getInventorySummary>,
+  inventory: Record<string, unknown>
+) {
+  const repeated = getRepeatedGroups(inventory).find((group) => group.type === "card" && group.count >= 3);
+  if (repeated) return `${repeated.count} similar card-like objects need stronger hierarchy and rhythm.`;
+  if (summary.longTextBlocks >= 1) return "Dense text blocks need more scannable structure.";
+  if (summary.actions === 0) return "No clear primary action was found in the object inventory.";
+  return "Improve hierarchy, grouping, and visual rhythm based on the detected objects.";
+}
+
+type RepeatedGroup = {
+  type: string;
+  count: number;
+  similarSize: boolean;
+};
+
+function mergeUniqueStrings(...groups: string[][]) {
+  const seen = new Set<string>();
+  const merged: string[] = [];
+
+  for (const group of groups) {
+    for (const item of group) {
+      const value = typeof item === "string" ? item.trim() : "";
+      if (!value || seen.has(value)) continue;
+      seen.add(value);
+      merged.push(value);
+    }
+  }
+
+  return merged;
+}
+
+function mergeUniqueEnums<const T extends readonly string[]>(
+  current: T[number][],
+  next: unknown[],
+  allowed: T,
+  limit: number
+) {
+  const allowedSet = new Set<string>(allowed as readonly string[]);
+  const merged: T[number][] = [];
+
+  for (const item of [...current, ...next]) {
+    if (typeof item !== "string" || !allowedSet.has(item)) continue;
+    const typed = item as T[number];
+    if (merged.includes(typed)) continue;
+    merged.push(typed);
+    if (merged.length >= limit) break;
+  }
+
+  return merged;
+}
+
+function getStringArray(value: unknown) {
+  return Array.isArray(value)
+    ? value
+        .map((item) => (typeof item === "string" ? item.trim() : ""))
+        .filter(Boolean)
+    : [];
+}
+
+function getLabels(value: unknown) {
+  if (!Array.isArray(value)) return [];
+
+  return value.flatMap((item) => {
+    if (typeof item === "string") return [item.trim()].filter(Boolean);
+    if (!isRecord(item)) return [];
+
+    const label = stringOrEmpty(item.label).trim();
+    const title = stringOrEmpty(item.title).trim();
+    const text = stringOrEmpty(item.text).trim();
+    return [label || title || text].filter(Boolean);
+  });
+}
+
+function getRepeatedGroups(inventory: Record<string, unknown>): RepeatedGroup[] {
+  if (!Array.isArray(inventory.repeatedGroups)) return [];
+
+  return inventory.repeatedGroups
+    .filter(isRecord)
+    .map((group) => ({
+      type: typeof group.type === "string" ? group.type : "unknown",
+      count: numberFromRecord(group, "count"),
+      similarSize: Boolean(group.similarSize)
+    }))
+    .filter((group) => group.count > 0);
+}
+
+function getInventoryKeywordText(inventory: Record<string, unknown>) {
+  return [
+    ...getStringArray(inventory.keywords),
+    ...getStringArray(inventory.priceTokens),
+    ...getStringArray(inventory.metrics),
+    ...getStringArray(inventory.headings),
+    ...getLabels(inventory.actions),
+    ...getLabels(inventory.cards)
+  ]
+    .join(" ")
+    .toLowerCase();
+}
+
+function hasAnnouncementBubbleCopy(value: string): boolean {
+  return /(?:coming soon|launching soon|available soon|opening soon|now open|new location|new city|\bsoon\b|скоро|жакында|жақында)/i.test(
+    value
+  );
+}
+
+function numberFromRecord(record: Record<string, unknown>, key: string) {
+  const value = record[key];
+  return typeof value === "number" && Number.isFinite(value) ? value : 0;
 }
 
 function sanitizeUncodixify(value: unknown): AIUnderstandingResult["uncodixify"] {
@@ -1064,120 +1434,6 @@ function sanitizeDetectedBlock(value: unknown): AIUnderstandingResult["detectedB
   };
 }
 
-function extractLocalKeywords(payload: AnalyzeAreaRequest) {
-  const detected = isRecord(payload.detected) ? payload.detected : {};
-  const counts = isRecord(payload.counts) ? payload.counts : {};
-  const elementText = payload.matchedElements
-    .slice(0, 40)
-    .map((element) => {
-      if (!isRecord(element)) return "";
-      return [element.tagName, element.className, element.role, element.ariaLabel, element.text]
-        .map(stringOrEmpty)
-        .join(" ");
-    })
-    .join(" ");
-  const base = [
-    stringOrEmpty(detected.sectionType),
-    stringOrEmpty(detected.layoutType),
-    ...(Array.isArray(detected.reasons) ? detected.reasons.map(stringOrEmpty) : []),
-    counts.cardsEstimate ? "cards" : "",
-    counts.buttons ? "button cta" : "",
-    counts.inputs ? "form input lead-capture" : "",
-    counts.images ? "image product-preview" : "",
-    counts.svgs ? "icon" : "",
-    elementText
-  ].join(" ");
-
-  return [...new Set(base.split(/[^a-zA-Z0-9_-]+/).map(normalizeKeyword).filter(Boolean))].slice(0, 30);
-}
-
-function inferContentType(
-  sectionType: AIUnderstandingResult["sectionType"],
-  counts: Record<string, unknown>
-): AIUnderstandingResult["contentType"] {
-  if (sectionType === "pricing") return "pricing_plans";
-  if (sectionType === "stats") return "metrics";
-  if (sectionType === "form" || numberOrZero(counts.inputs) > 0) return "form";
-  if (sectionType === "testimonials") return "testimonial_cards";
-  if (sectionType === "dashboard") return "dashboard_widgets";
-  if (sectionType === "navigation") return "navigation_links";
-  if (numberOrZero(counts.cardsEstimate) > 0) return "cards";
-  if (numberOrZero(counts.textLength) > 0) return "text_block";
-  return "unknown";
-}
-
-function inferDesignIntent(sectionType: AIUnderstandingResult["sectionType"]): AIUnderstandingResult["designIntent"] {
-  if (sectionType === "hero" || sectionType === "cta" || sectionType === "pricing") return "conversion";
-  if (sectionType === "features" || sectionType === "cards") return "explanation";
-  if (sectionType === "stats" || sectionType === "dashboard") return "data_summary";
-  if (sectionType === "form" || sectionType === "auth") return "lead_capture";
-  if (sectionType === "testimonials") return "social_proof";
-  if (sectionType === "navigation") return "navigation";
-  return "unknown";
-}
-
-function inferLocalProblems(
-  sectionType: AIUnderstandingResult["sectionType"],
-  layoutType: AIUnderstandingResult["layoutType"],
-  counts: Record<string, unknown>
-): AIUnderstandingResult["uiProblems"] {
-  const problems = new Set<AIUnderstandingResult["uiProblems"][number]>();
-
-  if (layoutType === "equal_grid") problems.add("cards_too_equal");
-  if (layoutType === "equal_grid" || sectionType === "cards") problems.add("flat_layout");
-  if (numberOrZero(counts.textLength) > 500) problems.add("too_text_heavy");
-  if (numberOrZero(counts.buttons) === 0 && (sectionType === "hero" || sectionType === "cta")) problems.add("cta_not_clear");
-  if (numberOrZero(counts.cardsEstimate) >= 3) problems.add("too_repetitive");
-  if (sectionType === "hero" || sectionType === "features") problems.add("weak_hierarchy");
-
-  return problems.size ? [...problems] : ["unknown"];
-}
-
-function inferAnimationCategories(
-  sectionType: AIUnderstandingResult["sectionType"],
-  counts: Record<string, unknown>
-): AIUnderstandingResult["recommendedCategories"]["animationCategories"] {
-  const categories = new Set<AIUnderstandingResult["recommendedCategories"]["animationCategories"][number]>();
-
-  if (sectionType === "hero" || sectionType === "cta") {
-    categories.add("text");
-    categories.add("button");
-    categories.add("background");
-  }
-  if (sectionType === "features" || sectionType === "cards" || sectionType === "pricing") {
-    categories.add("card");
-    categories.add("hover");
-    categories.add("scroll");
-  }
-  if (sectionType === "dashboard" || sectionType === "form" || numberOrZero(counts.inputs) > 0) {
-    categories.add("loader");
-    categories.add("button");
-  }
-  if (sectionType === "navigation") categories.add("navigation");
-
-  return categories.size ? [...categories] : ["other"];
-}
-
-function inferAnimationKeywords(
-  sectionType: AIUnderstandingResult["sectionType"],
-  counts: Record<string, unknown>
-) {
-  const keywords = new Set<string>();
-
-  if (sectionType === "hero") {
-    keywords.add("text-reveal");
-    keywords.add("background");
-  }
-  if (numberOrZero(counts.cardsEstimate) > 0) {
-    keywords.add("card-hover");
-    keywords.add("stagger");
-  }
-  if (numberOrZero(counts.buttons) > 0) keywords.add("button-microinteraction");
-  if (sectionType === "features" || sectionType === "pricing") keywords.add("reveal");
-
-  return [...keywords];
-}
-
 function normalizeKeyword(value: string) {
   return value
     .toLowerCase()
@@ -1212,26 +1468,8 @@ function clampNumber(value: unknown, min: number, max: number) {
   return Math.max(min, Math.min(max, numberValue));
 }
 
-function numberOrZero(value: unknown) {
-  return typeof value === "number" && Number.isFinite(value)
-    ? Math.max(0, Math.round(value))
-    : 0;
-}
-
-function stringOrNull(value: unknown) {
-  return typeof value === "string" ? value : null;
-}
-
 function stringOrEmpty(value: unknown) {
   return typeof value === "string" ? value : "";
-}
-
-function truncate(value: string | null, maxLength: number) {
-  if (!value) {
-    return value;
-  }
-
-  return value.length > maxLength ? `${value.slice(0, maxLength)}...` : value;
 }
 
 function logGemini(requestId: string, message: string, data?: unknown) {
@@ -1241,28 +1479,6 @@ function logGemini(requestId: string, message: string, data?: unknown) {
   }
 
   console.log(`[Gemini][${requestId}] ${message}`, data);
-}
-
-function compactMatchedElementLog(element: unknown) {
-  if (!isRecord(element)) {
-    return { tagName: "unknown", text: "" };
-  }
-
-  return {
-    tagName: truncate(stringOrNull(element.tagName), 30) ?? "unknown",
-    text: truncate(stringOrNull(element.text), 80) ?? ""
-  };
-}
-
-function summarizeSelectedRect(value: unknown) {
-  if (!isRecord(value)) {
-    return null;
-  }
-
-  return {
-    width: typeof value.width === "number" ? Math.round(value.width) : null,
-    height: typeof value.height === "number" ? Math.round(value.height) : null
-  };
 }
 
 function safeErrorMessage(error: unknown) {

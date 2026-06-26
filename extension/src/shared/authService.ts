@@ -41,7 +41,7 @@ export type ExchangeWebsiteCodeResult = {
 };
 
 const AUTH_AUTHORIZE_URL = "https://www.beuniq.design/extension/authorize";
-const AUTH_EXCHANGE_URL = "https://www.beuniq.design/api/extension-auth/exchange";
+const AUTH_EXCHANGE_URL = "https://polish-pilot.vercel.app/api/extension-auth/exchange";
 const AUTH_PROFILE_KEY = "authUserProfile";
 const AUTH_TOKEN_KEY = "authSessionToken";
 const AUTH_TOKEN_EXPIRES_AT_KEY = "authSessionTokenExpiresAt";
@@ -150,12 +150,13 @@ async function exchangeCodeRequest(
         tokenType?: unknown;
         expiresInSeconds?: unknown;
         email?: unknown;
-        error?: { code?: unknown; message?: unknown };
+        error?: { code?: unknown; message?: unknown } | string;
+        message?: unknown;
       }
     | null;
 
   if (!response.ok || !body?.token || body.tokenType !== "Bearer") {
-    throw mapExchangeError(body?.error?.code, body?.error?.message);
+    throw mapExchangeError(errorCodeFromBody(body), errorMessageFromBody(body));
   }
 
   if (
@@ -177,21 +178,49 @@ async function exchangeCodeRequest(
 function mapExchangeError(code?: unknown, message?: unknown): AuthError {
   const normalizedCode = typeof code === "string" ? code.toUpperCase() : "";
   const normalizedMessage =
-    typeof message === "string" && message ? message : "Could not connect this extension.";
+    typeof message === "string" && message ? message : null;
 
   if (normalizedCode.includes("EXPIRED")) {
-    return new AuthError("CODE_EXPIRED", normalizedMessage);
+    return new AuthError(
+      "CODE_EXPIRED",
+      normalizedMessage ?? "This code expired. Generate a new code on the website."
+    );
   }
   if (normalizedCode.includes("USED") || normalizedCode.includes("CONSUMED")) {
-    return new AuthError("CODE_USED", normalizedMessage);
+    return new AuthError(
+      "CODE_USED",
+      normalizedMessage ?? "This code has already been used. Generate a new code on the website."
+    );
   }
   if (normalizedCode.includes("INVALID_EMAIL")) {
-    return new AuthError("INVALID_EMAIL", normalizedMessage);
+    return new AuthError("INVALID_EMAIL", normalizedMessage ?? "Enter a valid email address.");
   }
   if (normalizedCode.includes("INVALID_CODE") || normalizedCode.includes("INVALID")) {
-    return new AuthError("INVALID_CODE", normalizedMessage);
+    return new AuthError(
+      "INVALID_CODE",
+      normalizedMessage ?? "The email and code do not match. Copy a fresh code from the website."
+    );
   }
-  return new AuthError("CODE_EXCHANGE_FAILED", normalizedMessage);
+  return new AuthError(
+    "CODE_EXCHANGE_FAILED",
+    normalizedMessage ?? "Could not connect this extension."
+  );
+}
+
+function errorCodeFromBody(
+  body: { error?: { code?: unknown; message?: unknown } | string; message?: unknown } | null
+): unknown {
+  if (!body) return undefined;
+  if (typeof body.error === "string") return body.error;
+  return body.error?.code;
+}
+
+function errorMessageFromBody(
+  body: { error?: { code?: unknown; message?: unknown } | string; message?: unknown } | null
+): unknown {
+  if (!body) return undefined;
+  if (typeof body.error === "object" && body.error?.message) return body.error.message;
+  return body.message;
 }
 
 async function persistSession(

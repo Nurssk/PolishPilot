@@ -6,6 +6,10 @@ import type { PolishPilotMode } from "../shared/types";
 import { EmailAuthForm } from "../components/EmailAuthForm";
 import { getScreenshotUsage, type ScreenshotUsage } from "../shared/usageService";
 
+function formatScreenshotCount(count: number) {
+  return `${count} ${count === 1 ? "screenshot" : "screenshots"}`;
+}
+
 export function Popup() {
   const [user, setUser] = useState<ExtensionUser | null>(null);
   const [usage, setUsage] = useState<ScreenshotUsage | null>(null);
@@ -154,7 +158,7 @@ export function Popup() {
             </span>
             {usage ? (
               <span className="mt-1 block font-semibold text-pilot-text">
-                {usage.screenshotsRemaining}/{usage.screenshotsTotal} screenshots left
+                {formatScreenshotCount(usage.screenshotsRemaining)}
               </span>
             ) : null}
           </p>
