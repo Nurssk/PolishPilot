@@ -242,6 +242,18 @@ function normalizeCodeChangeResult(
   const diffSummary =
     stringValue(value.diffSummary).trim() ||
     "Generated a revised rendered HTML snapshot for review.";
+  const modifiedCss =
+    stringValue(value.modifiedCss).trim() ||
+    payload.usedCss?.trim() ||
+    buildMinimalFallbackCss();
+  const fullHtmlDocument =
+    stringValue(value.fullHtmlDocument).trim() ||
+    buildStandaloneHtmlDocument({
+      title: payload.title,
+      html: modifiedHtml,
+      css: modifiedCss,
+      scope: payload.scope
+    });
   const warnings = Array.isArray(value.warnings)
     ? value.warnings
         .filter((item): item is string => typeof item === "string" && Boolean(item.trim()))
@@ -259,6 +271,8 @@ function normalizeCodeChangeResult(
 
   return {
     modifiedHtml,
+    modifiedCss,
+    fullHtmlDocument,
     diffSummary,
     cursorPrompt,
     warnings
@@ -278,6 +292,76 @@ Summary: ${diffSummary}
 
 Modified rendered HTML:
 ${modifiedHtml}`;
+}
+
+function buildStandaloneHtmlDocument({
+  title,
+  html,
+  css,
+  scope
+}: {
+  title?: string;
+  html: string;
+  css: string;
+  scope: GenerateCodeChangeRequest["scope"];
+}) {
+  if (/<!doctype html|<html[\s>]/i.test(html)) {
+    return injectCssIntoHtmlDocument(html, css);
+  }
+
+  return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${escapeHtml(title || `Design Humanizer ${scope}`)}</title>
+    <style>
+${css}
+    </style>
+  </head>
+  <body>
+${html}
+  </body>
+</html>`;
+}
+
+function injectCssIntoHtmlDocument(html: string, css: string) {
+  const styleTag = `<style>\n${css}\n</style>`;
+
+  if (/<\/head>/i.test(html)) {
+    return html.replace(/<\/head>/i, `${styleTag}\n</head>`);
+  }
+
+  if (/<html[\s>]/i.test(html)) {
+    return html.replace(/<html([^>]*)>/i, `<html$1><head>${styleTag}</head>`);
+  }
+
+  return `<!doctype html><html><head>${styleTag}</head><body>${html}</body></html>`;
+}
+
+function buildMinimalFallbackCss() {
+  return `body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #111111;
+  background: #ffffff;
+}
+
+img, svg, video, canvas {
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}`;
+}
+
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 function normalizeBase64Image(input: string | undefined) {

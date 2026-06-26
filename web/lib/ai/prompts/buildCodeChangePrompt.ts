@@ -20,6 +20,8 @@ export type GenerateCodeChangeRequest = {
 
 export type GenerateCodeChangeResult = {
   modifiedHtml: string;
+  modifiedCss?: string;
+  fullHtmlDocument?: string;
   diffSummary: string;
   cursorPrompt: string;
   warnings: string[];
@@ -37,7 +39,7 @@ export function buildCodeChangePrompt(input: GenerateCodeChangeRequest): string 
 
   return `You are Design Humanizer Code Change.
 You are given a screenshot plus sanitized rendered HTML from the user's own website/app.
-Generate a reviewable HTML/code rewrite. This is review-only; do not claim files were edited.
+Generate a reviewable HTML + CSS/code rewrite. This is review-only; do not claim files were edited.
 
 Scope: ${input.scope}
 Scope rule: ${scopeInstruction}
@@ -88,6 +90,8 @@ ${
 Return JSON only with this exact shape:
 {
   "modifiedHtml": "string",
+  "modifiedCss": "string",
+  "fullHtmlDocument": "string",
   "diffSummary": "short human-readable summary of concrete changes",
   "cursorPrompt": "prompt for Cursor/Claude Code to apply this change in the real codebase",
   "warnings": ["string"]
@@ -95,13 +99,15 @@ Return JSON only with this exact shape:
 
 Rules:
 1. modifiedHtml must be valid HTML for the requested scope.
-2. Preserve product meaning, names, links, numbers, prices, form fields, accessibility labels, and core functionality.
-3. You may rewrite text when recommendations mention copywriting, dense text, weak hierarchy, unclear CTA, or generic AI wording.
-4. Keep existing brand direction from CSS/style context unless a recommendation requires a visible change.
-5. Do not add external scripts, tracking, remote assets, watermarks, or unrelated sections.
-6. Do not return Markdown fences.
-7. Put any uncertainty or source-mapping limitation in warnings.
-8. cursorPrompt must explicitly say the provided HTML is rendered DOM and must be mapped to React/Next/Vue/static source files before editing.`;
+2. modifiedCss must include the CSS required to render modifiedHtml close to the screenshot. Start from USED_CSS when it exists, preserve useful existing class styles, and add CSS for any new or changed classes.
+3. fullHtmlDocument must be a complete previewable document with modifiedCss inside a <style> tag and modifiedHtml inside <body>. It must render styled when opened as a standalone .html file.
+4. Preserve product meaning, names, links, numbers, prices, form fields, accessibility labels, and core functionality.
+5. You may rewrite text when recommendations mention copywriting, dense text, weak hierarchy, unclear CTA, or generic AI wording.
+6. Keep existing brand direction from CSS/style context unless a recommendation requires a visible change.
+7. Do not add external scripts, tracking, remote assets, watermarks, or unrelated sections.
+8. Do not return Markdown fences.
+9. Put any uncertainty or source-mapping limitation in warnings.
+10. cursorPrompt must explicitly say the provided HTML/CSS is rendered DOM/CSS and must be mapped to React/Next/Vue/static source files before editing.`;
 }
 
 function formatList(items: string[] | undefined) {

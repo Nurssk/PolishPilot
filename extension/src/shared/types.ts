@@ -318,6 +318,8 @@ export type CodeChangeRequest = {
 
 export type CodeChangeResult = {
   modifiedHtml: string;
+  modifiedCss?: string;
+  fullHtmlDocument?: string;
   diffSummary: string;
   cursorPrompt: string;
   warnings: string[];

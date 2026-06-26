@@ -46,7 +46,7 @@ export function CodeChangePage() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [result, setResult] = useState<CodeChangeResult | null>(null);
   const [error, setError] = useState("");
-  const [copied, setCopied] = useState<"html" | "prompt" | null>(null);
+  const [copied, setCopied] = useState<"html" | "css" | "document" | "prompt" | null>(null);
   const [generatedScope, setGeneratedScope] = useState<CodeChangeScope | null>(null);
 
   useEffect(() => {
@@ -72,6 +72,19 @@ export function CodeChangePage() {
   );
   const selectedHtml = data?.capture?.selectedSourceSection?.htmlPreview ?? "";
   const fullPageHtml = data?.capture?.fullPageHtmlPreview ?? "";
+  const extractedCss = data?.capture?.usedCssRules?.cssText ?? "";
+  const downloadableDocument = useMemo(
+    () =>
+      result
+        ? result.fullHtmlDocument ||
+          buildStandaloneHtmlDocument({
+            title: data?.capture?.title,
+            html: result.modifiedHtml,
+            css: result.modifiedCss || extractedCss
+          })
+        : "",
+    [data?.capture?.title, extractedCss, result]
+  );
   const diffRows = useMemo(
     () => buildDiffRows(originalHtml, result?.modifiedHtml ?? ""),
     [originalHtml, result?.modifiedHtml]
@@ -179,7 +192,10 @@ export function CodeChangePage() {
     }
   }
 
-  async function copyValue(kind: "html" | "prompt", value: string) {
+  async function copyValue(
+    kind: "html" | "css" | "document" | "prompt",
+    value: string
+  ) {
     if (!value) return;
     await navigator.clipboard.writeText(value);
     setCopied(kind);
@@ -187,8 +203,8 @@ export function CodeChangePage() {
   }
 
   function downloadModifiedHtml() {
-    if (!result?.modifiedHtml) return;
-    const blob = new Blob([result.modifiedHtml], { type: "text/html;charset=utf-8" });
+    if (!downloadableDocument) return;
+    const blob = new Blob([downloadableDocument], { type: "text/html;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
@@ -268,11 +284,11 @@ export function CodeChangePage() {
         <div className="mt-4 grid gap-2 md:grid-cols-4">
           <Metric label="Selected HTML" value={`${selectedHtml.length.toLocaleString()} chars`} />
           <Metric label="Full page HTML" value={`${fullPageHtml.length.toLocaleString()} chars`} />
+          <Metric label="Extracted CSS" value={`${extractedCss.length.toLocaleString()} chars`} />
           <Metric
             label="Recommendations"
             value={`${data.recommendations.length.toLocaleString()} items`}
           />
-          <Metric label="Generated" value={generatedScope ?? "not yet"} />
         </div>
 
         {error ? (
@@ -299,12 +315,44 @@ export function CodeChangePage() {
                 </button>
                 <button
                   className="dh-button-secondary px-3 py-2 text-xs"
+                  onClick={() => void copyValue("document", downloadableDocument)}
+                  type="button"
+                >
+                  {copied === "document" ? "Copied" : "Copy Full HTML"}
+                </button>
+                <button
+                  className="dh-button-secondary px-3 py-2 text-xs"
                   onClick={downloadModifiedHtml}
                   type="button"
                 >
-                  Download .html
+                  Download styled .html
                 </button>
               </>
+            ) : null
+          }
+        />
+      </section>
+
+      <section className="grid gap-4 xl:grid-cols-2">
+        <CodePanel
+          title="Extracted CSS"
+          value={extractedCss || "No used CSS was extracted for this capture."}
+        />
+        <CodePanel
+          title="Modified CSS"
+          value={
+            result?.modifiedCss ||
+            "Generate a code change to see Gemini's CSS output. If Gemini omits it, extracted CSS is used as fallback."
+          }
+          actions={
+            result ? (
+              <button
+                className="dh-button-secondary px-3 py-2 text-xs"
+                onClick={() => void copyValue("css", result.modifiedCss || extractedCss)}
+                type="button"
+              >
+                {copied === "css" ? "Copied" : "Copy CSS"}
+              </button>
             ) : null
           }
         />
@@ -473,6 +521,57 @@ function getOriginalHtml(data: CodeChangeData | null, scope: CodeChangeScope) {
     data.capture.fullPageHtmlPreview ??
     ""
   );
+}
+
+function buildStandaloneHtmlDocument({
+  title,
+  html,
+  css
+}: {
+  title?: string;
+  html: string;
+  css: string;
+}) {
+  if (/<!doctype html|<html[\s>]/i.test(html)) {
+    return injectCssIntoHtmlDocument(html, css);
+  }
+
+  return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${escapeHtml(title || "Design Humanizer code change")}</title>
+    <style>
+${css}
+    </style>
+  </head>
+  <body>
+${html}
+  </body>
+</html>`;
+}
+
+function injectCssIntoHtmlDocument(html: string, css: string) {
+  const styleTag = `<style>\n${css}\n</style>`;
+
+  if (/<\/head>/i.test(html)) {
+    return html.replace(/<\/head>/i, `${styleTag}\n</head>`);
+  }
+
+  if (/<html[\s>]/i.test(html)) {
+    return html.replace(/<html([^>]*)>/i, `<html$1><head>${styleTag}</head>`);
+  }
+
+  return `<!doctype html><html><head>${styleTag}</head><body>${html}</body></html>`;
+}
+
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 function buildDiffRows(original: string, modified: string): DiffRow[] {
