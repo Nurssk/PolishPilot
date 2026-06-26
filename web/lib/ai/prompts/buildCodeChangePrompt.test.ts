@@ -27,16 +27,16 @@ const selectedPrompt = buildCodeChangePrompt(baseRequest);
 
 assert.match(selectedPrompt, /Scope: selected-block/);
 assert.match(selectedPrompt, /Rewrite ONLY the selected block/);
-assert.match(selectedPrompt, /Return modifiedHtml for that selected block only/);
+assert.match(selectedPrompt, /Return modifiedHtmlLines for that selected block only/);
 assert.match(selectedPrompt, /Do not rewrite the full page/);
 assert.match(selectedPrompt, /FULL_PAGE_HTML_CONTEXT:\nNot included because selected-block scope is active\./);
 assert.match(selectedPrompt, /HTML\/CSS is rendered DOM\/CSS and must be mapped to React\/Next\/Vue\/static source files/);
 assert.match(selectedPrompt, /Reduce dense copy/);
 assert.match(selectedPrompt, /USED_CSS:/);
-assert.match(selectedPrompt, /"modifiedCss": "string"/);
-assert.match(selectedPrompt, /"fullHtmlDocument": "string"/);
-assert.match(selectedPrompt, /modifiedCss must include the CSS required to render modifiedHtml/);
-assert.match(selectedPrompt, /standalone \.html file/);
+assert.match(selectedPrompt, /"modifiedHtmlLines": \["string"\]/);
+assert.match(selectedPrompt, /"modifiedCssLines": \["string"\]/);
+assert.match(selectedPrompt, /modifiedCssLines joined with "\\n" must include the CSS required/);
+assert.match(selectedPrompt, /The server will build the standalone \.html file/);
 assert.match(selectedPrompt, /Return JSON only/);
 
 const wholePagePrompt = buildCodeChangePrompt({

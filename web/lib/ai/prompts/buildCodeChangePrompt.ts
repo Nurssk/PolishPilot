@@ -35,7 +35,7 @@ export function buildCodeChangePrompt(input: GenerateCodeChangeRequest): string 
   const isWholePage = input.scope === "whole-page";
   const scopeInstruction = isWholePage
     ? `Rewrite the full rendered HTML document in ORIGINAL_HTML. Keep unrelated areas stable unless a change is needed to satisfy the recommendations.`
-    : `Rewrite ONLY the selected block in ORIGINAL_HTML. Return modifiedHtml for that selected block only. Do not rewrite the full page.`;
+    : `Rewrite ONLY the selected block in ORIGINAL_HTML. Return modifiedHtmlLines for that selected block only. Do not rewrite the full page.`;
 
   return `You are Design Humanizer Code Change.
 You are given a screenshot plus sanitized rendered HTML from the user's own website/app.
@@ -89,18 +89,17 @@ ${
 
 Return JSON only with this exact shape:
 {
-  "modifiedHtml": "string",
-  "modifiedCss": "string",
-  "fullHtmlDocument": "string",
+  "modifiedHtmlLines": ["string"],
+  "modifiedCssLines": ["string"],
   "diffSummary": "short human-readable summary of concrete changes",
   "cursorPrompt": "prompt for Cursor/Claude Code to apply this change in the real codebase",
   "warnings": ["string"]
 }
 
 Rules:
-1. modifiedHtml must be valid HTML for the requested scope.
-2. modifiedCss must include the CSS required to render modifiedHtml close to the screenshot. Start from USED_CSS when it exists, preserve useful existing class styles, and add CSS for any new or changed classes.
-3. fullHtmlDocument must be a complete previewable document with modifiedCss inside a <style> tag and modifiedHtml inside <body>. It must render styled when opened as a standalone .html file.
+1. modifiedHtmlLines joined with "\\n" must be valid HTML for the requested scope.
+2. modifiedCssLines joined with "\\n" must include the CSS required to render modifiedHtmlLines close to the screenshot. Start from USED_CSS when it exists, preserve useful existing class styles, and add CSS for any new or changed classes.
+3. Do not return a complete HTML document. The server will build the standalone .html file by combining modifiedHtmlLines and modifiedCssLines.
 4. Preserve product meaning, names, links, numbers, prices, form fields, accessibility labels, and core functionality.
 5. You may rewrite text when recommendations mention copywriting, dense text, weak hierarchy, unclear CTA, or generic AI wording.
 6. Keep existing brand direction from CSS/style context unless a recommendation requires a visible change.

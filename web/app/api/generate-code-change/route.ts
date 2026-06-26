@@ -192,7 +192,7 @@ async function generateGeminiText(
             config: {
               responseMimeType: "application/json",
               temperature: 0.2,
-              maxOutputTokens: 8192
+              maxOutputTokens: 16384
             }
           }),
           GEMINI_TIMEOUT_MS
@@ -233,27 +233,25 @@ function normalizeCodeChangeResult(
     throw new Error("Gemini code-change JSON must be an object.");
   }
 
-  const modifiedHtml = stringValue(value.modifiedHtml).trim();
+  const modifiedHtml = stringOrLines(value.modifiedHtml, value.modifiedHtmlLines).trim();
 
   if (!modifiedHtml) {
-    throw new Error("Gemini code-change JSON must include modifiedHtml.");
+    throw new Error("Gemini code-change JSON must include modifiedHtmlLines.");
   }
 
   const diffSummary =
     stringValue(value.diffSummary).trim() ||
     "Generated a revised rendered HTML snapshot for review.";
   const modifiedCss =
-    stringValue(value.modifiedCss).trim() ||
+    stringOrLines(value.modifiedCss, value.modifiedCssLines).trim() ||
     payload.usedCss?.trim() ||
     buildMinimalFallbackCss();
-  const fullHtmlDocument =
-    stringValue(value.fullHtmlDocument).trim() ||
-    buildStandaloneHtmlDocument({
-      title: payload.title,
-      html: modifiedHtml,
-      css: modifiedCss,
-      scope: payload.scope
-    });
+  const fullHtmlDocument = buildStandaloneHtmlDocument({
+    title: payload.title,
+    html: modifiedHtml,
+    css: modifiedCss,
+    scope: payload.scope
+  });
   const warnings = Array.isArray(value.warnings)
     ? value.warnings
         .filter((item): item is string => typeof item === "string" && Boolean(item.trim()))
@@ -261,7 +259,7 @@ function normalizeCodeChangeResult(
     : [];
   const cursorPrompt =
     stringValue(value.cursorPrompt).trim() ||
-    buildFallbackCursorPrompt(payload, modifiedHtml, diffSummary);
+    buildFallbackCursorPrompt(payload, modifiedHtml, modifiedCss, diffSummary);
 
   if (!/rendered dom|rendered html|actual source|source files|map/i.test(cursorPrompt)) {
     warnings.push(
@@ -282,16 +280,20 @@ function normalizeCodeChangeResult(
 function buildFallbackCursorPrompt(
   payload: GenerateCodeChangeRequest,
   modifiedHtml: string,
+  modifiedCss: string,
   diffSummary: string
 ) {
-  return `Use this rendered HTML rewrite as implementation guidance for the real codebase.
-The original HTML is rendered DOM, not guaranteed source code. First map the block back to the actual React/Next/Vue/static source files, then apply the same structural, copy, and style changes there.
+  return `Use this rendered HTML/CSS rewrite as implementation guidance for the real codebase.
+The original HTML/CSS is rendered DOM/CSS, not guaranteed source code. First map the block back to the actual React/Next/Vue/static source files, then apply the same structural, copy, and style changes there.
 
 Scope: ${payload.scope}
 Summary: ${diffSummary}
 
 Modified rendered HTML:
-${modifiedHtml}`;
+${modifiedHtml}
+
+Modified rendered CSS:
+${modifiedCss}`;
 }
 
 function buildStandaloneHtmlDocument({
@@ -492,6 +494,17 @@ function isTransientGeminiError(error: unknown) {
 
 function stringValue(value: unknown) {
   return typeof value === "string" ? value : "";
+}
+
+function stringOrLines(value: unknown, lines: unknown) {
+  const direct = stringValue(value);
+  if (direct.trim()) return direct;
+
+  if (!Array.isArray(lines)) return "";
+
+  return lines
+    .filter((line): line is string => typeof line === "string")
+    .join("\n");
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
