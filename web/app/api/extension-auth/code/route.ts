@@ -1,4 +1,5 @@
 import { createExtensionAuthCode } from "../../../../lib/auth/extensionCodeAuth";
+import { consumeCodeSendAllowance } from "../../../../lib/auth/codeRateLimit";
 import { readAuthenticatedUser } from "../../../../lib/auth/readAuthenticatedUser";
 
 export const runtime = "nodejs";
@@ -25,6 +26,21 @@ export async function POST(request: Request) {
     );
   }
 
+  const rateLimit = await consumeCodeSendAllowance("extension-code", user.email);
+  if (!rateLimit.ok) {
+    return json(
+      {
+        ok: false,
+        error: {
+          code: "RATE_LIMITED",
+          message: "Too many code requests. Try again in a minute."
+        }
+      },
+      429,
+      { "Retry-After": String(rateLimit.retryAfterSeconds) }
+    );
+  }
+
   const result = await createExtensionAuthCode(user.email);
   return json(
     {
@@ -37,6 +53,6 @@ export async function POST(request: Request) {
   );
 }
 
-function json(body: unknown, status: number) {
-  return Response.json(body, { status, headers: corsHeaders });
+function json(body: unknown, status: number, headers: Record<string, string> = {}) {
+  return Response.json(body, { status, headers: { ...corsHeaders, ...headers } });
 }

@@ -1081,7 +1081,7 @@ export function SidePanel() {
             <h2 className="text-lg font-black text-pilot-text">Selected Area</h2>
             {!capture ? (
               <p className="mt-1 text-sm leading-6 text-pilot-muted">
-                {hasLoadedCapture ? "Select an area from the popup." : "Loading latest capture..."}
+                {hasLoadedCapture ? "Select an area from the side panel." : "Loading latest capture..."}
               </p>
             ) : null}
           </div>

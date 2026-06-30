@@ -10,11 +10,10 @@ import {
 
 const FRIENDLY_MESSAGE: Record<AuthErrorCode, string> = {
   AUTH_NOT_CONFIGURED: "Authorization is not configured yet.",
-  INVALID_EMAIL: "Enter a valid email address.",
   INVALID_CODE: "Enter the 6-character code from the website.",
   CODE_EXPIRED: "This code expired. Generate a new code on the website.",
   CODE_USED: "This code has already been used. Generate a new code on the website.",
-  CODE_EXCHANGE_FAILED: "Could not connect this extension. Check the email and code.",
+  CODE_EXCHANGE_FAILED: "Could not connect this extension. Check the code.",
   NETWORK_ERROR: "Network error. Check your connection and try again.",
   UNKNOWN: "Could not sign in. Please try again."
 };
@@ -25,7 +24,6 @@ type EmailAuthFormProps = {
 };
 
 export function EmailAuthForm({ compact = false, onSignedIn }: EmailAuthFormProps) {
-  const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [status, setStatus] = useState<"idle" | "opening" | "connecting">("idle");
   const [error, setError] = useState("");
@@ -51,7 +49,7 @@ export function EmailAuthForm({ compact = false, onSignedIn }: EmailAuthFormProp
     setError("");
     setNotice("");
     try {
-      const user = await exchangeWebsiteCode(email, code);
+      const user = await exchangeWebsiteCode(code);
       setCode("");
       onSignedIn(user);
     } catch (caught) {
@@ -64,7 +62,7 @@ export function EmailAuthForm({ compact = false, onSignedIn }: EmailAuthFormProp
   return (
     <form className={compact ? "space-y-2" : "mt-3 space-y-3"} onSubmit={handleSubmit}>
       <button
-        className={`dh-button-secondary flex w-full items-center justify-center gap-2 ${compact ? "px-3 py-2 text-xs" : "px-3 py-3 text-sm"}`}
+        className={`flex w-full items-center justify-center gap-2 rounded-xl bg-black font-black text-white shadow-sm transition hover:bg-neutral-900 disabled:cursor-not-allowed disabled:opacity-60 ${compact ? "px-3 py-2 text-xs" : "px-3 py-3 text-sm"}`}
         disabled={status !== "idle"}
         onClick={() => void handleOpenAuthorizationPage()}
         type="button"
@@ -75,20 +73,6 @@ export function EmailAuthForm({ compact = false, onSignedIn }: EmailAuthFormProp
       <p className={compact ? "text-[11px] leading-4 text-pilot-muted" : "text-sm leading-6 text-pilot-muted"}>
         Log in on the website, then paste your code here.
       </p>
-
-      <label className="block">
-        <span className="sr-only">Email</span>
-        <input
-          autoComplete="email"
-          className={inputClassName(compact)}
-          disabled={status !== "idle"}
-          inputMode="email"
-          onChange={(event) => setEmail(event.target.value)}
-          placeholder="you@example.com"
-          type="email"
-          value={email}
-        />
-      </label>
 
       <label className="block">
         <span className="sr-only">Authorization code</span>

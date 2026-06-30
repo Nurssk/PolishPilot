@@ -4,8 +4,7 @@
   "description": "Drag over a UI section to capture a screenshot crop and understand its layout.",
   "version": "0.2.37",
   "action": {
-    "default_title": "PolishPilot",
-    "default_popup": "index.html"
+    "default_title": "PolishPilot"
   },
   "background": {
     "service_worker": "assets/serviceWorker.js",

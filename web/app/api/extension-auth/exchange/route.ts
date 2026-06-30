@@ -17,9 +17,9 @@ export async function OPTIONS() {
 
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as
-    | { email?: unknown; code?: unknown }
+    | { code?: unknown }
     | null;
-  const result = await exchangeExtensionAuthCode(body?.email, body?.code);
+  const result = await exchangeExtensionAuthCode(body?.code);
 
   if (!result.ok) {
     return json(

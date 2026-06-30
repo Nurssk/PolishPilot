@@ -1,9 +1,13 @@
 import { randomInt, timingSafeEqual } from "node:crypto";
 import {
   createFirestoreAutoIdDocument,
+  deleteFirestoreDocument,
+  type FirestoreDocument,
   queryFirestoreDocuments,
   readString,
-  stringField
+  readTimestamp,
+  stringField,
+  timestampField
 } from "../firebase/firestoreRest";
 import { normalizeEmail } from "./emailCodeAuth";
 
@@ -21,7 +25,7 @@ export type ExtensionCodeExchangeResult =
   | {
       ok: false;
       status: number;
-      code: "INVALID_EMAIL" | "INVALID_CODE";
+      code: "INVALID_CODE" | "CODE_EXPIRED";
       message: string;
     };
 
@@ -37,33 +41,27 @@ export async function createExtensionAuthCode(email: string): Promise<ExtensionA
     throw new Error("Cannot create an extension code without a valid email.");
   }
 
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + EXTENSION_CODE_TTL_MS);
   const code = generateExtensionCode();
   await createFirestoreAutoIdDocument(EXTENSION_CODES_COLLECTION, {
     email: stringField(normalizedEmail),
-    code: stringField(code)
+    code: stringField(code),
+    createdAt: timestampField(now),
+    expiresAt: timestampField(expiresAt)
   });
 
   return {
     code,
-    expiresAt: new Date(Date.now() + EXTENSION_CODE_TTL_MS).toISOString()
+    expiresAt: expiresAt.toISOString()
   };
 }
 
 export async function exchangeExtensionAuthCode(
-  emailValue: unknown,
   codeValue: unknown
 ): Promise<ExtensionCodeExchangeResult> {
-  const email = normalizeEmail(emailValue);
   const code = normalizeExtensionCode(codeValue);
 
-  if (!email) {
-    return {
-      ok: false,
-      status: 400,
-      code: "INVALID_EMAIL",
-      message: "Enter the same email you used on the website."
-    };
-  }
   if (!code) {
     return {
       ok: false,
@@ -74,21 +72,36 @@ export async function exchangeExtensionAuthCode(
   }
 
   const documents = await queryFirestoreDocuments(EXTENSION_CODES_COLLECTION, {
-    email: stringField(email)
-  });
-  const matchingDocument = documents.find((document) => {
-    const fields = document.fields;
-    return (
-      safeEqual(readString(fields, "email") ?? "", email) &&
-      safeEqual(readString(fields, "code") ?? "", code)
-    );
+    code: stringField(code)
   });
 
-  if (!matchingDocument) {
-    return invalidCode();
+  let sawExpiredCode = false;
+  for (const document of documents) {
+    const fields = document.fields;
+    const storedCode = readString(fields, "code") ?? "";
+    const email = normalizeEmail(readString(fields, "email"));
+    if (!email || !safeEqual(storedCode, code)) continue;
+
+    if (isExpired(document)) {
+      sawExpiredCode = true;
+      await deleteDocumentByName(document.name).catch(() => undefined);
+      continue;
+    }
+
+    await deleteDocumentByName(document.name);
+    return { ok: true, email };
   }
 
-  return { ok: true, email };
+  if (sawExpiredCode) {
+    return {
+      ok: false,
+      status: 401,
+      code: "CODE_EXPIRED",
+      message: "This code expired. Generate a new code on the website."
+    };
+  }
+
+  return invalidCode();
 }
 
 function invalidCode(): ExtensionCodeExchangeResult {
@@ -96,7 +109,7 @@ function invalidCode(): ExtensionCodeExchangeResult {
     ok: false,
     status: 401,
     code: "INVALID_CODE",
-    message: "The email and code do not match. Copy a fresh code from the website."
+    message: "This code is invalid. Copy a fresh code from the website."
   };
 }
 
@@ -106,6 +119,19 @@ function generateExtensionCode(): string {
     code += CODE_ALPHABET[randomInt(CODE_ALPHABET.length)];
   }
   return code;
+}
+
+function isExpired(document: FirestoreDocument): boolean {
+  const expiresAt = readTimestamp(document.fields, "expiresAt");
+  if (expiresAt) return Date.parse(expiresAt) <= Date.now();
+  if (!document.createTime) return false;
+  return Date.parse(document.createTime) + EXTENSION_CODE_TTL_MS <= Date.now();
+}
+
+async function deleteDocumentByName(name: string): Promise<void> {
+  const documentId = name.split("/").pop();
+  if (!documentId) return;
+  await deleteFirestoreDocument(EXTENSION_CODES_COLLECTION, documentId);
 }
 
 function safeEqual(left: string, right: string): boolean {

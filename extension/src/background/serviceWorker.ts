@@ -17,11 +17,17 @@ import type {
 
 let latestCapture: RectangleCapture | null = null;
 
+void configureSidePanelBehavior();
+
 chrome.runtime.onInstalled.addListener(() => {
-  if (chrome.sidePanel?.setPanelBehavior) {
-    chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false });
-  }
+  void configureSidePanelBehavior();
 });
+
+async function configureSidePanelBehavior() {
+  if (chrome.sidePanel?.setPanelBehavior) {
+    await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
+  }
+}
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (!isPolishPilotMessage(message)) {

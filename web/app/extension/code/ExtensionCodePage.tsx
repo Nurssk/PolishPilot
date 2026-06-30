@@ -101,11 +101,11 @@ export function ExtensionCodePage() {
         <aside style={styles.instructions}>
           <div style={styles.logo}>DH</div>
           <h1 style={styles.title}>Your extension code</h1>
-          <p style={styles.lede}>Copy this one-time code into the Chrome extension with the same email.</p>
+          <p style={styles.lede}>Copy this one-time code into the Chrome extension.</p>
 
           <div style={styles.steps}>
-            <Step index={1} title="Use the same email">
-              The extension checks that the email matches this signed-in account.
+            <Step index={1} title="Paste only the code">
+              The extension finds your signed-in email automatically from this code.
             </Step>
             <Step index={2} title="Use it once">
               The code expires in 10 minutes and is marked used after exchange.

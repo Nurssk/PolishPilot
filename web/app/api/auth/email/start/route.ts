@@ -4,6 +4,7 @@ import {
   normalizeEmail,
   sendEmailCode
 } from "../../../../../lib/auth/emailCodeAuth";
+import { consumeCodeSendAllowance } from "../../../../../lib/auth/codeRateLimit";
 
 export const runtime = "nodejs";
 
@@ -40,6 +41,21 @@ export async function POST(request: Request) {
     );
   }
 
+  const rateLimit = await consumeCodeSendAllowance("email-login", email);
+  if (!rateLimit.ok) {
+    return json(
+      {
+        ok: false,
+        error: {
+          code: "RATE_LIMITED",
+          message: "Too many code requests. Try again in a minute."
+        }
+      },
+      429,
+      { "Retry-After": String(rateLimit.retryAfterSeconds) }
+    );
+  }
+
   const code = createEmailCode(email);
   const result = await sendEmailCode(email, code);
   if (result.errorCode) {
@@ -68,6 +84,6 @@ export async function POST(request: Request) {
   );
 }
 
-function json(body: unknown, status: number) {
-  return Response.json(body, { status, headers: corsHeaders });
+function json(body: unknown, status: number, headers: Record<string, string> = {}) {
+  return Response.json(body, { status, headers: { ...corsHeaders, ...headers } });
 }

@@ -1,3 +1,5 @@
+import { apiUrl } from "./apiConfig";
+
 export type ExtensionUser = {
   uid: string;
   email: string | null;
@@ -16,7 +18,6 @@ export type AuthState = {
 
 export type AuthErrorCode =
   | "AUTH_NOT_CONFIGURED"
-  | "INVALID_EMAIL"
   | "INVALID_CODE"
   | "CODE_EXPIRED"
   | "CODE_USED"
@@ -41,7 +42,7 @@ export type ExchangeWebsiteCodeResult = {
 };
 
 const AUTH_AUTHORIZE_URL = "https://www.beuniq.design/extension/authorize";
-const AUTH_EXCHANGE_URL = "https://polish-pilot.vercel.app/api/extension-auth/exchange";
+const AUTH_EXCHANGE_URL = apiUrl("/api/extension-auth/exchange");
 const AUTH_PROFILE_KEY = "authUserProfile";
 const AUTH_TOKEN_KEY = "authSessionToken";
 const AUTH_TOKEN_EXPIRES_AT_KEY = "authSessionTokenExpiresAt";
@@ -60,21 +61,14 @@ export async function openAuthorizationPage(): Promise<void> {
   window.open(AUTH_AUTHORIZE_URL, "_blank", "noopener,noreferrer");
 }
 
-export async function exchangeWebsiteCode(
-  email: string,
-  code: string
-): Promise<ExtensionUser> {
-  const normalizedEmail = normalizeEmail(email);
+export async function exchangeWebsiteCode(code: string): Promise<ExtensionUser> {
   const normalizedCode = normalizeCode(code);
 
-  if (!normalizedEmail) {
-    throw new AuthError("INVALID_EMAIL", "Enter a valid email address.");
-  }
   if (normalizedCode.length !== 6) {
     throw new AuthError("INVALID_CODE", "Enter the 6-character code.");
   }
 
-  const body = await exchangeCodeRequest(normalizedEmail, normalizedCode);
+  const body = await exchangeCodeRequest(normalizedCode);
   const user: ExtensionUser = {
     uid: body.email,
     email: body.email,
@@ -129,16 +123,13 @@ export async function getAuthHeaders(): Promise<Record<string, string>> {
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
-async function exchangeCodeRequest(
-  email: string,
-  code: string
-): Promise<ExchangeWebsiteCodeResult> {
+async function exchangeCodeRequest(code: string): Promise<ExchangeWebsiteCodeResult> {
   let response: Response;
   try {
     response = await fetch(AUTH_EXCHANGE_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, code })
+      body: JSON.stringify({ code })
     });
   } catch {
     throw new AuthError("NETWORK_ERROR", "Could not reach the authorization server.");
@@ -193,12 +184,15 @@ function mapExchangeError(code?: unknown, message?: unknown): AuthError {
     );
   }
   if (normalizedCode.includes("INVALID_EMAIL")) {
-    return new AuthError("INVALID_EMAIL", normalizedMessage ?? "Enter a valid email address.");
+    return new AuthError(
+      "CODE_EXCHANGE_FAILED",
+      "Authorization backend is out of date. Deploy the latest web backend, then try again."
+    );
   }
   if (normalizedCode.includes("INVALID_CODE") || normalizedCode.includes("INVALID")) {
     return new AuthError(
       "INVALID_CODE",
-      normalizedMessage ?? "The email and code do not match. Copy a fresh code from the website."
+      normalizedMessage ?? "This code is invalid. Copy a fresh code from the website."
     );
   }
   return new AuthError(
@@ -286,11 +280,6 @@ function notifyAuthListeners(user: ExtensionUser | null): void {
   for (const listener of authListeners) {
     listener(user);
   }
-}
-
-function normalizeEmail(email: string): string {
-  const normalized = email.trim().toLowerCase();
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized) ? normalized : "";
 }
 
 export function normalizeCode(code: string): string {
