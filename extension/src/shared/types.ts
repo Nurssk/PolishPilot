@@ -150,6 +150,7 @@ export type SourceSectionPart = {
   ctaSnippets: string[];
   mediaSnippets: string[];
   htmlPreview: string;
+  inlineHtmlPreview?: string;
   sectionType: SectionType;
   layoutType: LayoutType;
   confidence: number;
@@ -228,6 +229,7 @@ export type RectangleCapture = {
   styleTokens?: StyleTokens;
   pageDesignContext?: PageDesignContext;
   fullPageHtmlPreview?: string;
+  fullPageInlineHtmlPreview?: string;
   sourceSections?: SourceSectionPart[];
   selectedSourceSection?: SourceSectionPart;
   previewDebugLogs?: PreviewDebugLog[];
@@ -282,21 +284,23 @@ export type ShowInPagePreviewMessage = {
   payload: InPagePreviewPayload;
 };
 
-export type AIImagePreviewPayload = {
-  previewImageBase64: string;
-  patternName: string;
-};
-
-export type ShowAIImagePreviewMessage = {
-  type: "SHOW_AI_IMAGE_PREVIEW";
-  payload: AIImagePreviewPayload;
-};
-
 export type RemoveInPagePreviewMessage = {
   type: "REMOVE_IN_PAGE_PREVIEW";
 };
 
 export type CodeChangeScope = "selected-block" | "whole-page";
+
+export type ApplyCodeChangePreviewPayload = {
+  domPath?: string;
+  html: string;
+  css?: string;
+  scope: CodeChangeScope;
+};
+
+export type ApplyCodeChangePreviewMessage = {
+  type: "APPLY_CODE_CHANGE_PREVIEW";
+  payload: ApplyCodeChangePreviewPayload;
+};
 
 export type CodeChangeRequest = {
   screenshotBase64: string;
@@ -325,6 +329,55 @@ export type CodeChangeResult = {
   warnings: string[];
 };
 
+export type SourceFileCandidate = {
+  path: string;
+  language: string;
+  size: number;
+  score: number;
+  reasons: string[];
+  snippet: string;
+  matchedTokens: string[];
+};
+
+export type SourcePatchEdit = {
+  id: string;
+  filePath: string;
+  originalSnippet: string;
+  replacementSnippet: string;
+  explanation: string;
+  confidence: number;
+};
+
+export type SourcePatchRequest = {
+  screenshotBase64: string;
+  scope: CodeChangeScope;
+  url?: string;
+  title?: string;
+  originalHtml: string;
+  originalCss?: string;
+  modifiedHtml: string;
+  modifiedCss?: string;
+  recommendations?: string[];
+  selectedPattern?: unknown;
+  selectedTemplateReference?: unknown;
+  selectedAnimationReference?: unknown;
+  candidateFiles: SourceFileCandidate[];
+};
+
+export type SourcePatchResult = {
+  summary: string;
+  edits: SourcePatchEdit[];
+  warnings: string[];
+  manualInstructions?: string;
+};
+
+export type CodeApplyStatus = {
+  editId: string;
+  filePath: string;
+  status: "pending" | "applied" | "blocked" | "manual" | "error";
+  message: string;
+};
+
 export type PolishPilotMessage =
   | StartRectangleSelectionMessage
   | StartNewScreenshotMessage
@@ -333,8 +386,8 @@ export type PolishPilotMessage =
   | CaptureUpdatedMessage
   | UsageUpdatedMessage
   | ShowInPagePreviewMessage
-  | ShowAIImagePreviewMessage
-  | RemoveInPagePreviewMessage;
+  | RemoveInPagePreviewMessage
+  | ApplyCodeChangePreviewMessage;
 
 export type AIUnderstandingResult = {
   sectionType: UIBlockCategory;

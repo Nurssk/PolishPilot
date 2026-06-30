@@ -12,7 +12,6 @@ import type {
   RectangleSelectionCompleteMessage,
   RemoveInPagePreviewMessage,
   SelectionRect,
-  ShowAIImagePreviewMessage,
   ShowInPagePreviewMessage
 } from "../shared/types";
 
@@ -53,11 +52,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   if (
     message.type === "SHOW_IN_PAGE_PREVIEW" ||
-    message.type === "SHOW_AI_IMAGE_PREVIEW" ||
     message.type === "REMOVE_IN_PAGE_PREVIEW"
   ) {
     forwardPreviewMessageToActiveTab(
-      message as ShowInPagePreviewMessage | ShowAIImagePreviewMessage | RemoveInPagePreviewMessage
+      message as ShowInPagePreviewMessage | RemoveInPagePreviewMessage
     )
       .then(() => sendResponse({ ok: true }))
       .catch((error: unknown) => {
@@ -152,7 +150,7 @@ async function sendStartSelectionMessage(
 }
 
 async function forwardPreviewMessageToActiveTab(
-  message: ShowInPagePreviewMessage | ShowAIImagePreviewMessage | RemoveInPagePreviewMessage
+  message: ShowInPagePreviewMessage | RemoveInPagePreviewMessage
 ) {
   const [tab] = await chrome.tabs.query({
     active: true,

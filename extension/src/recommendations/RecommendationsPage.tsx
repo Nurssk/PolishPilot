@@ -5,15 +5,12 @@ import {
   RECOMMENDATIONS_STORAGE_KEY,
   SELECTED_ANIMATION_STORAGE_KEY,
   SELECTED_PATTERN_STORAGE_KEY,
-  SELECTED_TEMPLATE_STORAGE_KEY,
-  WORKSPACE_AI_PREVIEW_REQUEST_KEY
+  SELECTED_TEMPLATE_STORAGE_KEY
 } from "../shared/messages";
 import { closeCurrentTab } from "../shared/closeCurrentTab";
 import { PatternCard } from "../components/PatternCard";
 import { TemplateReferenceCard } from "../components/TemplateReferenceCard";
 import { AnimationReferenceCard } from "../components/AnimationReferenceCard";
-import { GENERATED_PREVIEWS_KEY } from "../shared/generatedPreviewStore";
-import type { GeneratedPreviewImage } from "../shared/generatedPreviewTypes";
 import type { DesignIdeasData, RecommendationsData } from "../shared/windowData";
 import type { UncodixifyFinding } from "../analysis/uncodixifyTypes";
 import type { LayoutPattern } from "../patterns/layoutPatterns";
@@ -23,8 +20,7 @@ type WorkspaceTab =
   | "recommendations"
   | "layouts"
   | "templates"
-  | "animations"
-  | "aiPreview";
+  | "animations";
 
 const CATEGORY_LABEL: Record<string, string> = {
   layout: "Layout",
@@ -67,11 +63,6 @@ export function RecommendationsPage() {
   const [loaded, setLoaded] = useState(false);
   const [copiedPrompt, setCopiedPrompt] = useState(false);
   const [copiedPatternId, setCopiedPatternId] = useState<string | null>(null);
-  const [previewRequestState, setPreviewRequestState] = useState<
-    "idle" | "requested" | "ready"
-  >("idle");
-  const [latestPreview, setLatestPreview] = useState<GeneratedPreviewImage | null>(null);
-
   useEffect(() => {
     void readData().then(() => setLoaded(true));
 
@@ -86,8 +77,7 @@ export function RecommendationsPage() {
         EXCLUDED_UNCODIX_RULES_STORAGE_KEY in changes ||
         SELECTED_PATTERN_STORAGE_KEY in changes ||
         SELECTED_TEMPLATE_STORAGE_KEY in changes ||
-        SELECTED_ANIMATION_STORAGE_KEY in changes ||
-        GENERATED_PREVIEWS_KEY in changes
+        SELECTED_ANIMATION_STORAGE_KEY in changes
       ) {
         void readData();
       }
@@ -104,8 +94,7 @@ export function RecommendationsPage() {
       EXCLUDED_UNCODIX_RULES_STORAGE_KEY,
       SELECTED_PATTERN_STORAGE_KEY,
       SELECTED_TEMPLATE_STORAGE_KEY,
-      SELECTED_ANIMATION_STORAGE_KEY,
-      GENERATED_PREVIEWS_KEY
+      SELECTED_ANIMATION_STORAGE_KEY
     ]);
     const stored = result[RECOMMENDATIONS_STORAGE_KEY] as RecommendationsData | undefined;
     const storedIdeas = result[DESIGN_IDEAS_STORAGE_KEY] as DesignIdeasData | undefined;
@@ -138,11 +127,6 @@ export function RecommendationsPage() {
           }
         : null
     );
-    const previews = result[GENERATED_PREVIEWS_KEY] as GeneratedPreviewImage[] | undefined;
-    setLatestPreview(Array.isArray(previews) ? previews[0] ?? null : null);
-    if (Array.isArray(previews) && previews.length > 0) {
-      setPreviewRequestState("ready");
-    }
   }
 
   async function toggleRule(ruleId: string) {
@@ -181,8 +165,7 @@ export function RecommendationsPage() {
     recommendations: findings.length,
     layouts: ideas?.layoutPatterns.length ?? 0,
     templates: templates.length,
-    animations: ideas?.animationReferences.length ?? 0,
-    aiPreview: latestPreview ? 1 : 0
+    animations: ideas?.animationReferences.length ?? 0
   };
 
   async function selectPattern(pattern: LayoutPattern) {
@@ -226,16 +209,6 @@ export function RecommendationsPage() {
     await navigator.clipboard.writeText(cursorPrompt);
     setCopiedPrompt(true);
     window.setTimeout(() => setCopiedPrompt(false), 1600);
-  }
-
-  async function requestAIPreview() {
-    setPreviewRequestState("requested");
-    await chrome.storage.session.set({
-      [WORKSPACE_AI_PREVIEW_REQUEST_KEY]: {
-        requestedAt: Date.now(),
-        openResult: false
-      }
-    });
   }
 
   return (
@@ -391,24 +364,13 @@ export function RecommendationsPage() {
                 )
               ) : null}
 
-              {tab === "aiPreview" ? (
-                <AIPreviewPanel
-                  latestPreview={latestPreview}
-                  onGeneratePreview={() => void requestAIPreview()}
-                  previewRequestState={previewRequestState}
-                  selectedPattern={selectedPattern}
-                />
-              ) : null}
             </div>
           )}
         </div>
         <WorkspaceActionBar
           copiedPrompt={copiedPrompt}
           cursorPrompt={cursorPrompt}
-          latestPreview={latestPreview}
           onCopyPrompt={() => void copyPrompt()}
-          onGeneratePreview={() => void requestAIPreview()}
-          previewRequestState={previewRequestState}
           selectedAnimation={selectedAnimation?.title}
           selectedPattern={selectedPattern?.name}
           selectedTemplate={selectedTemplate?.title}
@@ -432,7 +394,6 @@ function WorkspaceSidebar({
     layouts: number;
     templates: number;
     animations: number;
-    aiPreview: number;
   };
   onTab: (tab: WorkspaceTab) => void;
   sourceTitle?: string;
@@ -475,12 +436,6 @@ function WorkspaceSidebar({
           badge={counts.animations ? String(counts.animations) : undefined}
           label="Animations"
           onClick={() => onTab("animations")}
-        />
-        <NavButton
-          active={active === "aiPreview"}
-          badge={counts.aiPreview ? String(counts.aiPreview) : undefined}
-          label="AI Preview"
-          onClick={() => onTab("aiPreview")}
         />
       </nav>
 
@@ -554,20 +509,14 @@ function NavButton({
 function WorkspaceActionBar({
   copiedPrompt,
   cursorPrompt,
-  latestPreview,
   onCopyPrompt,
-  onGeneratePreview,
-  previewRequestState,
   selectedAnimation,
   selectedPattern,
   selectedTemplate
 }: {
   copiedPrompt: boolean;
   cursorPrompt: string;
-  latestPreview: GeneratedPreviewImage | null;
   onCopyPrompt: () => void;
-  onGeneratePreview: () => void;
-  previewRequestState: "idle" | "requested" | "ready";
   selectedAnimation?: string;
   selectedPattern?: string;
   selectedTemplate?: string;
@@ -596,23 +545,7 @@ function WorkspaceActionBar({
               </span>
             ))}
           </div>
-          {latestPreview ? (
-            <p className="mt-1 text-xs text-pilot-muted">
-              Latest AI preview ready: {latestPreview.patternName}
-            </p>
-          ) : previewRequestState === "requested" ? (
-            <p className="mt-1 text-xs text-pilot-muted">
-              Preview requested. Keep the side panel open while it generates.
-            </p>
-          ) : null}
         </div>
-        <button
-          className="dh-button-secondary px-4 py-2.5 text-sm"
-          onClick={onGeneratePreview}
-          type="button"
-        >
-          {previewRequestState === "requested" ? "Generating..." : "Generate AI Preview"}
-        </button>
         <button
           className="dh-button-primary px-4 py-2.5 text-sm"
           disabled={!cursorPrompt}
@@ -623,111 +556,6 @@ function WorkspaceActionBar({
         </button>
       </div>
     </div>
-  );
-}
-
-function AIPreviewPanel({
-  latestPreview,
-  onGeneratePreview,
-  previewRequestState,
-  selectedPattern
-}: {
-  latestPreview: GeneratedPreviewImage | null;
-  onGeneratePreview: () => void;
-  previewRequestState: "idle" | "requested" | "ready";
-  selectedPattern: LayoutPattern | undefined;
-}) {
-  async function openLatestPreview() {
-    const url = latestPreview?.id
-      ? `preview-image.html?id=${latestPreview.id}`
-      : "preview-gallery.html";
-    await chrome.tabs.create({ url: chrome.runtime.getURL(url) });
-  }
-
-  return (
-    <>
-      <PageHeader
-        eyebrow="AI Preview"
-        title="Generate a Humanizer preview"
-        description="Gemini uses the captured screenshot and every Humanizer recommendation. A selected layout is optional."
-      />
-
-      <section className="mt-5 rounded-xl border border-pilot-border bg-pilot-card p-5 shadow-pilot">
-        <p className="text-[11px] font-black uppercase tracking-[0.08em] text-pilot-soft">
-          Generation brief
-        </p>
-        <p className="mt-2 text-sm leading-6 text-pilot-muted">
-          Without a layout, the preview focuses on fixing the recommendations directly:
-          design, hierarchy, spacing, and copy. If a layout is selected, it becomes only
-          supporting structure.
-        </p>
-      </section>
-
-      <section className="mt-5 grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
-          <div className="rounded-xl border border-pilot-border bg-pilot-card p-5 shadow-pilot">
-            <p className="text-[11px] font-black uppercase tracking-[0.08em] text-pilot-soft">
-              Preview direction
-            </p>
-            <h2 className="mt-2 text-xl font-black text-pilot-text">
-              {selectedPattern?.name ?? "Recommendation fixes"}
-            </h2>
-            <p className="mt-2 text-sm leading-6 text-pilot-muted">
-              Generate an AI image that shows the visible design fixes. Text can be
-              humanized when the recommendations call for copy improvements.
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              <button
-                className="dh-button-primary px-4 py-2.5 text-sm"
-                disabled={previewRequestState === "requested"}
-                onClick={onGeneratePreview}
-                type="button"
-              >
-                {previewRequestState === "requested"
-                  ? "Generating..."
-                  : "Generate AI Preview"}
-              </button>
-              <button
-                className="dh-button-secondary px-4 py-2.5 text-sm"
-                disabled={!latestPreview}
-                onClick={() => void openLatestPreview()}
-                type="button"
-              >
-                Open Latest
-              </button>
-            </div>
-            {previewRequestState === "requested" ? (
-              <p className="mt-3 text-xs text-pilot-muted">
-                Preview requested. Keep the side panel open while it generates.
-              </p>
-            ) : null}
-          </div>
-
-          <div className="rounded-xl border border-pilot-border bg-pilot-card p-4 shadow-pilot">
-            <p className="text-[11px] font-black uppercase tracking-[0.08em] text-pilot-soft">
-              Latest preview
-            </p>
-            {latestPreview ? (
-              <>
-                <img
-                  alt="Latest AI preview"
-                  className="mt-3 aspect-video w-full rounded-lg border border-pilot-border bg-pilot-bg object-cover"
-                  src={toDataUrl(latestPreview.imageBase64)}
-                />
-                <p className="mt-3 text-sm font-bold text-pilot-text">
-                  {latestPreview.patternName ?? "Generated preview"}
-                </p>
-                <p className="mt-1 text-xs text-pilot-muted">
-                  {formatPreviewDate(latestPreview.createdAt)}
-                </p>
-              </>
-            ) : (
-              <p className="mt-3 text-sm leading-6 text-pilot-muted">
-                No generated preview yet.
-              </p>
-            )}
-          </div>
-        </section>
-    </>
   );
 }
 
@@ -949,14 +777,4 @@ function strongestCategory(findings: UncodixifyFinding[]) {
     0
   ];
   return count ? `${label} · ${count} ${count === 1 ? "issue" : "issues"}` : "None";
-}
-
-function toDataUrl(imageBase64: string) {
-  return imageBase64.startsWith("data:")
-    ? imageBase64
-    : `data:image/png;base64,${imageBase64}`;
-}
-
-function formatPreviewDate(createdAt: string) {
-  return new Date(createdAt).toLocaleString();
 }

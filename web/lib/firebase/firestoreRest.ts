@@ -161,6 +161,10 @@ export function timestampField(value: Date): FirestoreValue {
   return { timestampValue: value.toISOString() };
 }
 
+export function booleanField(value: boolean): FirestoreValue {
+  return { booleanValue: value };
+}
+
 export function readString(fields: Record<string, FirestoreValue> | undefined, key: string): string | null {
   const value = fields?.[key];
   return value && "stringValue" in value ? value.stringValue : null;
@@ -176,6 +180,11 @@ export function readInteger(fields: Record<string, FirestoreValue> | undefined, 
 export function readTimestamp(fields: Record<string, FirestoreValue> | undefined, key: string): string | null {
   const value = fields?.[key];
   return value && "timestampValue" in value ? value.timestampValue : null;
+}
+
+export function readBoolean(fields: Record<string, FirestoreValue> | undefined, key: string): boolean | null {
+  const value = fields?.[key];
+  return value && "booleanValue" in value ? value.booleanValue : null;
 }
 
 async function firestoreFetch(path: string, init: RequestInit): Promise<Response> {

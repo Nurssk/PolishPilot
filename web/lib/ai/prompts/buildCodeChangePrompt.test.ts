@@ -20,6 +20,16 @@ const baseRequest: GenerateCodeChangeRequest = {
   aiResult: {
     sectionType: "hero",
     layoutType: "vertical_stack"
+  },
+  selectedTemplateReference: {
+    title: "Feature Bento",
+    source: "watermelon-ui",
+    implementationHint: "Use asymmetric bento cards with a featured panel."
+  },
+  selectedAnimationReference: {
+    title: "Staggered Reveal",
+    source: "motion-primitives",
+    implementationHint: "Reveal cards with small delays and reduced-motion fallback."
   }
 };
 
@@ -38,6 +48,11 @@ assert.match(selectedPrompt, /"modifiedCssLines": \["string"\]/);
 assert.match(selectedPrompt, /modifiedCssLines joined with "\\n" must include the CSS required/);
 assert.match(selectedPrompt, /The server will build the standalone \.html file/);
 assert.match(selectedPrompt, /Return JSON only/);
+assert.match(selectedPrompt, /The user explicitly picked this layout\/template\/animation direction/);
+assert.match(selectedPrompt, /Feature Bento/);
+assert.match(selectedPrompt, /Staggered Reveal/);
+assert.match(selectedPrompt, /If a selected template exists, use its layout\/component idea/);
+assert.match(selectedPrompt, /If a selected animation exists, include the required CSS/);
 
 const wholePagePrompt = buildCodeChangePrompt({
   ...baseRequest,

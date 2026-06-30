@@ -1,8 +1,6 @@
 import "../styles/tailwind.css";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  AI_PREVIEW_STORAGE_KEY,
-  AI_PREVIEW_REGENERATE_KEY,
   CODE_CHANGE_STORAGE_KEY,
   DESIGN_IDEAS_STORAGE_KEY,
   EXCLUDED_UNCODIX_RULES_STORAGE_KEY,
@@ -14,18 +12,10 @@ import {
   SELECTED_ANIMATION_STORAGE_KEY,
   SELECTED_PATTERN_STORAGE_KEY,
   SELECTED_TEMPLATE_STORAGE_KEY,
-  WORKSPACE_AI_PREVIEW_REQUEST_KEY,
   formatPixels,
   isPolishPilotMessage
 } from "../shared/messages";
 import { API_BASE_URL, apiUrl } from "../shared/apiConfig";
-import { downloadBase64Image, previewDownloadFilename } from "../shared/downloadImage";
-import {
-  addGeneratedPreview,
-  GENERATED_PREVIEWS_KEY,
-  getGeneratedPreviews
-} from "../shared/generatedPreviewStore";
-import type { GeneratedPreviewImage } from "../shared/generatedPreviewTypes";
 import { AccountPanel } from "../components/AccountPanel";
 import { getAuthHeaders } from "../shared/authService";
 import { UncodixifyCheck } from "../components/UncodixifyCheck";
@@ -68,7 +58,6 @@ import type {
 } from "../shared/windowData";
 
 const ANALYZE_URL = apiUrl("/api/analyze-area");
-const AI_PREVIEW_URL = apiUrl("/api/generate-ai-preview");
 const HEALTH_URL = apiUrl("/api/health");
 
 type AIStatus = "idle" | "loading" | "success" | "error";
@@ -107,46 +96,6 @@ type GeminiDebugState = {
   jsonParseStrategy?: "direct" | "extracted" | "repaired";
   error?: GeminiApiError;
 };
-type AIPreviewStatus = "idle" | "loading" | "success" | "error";
-type AIPreviewDebugState = {
-  requestId?: string;
-  model?: string;
-  durationMs?: number;
-  screenshotLength?: number;
-  templateMode?: "text-only" | "schematic-image" | "both";
-  hasTemplateImage?: boolean;
-  availableImageModels?: string[];
-  selectedModel?: string;
-  sdkModelName?: string;
-  orderedModelCandidates?: string[];
-  modelSelectionWarning?: string;
-  quotaError?: boolean;
-  retryAfterSeconds?: number;
-  modelAttempts?: Array<Record<string, unknown>>;
-  callMode?: string;
-  responseTopLevelKeys?: string[];
-  imageInlineDataFound?: boolean;
-  recommendationCounts?: {
-    designChecks: number;
-    layoutIdeas: number;
-    templateReferences: number;
-    animationReferences: number;
-    uncodixifyRecommendations: number;
-  };
-  solutionStatus?: "success" | "error" | "skipped";
-  solutionModel?: string;
-  solutionDurationMs?: number;
-  solutionPromptChars?: number;
-  solutionTextEditCount?: number;
-  solutionSummary?: string;
-  solutionError?: string;
-  promptUsed?: string;
-  error?: {
-    code: string;
-    message: string;
-    details?: string;
-  };
-};
 type AnalyzeAreaSuccessResponse = {
   ok: true;
   requestId: string;
@@ -161,49 +110,6 @@ type AnalyzeAreaSuccessResponse = {
     jsonParseStrategy?: "direct" | "extracted" | "repaired";
     retryCount?: number;
   };
-};
-type GenerateAIPreviewSuccessResponse = {
-  ok: true;
-  requestId: string;
-  provider: "gemini";
-  model: string;
-  durationMs: number;
-  previewImageBase64: string;
-  promptUsed: string;
-  debug?: {
-    screenshotLength: number;
-    templateMode: "text-only" | "schematic-image" | "both";
-    hasTemplateImage: boolean;
-    availableImageModels?: string[];
-    selectedModel?: string;
-    sdkModelName?: string;
-    orderedModelCandidates?: string[];
-    modelSelectionWarning?: string;
-    quotaError?: boolean;
-    retryAfterSeconds?: number;
-    modelAttempts?: Array<Record<string, unknown>>;
-    callMode?: string;
-    responseTopLevelKeys?: string[];
-    imageInlineDataFound?: boolean;
-    recommendationCounts?: AIPreviewDebugState["recommendationCounts"];
-    solutionStatus?: AIPreviewDebugState["solutionStatus"];
-    solutionModel?: string;
-    solutionDurationMs?: number;
-    solutionPromptChars?: number;
-    solutionTextEditCount?: number;
-    solutionSummary?: string;
-    solutionError?: string;
-  };
-};
-type GenerateAIPreviewErrorResponse = {
-  ok: false;
-  requestId?: string;
-  error?: {
-    code: string;
-    message: string;
-    details?: string;
-  };
-  debug?: Record<string, unknown>;
 };
 type AnalyzeAreaErrorResponse = {
   ok: false;
@@ -239,16 +145,11 @@ export function SidePanel() {
     null
   );
   const [geminiDebug, setGeminiDebug] = useState<GeminiDebugState>({});
-  const [aiPreviewStatus, setAIPreviewStatus] = useState<AIPreviewStatus>("idle");
-  const [aiPreviewError, setAIPreviewError] = useState("");
-  const [aiPreviewDebug, setAIPreviewDebug] = useState<AIPreviewDebugState>({});
   const [geminiLogs, setGeminiLogs] = useState<GeminiLogEntry[]>([]);
   const [debugCopied, setDebugCopied] = useState(false);
   const [previewDebugCopied, setPreviewDebugCopied] = useState(false);
   const [promptCopied, setPromptCopied] = useState(false);
-  const [generatedPreviews, setGeneratedPreviews] = useState<GeneratedPreviewImage[]>([]);
   const [excludedUncodixRuleIds, setExcludedUncodixRuleIds] = useState<string[]>([]);
-  const generateAIPreviewRef = useRef<((options?: { openResult?: boolean }) => Promise<void>) | null>(null);
   const analysisTimersRef = useRef<number[]>([]);
 
   useEffect(() => {
@@ -276,10 +177,6 @@ export function SidePanel() {
       const nextPatternId = changes[SELECTED_PATTERN_STORAGE_KEY]?.newValue as
         | LayoutPatternId
         | undefined;
-      const nextGeneratedPreviews = changes[GENERATED_PREVIEWS_KEY]?.newValue as
-        | GeneratedPreviewImage[]
-        | undefined;
-
       // Selections made inside the floating windows sync back here.
       if (SELECTED_TEMPLATE_STORAGE_KEY in changes) {
         setSelectedTemplateId(
@@ -297,16 +194,6 @@ export function SidePanel() {
         const next = changes[EXCLUDED_UNCODIX_RULES_STORAGE_KEY]?.newValue;
         setExcludedUncodixRuleIds(Array.isArray(next) ? (next as string[]) : []);
       }
-      if (AI_PREVIEW_REGENERATE_KEY in changes && changes[AI_PREVIEW_REGENERATE_KEY]?.newValue) {
-        void generateAIPreviewRef.current?.();
-      }
-      if (
-        WORKSPACE_AI_PREVIEW_REQUEST_KEY in changes &&
-        changes[WORKSPACE_AI_PREVIEW_REQUEST_KEY]?.newValue
-      ) {
-        void generateAIPreviewRef.current?.({ openResult: false });
-      }
-
       if (nextCapture) {
         setCapture((current) => {
           const isSameCapture = current?.captureId === nextCapture.captureId;
@@ -317,9 +204,6 @@ export function SidePanel() {
             setAnalysisStep("capture");
             setAIError("");
             setGeminiDebug({});
-            setAIPreviewStatus("idle");
-            setAIPreviewError("");
-            setAIPreviewDebug({});
             setSelectedPatternId(null);
             setSelectedTemplateId(null);
             setSelectedAnimationId(null);
@@ -342,11 +226,6 @@ export function SidePanel() {
         setAnalysisStep("complete");
       }
       if (nextPatternId) setSelectedPatternId(nextPatternId);
-      if (Array.isArray(nextGeneratedPreviews)) {
-        setGeneratedPreviews(nextGeneratedPreviews);
-      } else if (GENERATED_PREVIEWS_KEY in changes && !nextGeneratedPreviews) {
-        setGeneratedPreviews([]);
-      }
     }
 
     function handleRuntimeMessage(message: unknown) {
@@ -358,9 +237,6 @@ export function SidePanel() {
         setAnalysisStep("capture");
         setAIError("");
         setGeminiDebug({});
-        setAIPreviewStatus("idle");
-        setAIPreviewError("");
-        setAIPreviewDebug({});
         setSelectedPatternId(null);
         setSelectedTemplateId(null);
         setSelectedAnimationId(null);
@@ -469,7 +345,6 @@ export function SidePanel() {
     allSuggestedTemplates.find((reference) => reference.id === selectedTemplateId) ?? null;
   const selectedAnimation =
     suggestedAnimations.find((reference) => reference.id === selectedAnimationId) ?? null;
-  const latestGeneratedPreview = generatedPreviews[0] ?? null;
   // A design direction counts only when the user actively selected one (not the
   // fallback first suggestion). This drives the Cursor prompt's preservation rule.
   const designDirectionSelected = Boolean(
@@ -617,9 +492,6 @@ export function SidePanel() {
     window.setTimeout(() => setPromptCopied(false), 1600);
   }
 
-  // Keep a live reference so the AI Preview window's "Regenerate" can call it.
-  generateAIPreviewRef.current = generateAIPreview;
-
   async function refreshData() {
     const [localResult, sessionResult] = await Promise.all([
       chrome.storage.local.get(POLISH_PILOT_MODE_STORAGE_KEY),
@@ -629,8 +501,7 @@ export function SidePanel() {
         SELECTED_PATTERN_STORAGE_KEY,
         SELECTED_TEMPLATE_STORAGE_KEY,
         SELECTED_ANIMATION_STORAGE_KEY,
-        EXCLUDED_UNCODIX_RULES_STORAGE_KEY,
-        GENERATED_PREVIEWS_KEY
+        EXCLUDED_UNCODIX_RULES_STORAGE_KEY
       ])
     ]);
     const storedMode = localResult[POLISH_PILOT_MODE_STORAGE_KEY];
@@ -657,11 +528,6 @@ export function SidePanel() {
     setExcludedUncodixRuleIds(
       Array.isArray(sessionResult[EXCLUDED_UNCODIX_RULES_STORAGE_KEY])
         ? (sessionResult[EXCLUDED_UNCODIX_RULES_STORAGE_KEY] as string[])
-        : []
-    );
-    setGeneratedPreviews(
-      Array.isArray(sessionResult[GENERATED_PREVIEWS_KEY])
-        ? (sessionResult[GENERATED_PREVIEWS_KEY] as GeneratedPreviewImage[])
         : []
     );
     setHasLoadedCapture(true);
@@ -932,253 +798,9 @@ export function SidePanel() {
     setPagePreviewStatus("Preview shown on page.");
   }
 
-  async function generateAIPreview(options: { openResult?: boolean } = {}) {
-    const openResult = options.openResult ?? true;
-    if (!capture || !capture.screenshotBase64) {
-      setAIPreviewStatus("error");
-      setAIPreviewError("Select an area before generating AI preview.");
-      return;
-    }
-
-    const previewPattern = explicitSelectedPattern;
-    const previewContent = extractPreviewContent({ capture, aiResult: effectiveAIResult });
-    setAIPreviewStatus("loading");
-    setAIPreviewError("");
-    setAIPreviewDebug({
-      screenshotLength: capture.screenshotBase64.length,
-      templateMode: "text-only",
-      hasTemplateImage: false,
-      recommendationCounts: buildAIPreviewRecommendationCounts({
-        analysis: uncodixifyResult,
-        suggestions,
-        templateReferences: allSuggestedTemplates,
-        animationReferences: suggestedAnimations,
-        uncodixifyRecommendations: allUncodixRecommendations
-      })
-    });
-    setPagePreviewStatus("Planning fixes, humanizing text, then generating visual preview...");
-
-    try {
-      const response = await fetch(AI_PREVIEW_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", ...(await getAuthHeaders()) },
-        body: JSON.stringify({
-          screenshotBase64: capture.screenshotBase64,
-          url: capture.url,
-          title: capture.title,
-          aiResult: effectiveAIResult,
-          selectedPattern: previewPattern
-            ? {
-                id: previewPattern.id,
-                name: previewPattern.name,
-                description: previewPattern.problemSolved.join(" "),
-                bestFor: previewPattern.bestFor,
-                tailwindHint: previewPattern.tailwindHint,
-                promptInstruction: previewPattern.promptInstruction,
-                exampleStructure: previewPattern.exampleStructure
-              }
-            : undefined,
-          selectedTemplateReference: selectedTemplate,
-          selectedAnimationReference: selectedAnimation,
-          recommendationContext: buildAIPreviewRecommendationContext({
-            analysis: uncodixifyResult,
-            suggestions,
-            templateReferences: allSuggestedTemplates,
-            animationReferences: suggestedAnimations
-          }),
-          previewContent,
-          styleContext: capture.styleContext,
-          templateMode: "text-only",
-          uncodixify: allUncodixRecommendations.length
-            ? { recommendations: allUncodixRecommendations }
-            : undefined
-        })
-      });
-      const body = (await response.json().catch(() => null)) as
-        | GenerateAIPreviewSuccessResponse
-        | GenerateAIPreviewErrorResponse
-        | null;
-
-      if (!response.ok || !body || body.ok !== true) {
-        const errorBody = body && "ok" in body && body.ok === false ? body : null;
-        const message = formatAIPreviewErrorMessage(errorBody?.error);
-        setAIPreviewStatus("error");
-        setAIPreviewError(message);
-        setAIPreviewDebug({
-          ...(errorBody?.debug as Partial<AIPreviewDebugState> | undefined),
-          requestId: errorBody?.requestId,
-          error: errorBody?.error
-            ? {
-                code: errorBody.error.code,
-                message: errorBody.error.message,
-                details: errorBody.error.details
-              }
-            : {
-                code: "AI_PREVIEW_FAILED",
-                message
-              }
-        });
-        setPagePreviewStatus(message);
-        addGeminiLog("error", "AI preview failed", {
-          status: response.status,
-          message,
-          debug: errorBody?.debug
-        });
-        return;
-      }
-
-      setAIPreviewStatus("success");
-      setAIPreviewError("");
-      setAIPreviewDebug({
-        requestId: body.requestId,
-        model: body.model,
-        durationMs: body.durationMs,
-        screenshotLength: body.debug?.screenshotLength,
-        templateMode: body.debug?.templateMode,
-        hasTemplateImage: body.debug?.hasTemplateImage,
-        availableImageModels: body.debug?.availableImageModels,
-        selectedModel: body.debug?.selectedModel,
-        sdkModelName: body.debug?.sdkModelName,
-        orderedModelCandidates: body.debug?.orderedModelCandidates,
-        modelSelectionWarning: body.debug?.modelSelectionWarning,
-        quotaError: body.debug?.quotaError,
-        retryAfterSeconds: body.debug?.retryAfterSeconds,
-        modelAttempts: body.debug?.modelAttempts,
-        callMode: body.debug?.callMode,
-        responseTopLevelKeys: body.debug?.responseTopLevelKeys,
-        imageInlineDataFound: body.debug?.imageInlineDataFound,
-        recommendationCounts: body.debug?.recommendationCounts,
-        solutionStatus: body.debug?.solutionStatus,
-        solutionModel: body.debug?.solutionModel,
-        solutionDurationMs: body.debug?.solutionDurationMs,
-        solutionPromptChars: body.debug?.solutionPromptChars,
-        solutionTextEditCount: body.debug?.solutionTextEditCount,
-        solutionSummary: body.debug?.solutionSummary,
-        solutionError: body.debug?.solutionError,
-        promptUsed: body.promptUsed
-      });
-
-      await chrome.storage.session.set({
-        [AI_PREVIEW_STORAGE_KEY]: {
-          requestId: body.requestId,
-          model: body.model,
-          durationMs: body.durationMs,
-          patternId: previewPattern?.id,
-          patternName: previewPattern?.name ?? "Recommendation fixes",
-          previewImageBase64: body.previewImageBase64,
-          previewId: body.requestId,
-          debug: body.debug
-        }
-      });
-
-      const generatedPreview: GeneratedPreviewImage = {
-        id: body.requestId || `preview-${Date.now()}`,
-        createdAt: new Date().toISOString(),
-        sourceUrl: capture.url,
-        sourceTitle: capture.title,
-        patternId: previewPattern?.id,
-        patternName: previewPattern?.name ?? "Recommendation fixes",
-        sectionType: effectiveAIResult?.sectionType ?? "unknown",
-        layoutType: effectiveAIResult?.layoutType ?? "unknown",
-        imageBase64: body.previewImageBase64,
-        sourceScreenshotBase64: capture.screenshotBase64,
-        promptUsed: body.promptUsed,
-        model: body.model,
-        provider: "gemini",
-        uncodixifyScore: uncodixifyResult?.score,
-        uncodixifyFindings: uncodixifyResult?.findings
-          .map((finding) => finding.title)
-      };
-
-      await addGeneratedPreview(generatedPreview);
-      setGeneratedPreviews(await getGeneratedPreviews());
-      if (openResult) {
-        await openGeneratedPreviewWindow(generatedPreview.id);
-      }
-
-      setPagePreviewStatus(
-        openResult ? "AI preview generated." : "AI preview generated in Recommendations."
-      );
-      addGeminiLog("success", "AI preview generated", {
-        previewId: generatedPreview.id,
-        requestId: body.requestId,
-        model: body.model,
-        durationMs: body.durationMs
-      });
-    } catch (error) {
-      const message = isFetchFailure(error)
-        ? formatBackendUnavailableMessage(AI_PREVIEW_URL)
-        : error instanceof Error
-          ? error.message
-          : "AI visual preview failed. You can still use local layout preview or copy the implementation prompt.";
-      setAIPreviewStatus("error");
-      setAIPreviewError(message);
-      setAIPreviewDebug((current) => ({
-        ...current,
-        error: {
-          code: isFetchFailure(error) ? "BACKEND_UNREACHABLE" : "AI_PREVIEW_FAILED",
-          message
-        }
-      }));
-      setPagePreviewStatus(message);
-      addGeminiLog("error", "AI preview error caught", { message });
-    }
-  }
-
   async function closePagePreview() {
     await chrome.runtime.sendMessage({ type: "REMOVE_IN_PAGE_PREVIEW" });
     setPagePreviewStatus("Page preview closed.");
-  }
-
-  async function openGeneratedPreviewTab(previewId: string) {
-    const url = chrome.runtime.getURL(`preview-image.html?id=${previewId}`);
-
-    await chrome.tabs.create({ url });
-  }
-
-  async function openGeneratedPreviewWindow(previewId: string) {
-    await chrome.tabs.create({
-      url: chrome.runtime.getURL(`preview-image.html?id=${previewId}`)
-    });
-  }
-
-  async function openGeneratedPreviewGallery() {
-    const url = chrome.runtime.getURL("preview-gallery.html");
-
-    await chrome.tabs.create({ url });
-  }
-
-  async function showGeneratedPreviewOnPage(preview = latestGeneratedPreview) {
-    if (!preview) {
-      setPagePreviewStatus("No generated AI preview available.");
-      return;
-    }
-
-    const response = await chrome.runtime.sendMessage({
-      type: "SHOW_AI_IMAGE_PREVIEW",
-      payload: {
-        previewImageBase64: preview.imageBase64,
-        patternName: preview.patternName ?? "Generated preview"
-      }
-    });
-
-    if (response && typeof response === "object" && "ok" in response && !response.ok) {
-      setPagePreviewStatus(
-        "error" in response ? String(response.error) : "Could not show AI preview on page."
-      );
-      return;
-    }
-
-    setPagePreviewStatus("AI preview shown on page.");
-  }
-
-  function downloadGeneratedPreview(preview = latestGeneratedPreview) {
-    if (!preview) {
-      setPagePreviewStatus("No generated AI preview available.");
-      return;
-    }
-
-    downloadBase64Image(preview.imageBase64, previewDownloadFilename(preview.createdAt));
   }
 
   async function startNewScreenshot() {
@@ -1186,9 +808,6 @@ export function SidePanel() {
     setSelectedTemplateId(null);
     setSelectedAnimationId(null);
     setExcludedUncodixRuleIds([]);
-    setAIPreviewStatus("idle");
-    setAIPreviewError("");
-    setAIPreviewDebug({});
     setAIStatus((current) =>
       current === "loading" || current === "error" ? "idle" : current
     );
@@ -1201,8 +820,7 @@ export function SidePanel() {
       SELECTED_TEMPLATE_STORAGE_KEY,
       SELECTED_ANIMATION_STORAGE_KEY,
       EXCLUDED_UNCODIX_RULES_STORAGE_KEY,
-      FULL_PREVIEW_STORAGE_KEY,
-      AI_PREVIEW_STORAGE_KEY
+      FULL_PREVIEW_STORAGE_KEY
     ]);
 
     try {
@@ -1253,7 +871,6 @@ export function SidePanel() {
       apiBaseUrl: API_BASE_URL,
       backendUrl: ANALYZE_URL,
       healthUrl: HEALTH_URL,
-      aiPreviewUrl: AI_PREVIEW_URL,
       requestId: geminiDebug.requestId,
       model: geminiDebug.model,
       status: aiStatus,
@@ -1272,41 +889,6 @@ export function SidePanel() {
           sourceContextChars: geminiDebug.sourceContextChars,
           matchedElementsCount: geminiDebug.matchedElementsCount,
           jsonParseStrategy: geminiDebug.jsonParseStrategy,
-        aiPreview: {
-          requestId: aiPreviewDebug.requestId,
-          model: aiPreviewDebug.model,
-          durationMs: aiPreviewDebug.durationMs,
-          screenshotLength: aiPreviewDebug.screenshotLength,
-          templateMode: aiPreviewDebug.templateMode,
-          availableImageModels: aiPreviewDebug.availableImageModels,
-          selectedModel: aiPreviewDebug.selectedModel,
-          sdkModelName: aiPreviewDebug.sdkModelName,
-          orderedModelCandidates: aiPreviewDebug.orderedModelCandidates,
-          modelSelectionWarning: aiPreviewDebug.modelSelectionWarning,
-          quotaError: aiPreviewDebug.quotaError,
-          retryAfterSeconds: aiPreviewDebug.retryAfterSeconds,
-          modelAttempts: aiPreviewDebug.modelAttempts,
-          callMode: aiPreviewDebug.callMode,
-          responseTopLevelKeys: aiPreviewDebug.responseTopLevelKeys,
-          imageInlineDataFound: aiPreviewDebug.imageInlineDataFound,
-          solutionStatus: aiPreviewDebug.solutionStatus,
-          solutionModel: aiPreviewDebug.solutionModel,
-          solutionDurationMs: aiPreviewDebug.solutionDurationMs,
-          solutionPromptChars: aiPreviewDebug.solutionPromptChars,
-          solutionTextEditCount: aiPreviewDebug.solutionTextEditCount,
-          solutionSummary: aiPreviewDebug.solutionSummary,
-          solutionError: aiPreviewDebug.solutionError,
-          error: aiPreviewDebug.error
-            ? {
-                code: aiPreviewDebug.error.code,
-                message: aiPreviewDebug.error.message,
-                details: aiPreviewDebug.error.details
-              }
-            : undefined,
-          promptUsedPreview: aiPreviewDebug.promptUsed
-            ? truncateDebugText(aiPreviewDebug.promptUsed, 1200)
-            : undefined
-        },
         usedCssRuleCount: capture?.usedCssRules?.ruleCount,
         skippedStyleSheets: capture?.usedCssRules?.skippedStyleSheets,
         styleTokensAvailable: Boolean(capture?.styleTokens),
@@ -1644,11 +1226,6 @@ export function SidePanel() {
             Generate Code Change
           </button>
         </div>
-        {aiPreviewStatus === "error" && aiPreviewError ? (
-          <p className="mt-3 rounded-md border border-pilot-border bg-pilot-bg p-3 text-sm leading-6 text-pilot-muted">
-            AI Preview is unavailable. Use the Cursor Prompt.
-          </p>
-        ) : null}
         {pagePreviewStatus ? (
           <p className="mt-3 text-sm leading-6 text-pilot-soft">{pagePreviewStatus}</p>
         ) : null}
@@ -1661,22 +1238,6 @@ export function SidePanel() {
           </summary>
 
           <div className="mt-3 grid grid-cols-2 gap-2">
-            <button
-              className="dh-button-secondary px-3 py-2 text-xs"
-              disabled={!capture || aiPreviewStatus === "loading"}
-              onClick={() => void generateAIPreview({ openResult: false })}
-              type="button"
-            >
-              {aiPreviewStatus === "loading" ? "Generating…" : "Generate AI Preview"}
-            </button>
-            <button
-              className="dh-button-secondary px-3 py-2 text-xs"
-              disabled={!generatedPreviews.length}
-              onClick={() => void openGeneratedPreviewGallery()}
-              type="button"
-            >
-              Open Gallery
-            </button>
             <button
               className="dh-button-secondary px-3 py-2 text-xs"
               disabled={!selectedPattern}
@@ -1694,14 +1255,6 @@ export function SidePanel() {
               Show on page
             </button>
             <button
-              className="dh-button-secondary px-3 py-2 text-xs"
-              disabled={!latestGeneratedPreview}
-              onClick={() => downloadGeneratedPreview(latestGeneratedPreview)}
-              type="button"
-            >
-              Download Preview
-            </button>
-            <button
               className="dh-button-secondary px-3 py-2 text-xs hover:border-pilot-danger/70"
               onClick={() => void closePagePreview()}
               type="button"
@@ -1712,8 +1265,6 @@ export function SidePanel() {
 
           <GeminiDebugPanel
             aiStatus={aiStatus}
-            aiPreviewDebug={aiPreviewDebug}
-            aiPreviewStatus={aiPreviewStatus}
             backendHealthStatus={backendHealthStatus}
             capture={capture}
             copied={debugCopied}
@@ -1729,7 +1280,6 @@ export function SidePanel() {
 
           <PromptDebugPanel
             cursorPrompt={cursorPromptText}
-            aiImagePrompt={aiPreviewDebug.promptUsed}
             analysisSummary={buildAnalysisPromptSummary(capture, geminiDebug, effectiveAIResult)}
             designDirectionSelected={designDirectionSelected}
             includedFixCount={includedUncodixRuleIds.length}
@@ -1745,89 +1295,6 @@ export function SidePanel() {
       ) : null}
     </main>
   );
-}
-
-function buildAIPreviewRecommendationCounts({
-  analysis,
-  suggestions,
-  templateReferences,
-  animationReferences,
-  uncodixifyRecommendations
-}: {
-  analysis: UncodixifyAnalysisResult | null;
-  suggestions: HumanizerSuggestions | null;
-  templateReferences: TemplateReference[];
-  animationReferences: AnimationReference[];
-  uncodixifyRecommendations: string[];
-}) {
-  return {
-    designChecks: analysis?.findings.length ?? 0,
-    layoutIdeas: suggestions?.layoutPatterns.length ?? 0,
-    templateReferences: templateReferences.length,
-    animationReferences: animationReferences.length,
-    uncodixifyRecommendations: uncodixifyRecommendations.length
-  };
-}
-
-function buildAIPreviewRecommendationContext({
-  analysis,
-  suggestions,
-  templateReferences,
-  animationReferences
-}: {
-  analysis: UncodixifyAnalysisResult | null;
-  suggestions: HumanizerSuggestions | null;
-  templateReferences: TemplateReference[];
-  animationReferences: AnimationReference[];
-}) {
-  return {
-    designChecks:
-      analysis?.findings.map((finding, index) => ({
-        index: index + 1,
-        ruleId: finding.ruleId,
-        title: previewContextText(finding.title, 96),
-        category: finding.category,
-        severity: finding.severity,
-        recommendation: previewContextText(finding.recommendation, 220),
-        betterDirection: previewContextText(finding.betterDirection, 180),
-        evidence: previewContextText(finding.evidence[0], 160)
-      })) ?? [],
-    layoutIdeas:
-      suggestions?.layoutPatterns.map((pattern, index) => ({
-        index: index + 1,
-        id: pattern.id,
-        name: previewContextText(pattern.name, 96),
-        category: pattern.category,
-        instruction: previewContextText(pattern.promptInstruction, 240),
-        solves: pattern.solvesProblems.slice(0, 5)
-      })) ?? [],
-    templateReferences: templateReferences.map((reference, index) => ({
-      index: index + 1,
-      id: reference.id,
-      title: previewContextText(reference.title, 120),
-      source: reference.source,
-      category: reference.category,
-      tags: reference.tags.slice(0, 8),
-      description: previewContextText(reference.description, 180),
-      usageNote: previewContextText(reference.usageNote, 180)
-    })),
-    animationReferences: animationReferences.map((reference, index) => ({
-      index: index + 1,
-      id: reference.id,
-      title: previewContextText(reference.title, 120),
-      source: reference.source,
-      category: reference.category,
-      tags: reference.tags.slice(0, 8),
-      bestFor: previewContextText(reference.bestFor, 180),
-      avoidWhen: previewContextText(reference.avoidWhen, 180)
-    }))
-  };
-}
-
-function previewContextText(value: string | undefined, maxLength: number) {
-  const clean = (value ?? "").replace(/\s+/g, " ").trim();
-  if (!clean) return undefined;
-  return clean.length > maxLength ? `${clean.slice(0, maxLength - 3)}...` : clean;
 }
 
 const ANALYSIS_PROCESS_STEPS: Array<{
@@ -1985,21 +1452,16 @@ function AnalysisProcessTrail({
 
 function PromptDebugPanel({
   cursorPrompt,
-  aiImagePrompt,
   analysisSummary,
   designDirectionSelected,
   includedFixCount
 }: {
   cursorPrompt: string;
-  aiImagePrompt?: string;
   analysisSummary: string;
   designDirectionSelected: boolean;
   includedFixCount: number;
 }) {
   const [copied, setCopied] = useState<"debug" | "cursor" | null>(null);
-  const safeImagePrompt = aiImagePrompt
-    ? redactBase64(aiImagePrompt)
-    : "Not generated yet. Generate an AI Preview to populate this.";
   const validation = validateGeneratedPrompt(cursorPrompt, {
     hasFindings: includedFixCount > 0,
     designDirectionSelected
@@ -2019,9 +1481,6 @@ function PromptDebugPanel({
     const text = [
       "=== Gemini Analysis Prompt (summary) ===",
       analysisSummary,
-      "",
-      "=== AI Image Preview Prompt ===",
-      safeImagePrompt,
       "",
       "=== Cursor/Codex Prompt ===",
       cursorPrompt
@@ -2088,8 +1547,7 @@ function PromptDebugPanel({
       </div>
 
       <PromptBlock title="1. Gemini Analysis Prompt (summary)" value={analysisSummary} />
-      <PromptBlock title="2. AI Image Preview Prompt" value={safeImagePrompt} />
-      <PromptBlock title="3. Cursor/Codex Prompt" value={cursorPrompt} open />
+      <PromptBlock title="2. Cursor/Codex Prompt" value={cursorPrompt} open />
 
       <div className="mt-3 grid grid-cols-2 gap-2">
         <button
@@ -2169,8 +1627,6 @@ function redactBase64(text: string): string {
 
 function GeminiDebugPanel({
   aiStatus,
-  aiPreviewDebug,
-  aiPreviewStatus,
   backendHealthStatus,
   capture,
   copied,
@@ -2184,8 +1640,6 @@ function GeminiDebugPanel({
   previewDebugCopied
 }: {
   aiStatus: AIStatus;
-  aiPreviewDebug: AIPreviewDebugState;
-  aiPreviewStatus: AIPreviewStatus;
   backendHealthStatus: BackendHealthStatus;
   capture: RectangleCapture | null;
   copied: boolean;
@@ -2226,44 +1680,6 @@ function GeminiDebugPanel({
           <Metric label="JSON" value={debug.jsonParseStrategy ?? "none"} />
           <Metric label="Error Code" value={debug.error?.code ?? "none"} />
           <Metric label="Error Stage" value={debug.error?.stage ?? "none"} />
-          <Metric label="AI Preview" value={aiPreviewStatus} />
-          <Metric label="AI Preview ID" value={aiPreviewDebug.requestId ?? "none"} />
-          <Metric label="AI Preview Model" value={aiPreviewDebug.model ?? "unknown"} />
-          <Metric label="Solution" value={aiPreviewDebug.solutionStatus ?? "none"} />
-          <Metric label="Solution Model" value={aiPreviewDebug.solutionModel ?? "none"} />
-          <Metric
-            label="Solution Time"
-            value={aiPreviewDebug.solutionDurationMs ? `${aiPreviewDebug.solutionDurationMs}ms` : "none"}
-          />
-          <Metric label="Text Edits" value={aiPreviewDebug.solutionTextEditCount ?? 0} />
-          <Metric label="Selected Image Model" value={aiPreviewDebug.selectedModel ?? "none"} />
-          <Metric label="SDK Model Name" value={aiPreviewDebug.sdkModelName ?? "none"} />
-          <Metric label="Image Models" value={aiPreviewDebug.availableImageModels?.length ?? 0} />
-          <Metric
-            label="Image Candidates"
-            value={aiPreviewDebug.orderedModelCandidates?.length ?? 0}
-          />
-          <Metric label="Quota Error" value={String(aiPreviewDebug.quotaError ?? false)} />
-          <Metric
-            label="Retry After"
-            value={
-              typeof aiPreviewDebug.retryAfterSeconds === "number"
-                ? `${aiPreviewDebug.retryAfterSeconds}s`
-                : "none"
-            }
-          />
-          <Metric label="Model Attempts" value={aiPreviewDebug.modelAttempts?.length ?? 0} />
-          <Metric label="Image Inline Data" value={String(aiPreviewDebug.imageInlineDataFound ?? false)} />
-          <Metric
-            label="Response Keys"
-            value={aiPreviewDebug.responseTopLevelKeys?.join(", ") || "none"}
-          />
-          <Metric
-            label="AI Preview Time"
-            value={aiPreviewDebug.durationMs ? `${aiPreviewDebug.durationMs}ms` : "none"}
-          />
-          <Metric label="Template" value={aiPreviewDebug.templateMode ?? "none"} />
-          <Metric label="AI Preview Error" value={aiPreviewDebug.error?.code ?? "none"} />
           <Metric label="Used CSS" value={capture?.usedCssRules?.ruleCount ?? 0} />
           <Metric label="Skipped CSS" value={capture?.usedCssRules?.skippedStyleSheets ?? 0} />
           <Metric label="Style Tokens" value={capture?.styleTokens ? "available" : "missing"} />
@@ -2281,60 +1697,6 @@ function GeminiDebugPanel({
               </p>
             ) : null}
           </div>
-        ) : null}
-
-        {aiPreviewDebug.error ? (
-          <div className="mt-3 rounded-lg border border-red-300/20 bg-red-950/20 p-3">
-            <p className="text-xs font-bold text-red-700">
-              AI Preview: {aiPreviewDebug.error.message}
-            </p>
-            {aiPreviewDebug.error.details ? (
-              <p className="mt-2 break-words text-xs leading-5 text-red-700/80">
-                {aiPreviewDebug.error.details}
-              </p>
-            ) : null}
-          </div>
-        ) : null}
-
-        {aiPreviewDebug.solutionError ? (
-          <div className="mt-3 rounded-lg border border-amber-300/20 bg-amber-950/20 p-3">
-            <p className="text-xs font-bold text-amber-800">
-              Solution prepass: {aiPreviewDebug.solutionError}
-            </p>
-          </div>
-        ) : null}
-
-        {aiPreviewDebug.solutionSummary ? (
-          <DebugDetails
-            title="AI preview solution summary"
-            value={aiPreviewDebug.solutionSummary}
-          />
-        ) : null}
-
-        {aiPreviewDebug.modelSelectionWarning ? (
-          <div className="mt-3 rounded-lg border border-amber-300/20 bg-amber-950/20 p-3">
-            <p className="text-xs font-bold text-amber-800">
-              {aiPreviewDebug.modelSelectionWarning}
-            </p>
-          </div>
-        ) : null}
-
-        {aiPreviewDebug.modelAttempts?.length ? (
-          <DebugDetails
-            title="AI image model attempts"
-            value={JSON.stringify(aiPreviewDebug.modelAttempts, null, 2)}
-          />
-        ) : null}
-
-        {aiPreviewDebug.promptUsed ? (
-          <details className="mt-3 rounded-lg border border-pilot-border bg-pilot-card/50 p-3">
-            <summary className="cursor-pointer text-xs font-bold text-pilot-text">
-              AI preview prompt
-            </summary>
-            <pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap break-words text-[11px] leading-5 text-pilot-muted">
-              {aiPreviewDebug.promptUsed}
-            </pre>
-          </details>
         ) : null}
 
         <div className="mt-3 grid grid-cols-2 gap-2">
@@ -2850,25 +2212,6 @@ function formatBackendUnavailableMessage(url: string) {
     "Could not reach backend.",
     "Check VITE_API_BASE_URL and whether the Vercel backend is deployed."
   ].join("\n");
-}
-
-function formatAIPreviewErrorMessage(error: GenerateAIPreviewErrorResponse["error"]) {
-  if (error?.code === "GEMINI_IMAGE_QUOTA_EXHAUSTED") {
-    return "AI image preview quota is exhausted for available image models. Use Live HTML/CSS Preview or try again later.";
-  }
-
-  if (error?.code === "GEMINI_IMAGE_GENERATION_FAILED") {
-    return "Image model is available, but generation failed. Check Developer Mode logs.";
-  }
-
-  if (error?.code === "GEMINI_IMAGE_MODEL_UNAVAILABLE") {
-    return "No Gemini image model is available for this key.";
-  }
-
-  return (
-    error?.message ??
-    "AI visual preview failed. You can still use local layout preview or copy the implementation prompt."
-  );
 }
 
 function formatGeminiError(error: GeminiApiError) {

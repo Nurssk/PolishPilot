@@ -44,11 +44,26 @@ assert.doesNotMatch(sanitized, /onclick/);
 assert.doesNotMatch(sanitized, /polishpilot-rectangle-overlay/);
 assert.doesNotMatch(sanitized, /data:image\/png;base64/);
 
+const assetPreserved = sanitizeHtmlSnapshot(dirtyHtml, {
+  scope: "selected-block",
+  maxLength: 20_000,
+  preserveVisualAssets: true
+});
+
+assert.match(assetPreserved, /data:image\/png;base64/);
+
 const capped = sanitizeHtmlSnapshot(`<main>${"x".repeat(200)}</main>`, {
   maxLength: 50
 });
 
 assert.ok(capped.length > 50);
 assert.match(capped, /truncated:/);
+
+const cappedAtTagBoundary = sanitizeHtmlSnapshot(
+  `<main><section data-long="${"x".repeat(120)}"><h1>Still valid before cut</h1></section></main>`,
+  { maxLength: 80 }
+);
+const beforeTruncationComment = cappedAtTagBoundary.split("<!-- truncated:")[0].trimEnd();
+assert.equal(beforeTruncationComment.endsWith(">"), true);
 
 console.log("PASS htmlSnapshot sanitizes and caps rendered HTML.");

@@ -4,6 +4,8 @@ import {
   type GenerateCodeChangeRequest,
   type GenerateCodeChangeResult
 } from "../../../lib/ai/prompts/buildCodeChangePrompt";
+import { readAuthenticatedUser } from "../../../lib/auth/readAuthenticatedUser";
+import { saveCodeGenerationHistory } from "../../../lib/codeGeneration/history";
 
 export const runtime = "nodejs";
 
@@ -26,6 +28,8 @@ type RouteDebug = {
   model?: string;
   retryCount?: number;
   jsonParseStrategy?: JsonParseStrategy;
+  historySaved?: boolean;
+  historyError?: string;
   durationMs?: number;
 };
 
@@ -65,6 +69,7 @@ export async function POST(request: Request) {
 
     const body = (await request.json()) as Partial<GenerateCodeChangeRequest>;
     const payload = normalizePayload(body);
+    const authenticatedUser = await readAuthenticatedUser(request);
     const normalizedScreenshot = normalizeBase64Image(payload.screenshotBase64);
 
     debug.screenshotExists = Boolean(normalizedScreenshot);
@@ -102,6 +107,25 @@ export async function POST(request: Request) {
     const result = normalizeCodeChangeResult(parsed.value, payload);
     const durationMs = Date.now() - startedAt;
     debug.durationMs = durationMs;
+
+    if (authenticatedUser) {
+      try {
+        await saveCodeGenerationHistory({
+          user: authenticatedUser,
+          payload,
+          result,
+          requestId,
+          model: generated.model
+        });
+        debug.historySaved = true;
+      } catch (historyError) {
+        debug.historySaved = false;
+        debug.historyError = safeErrorMessage(historyError);
+        result.warnings.push("Code generation succeeded, but account history could not be saved.");
+      }
+    } else {
+      debug.historySaved = false;
+    }
 
     return jsonResponse(
       {

@@ -4,7 +4,7 @@ import type {
   MatchedElement,
   RectangleSelectionPayload,
   SelectionRect,
-  AIImagePreviewPayload,
+  ApplyCodeChangePreviewPayload,
   InPagePreviewPayload,
   PageDesignContext,
   StyleContext,
@@ -22,7 +22,7 @@ import {
   sanitizeDebugHtml,
   truncateDebugText
 } from "../shared/previewDebug";
-import { sanitizeHtmlSnapshot } from "./htmlSnapshot";
+import { buildInlineComputedHtmlSnapshot, sanitizeHtmlSnapshot } from "./htmlSnapshot";
 
 declare global {
   interface Window {
@@ -34,6 +34,7 @@ declare global {
 const OVERLAY_ID = "polishpilot-rectangle-overlay";
 const PREVIEW_OVERLAY_ID = "polishpilot-in-page-preview";
 const PREVIEW_BACKDROP_ID = "polishpilot-in-page-preview-backdrop";
+const CODE_CHANGE_PREVIEW_STYLE_ID = "polishpilot-code-change-preview-style";
 const IGNORED_TAGS = new Set(["SCRIPT", "STYLE", "META", "LINK", "NOSCRIPT"]);
 
 let isSelecting = false;
@@ -69,14 +70,14 @@ if (!window.__polishPilotRectangleSelectionLoaded) {
         return false;
       }
 
-      if (message.type === "SHOW_AI_IMAGE_PREVIEW") {
-        showAIImagePreview(message.payload);
+      if (message.type === "REMOVE_IN_PAGE_PREVIEW") {
+        removeInPagePreview();
         sendResponse({ ok: true });
         return false;
       }
 
-      if (message.type === "REMOVE_IN_PAGE_PREVIEW") {
-        removeInPagePreview();
+      if (message.type === "APPLY_CODE_CHANGE_PREVIEW") {
+        applyCodeChangePreview(message.payload);
         sendResponse({ ok: true });
         return false;
       }
@@ -97,8 +98,8 @@ function isPolishPilotContentMessage(
 ): value is
   | { type: "START_RECTANGLE_SELECTION" }
   | { type: "SHOW_IN_PAGE_PREVIEW"; payload: InPagePreviewPayload }
-  | { type: "SHOW_AI_IMAGE_PREVIEW"; payload: AIImagePreviewPayload }
-  | { type: "REMOVE_IN_PAGE_PREVIEW" } {
+  | { type: "REMOVE_IN_PAGE_PREVIEW" }
+  | { type: "APPLY_CODE_CHANGE_PREVIEW"; payload: ApplyCodeChangePreviewPayload } {
   return Boolean(
     value &&
       typeof value === "object" &&
@@ -107,10 +108,55 @@ function isPolishPilotContentMessage(
       [
         "START_RECTANGLE_SELECTION",
         "SHOW_IN_PAGE_PREVIEW",
-        "SHOW_AI_IMAGE_PREVIEW",
-        "REMOVE_IN_PAGE_PREVIEW"
+        "REMOVE_IN_PAGE_PREVIEW",
+        "APPLY_CODE_CHANGE_PREVIEW"
       ].includes((value as { type: string }).type)
   );
+}
+
+function applyCodeChangePreview(payload: ApplyCodeChangePreviewPayload) {
+  if (payload.css?.trim()) {
+    document.getElementById(CODE_CHANGE_PREVIEW_STYLE_ID)?.remove();
+    const style = document.createElement("style");
+    style.id = CODE_CHANGE_PREVIEW_STYLE_ID;
+    style.dataset.polishpilot = "true";
+    style.textContent = payload.css;
+    document.head.appendChild(style);
+  }
+
+  const target =
+    payload.scope === "selected-block" && payload.domPath
+      ? resolveDomPath(payload.domPath)
+      : document.body;
+
+  if (!target) {
+    throw new Error("Could not find the captured DOM block for preview.");
+  }
+
+  const replacement = createPreviewReplacementNode(payload.html, payload.scope);
+  if (!replacement) {
+    throw new Error("Gemini preview HTML did not contain a renderable element.");
+  }
+
+  if (payload.scope === "whole-page") {
+    document.body.replaceChildren(...Array.from(replacement.childNodes).map((node) => node.cloneNode(true)));
+    return;
+  }
+
+  target.replaceWith(replacement);
+}
+
+function createPreviewReplacementNode(html: string, scope: ApplyCodeChangePreviewPayload["scope"]) {
+  const parser = new DOMParser();
+  const parsed = parser.parseFromString(html, "text/html");
+
+  if (scope === "whole-page") {
+    const wrapper = document.createElement("div");
+    wrapper.append(...Array.from(parsed.body.childNodes).map((node) => node.cloneNode(true)));
+    return wrapper;
+  }
+
+  return parsed.body.firstElementChild ?? null;
 }
 
 function startRectangleSelection() {
@@ -249,6 +295,7 @@ function handleMouseUp(event: MouseEvent) {
   const styleTokens = selectedRoot ? extractStyleTokens(selectedRoot) : undefined;
   const pageDesignContext = extractPageDesignContext();
   const fullPageHtmlPreview = captureFullPageHtmlSnapshot();
+  const fullPageInlineHtmlPreview = captureFullPageInlineHtmlSnapshot();
   const previewDebugLogs = buildCapturePreviewDebugLogs({
     selectedRect,
     selectedRoot,
@@ -260,7 +307,8 @@ function handleMouseUp(event: MouseEvent) {
     usedCssRules,
     styleTokens,
     pageDesignContext,
-    fullPageHtmlPreview
+    fullPageHtmlPreview,
+    fullPageInlineHtmlPreview
   });
   const payload: RectangleSelectionPayload = {
     url: window.location.href,
@@ -274,6 +322,7 @@ function handleMouseUp(event: MouseEvent) {
     styleTokens,
     pageDesignContext,
     fullPageHtmlPreview,
+    fullPageInlineHtmlPreview,
     sourceSections: enrichedSourceSections,
     selectedSourceSection: enrichedSelectedSourceSection,
     previewDebugLogs
@@ -429,157 +478,6 @@ function showInPagePreview(payload: InPagePreviewPayload) {
   }
 
   body.appendChild(renderPreviewHtml(payload));
-  container.appendChild(body);
-
-  previewContainer = container;
-  previewBackdrop = backdrop;
-  previewKeydownHandler = (event: KeyboardEvent) => {
-    if (event.key !== "Escape") {
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (isPreviewExpanded) {
-      setPreviewExpanded(false);
-      return;
-    }
-
-    removeInPagePreview();
-  };
-
-  window.addEventListener("keydown", previewKeydownHandler, true);
-  applyPreviewContainerMode(container, false);
-  document.documentElement.append(backdrop, container);
-}
-
-function showAIImagePreview(payload: AIImagePreviewPayload) {
-  removeInPagePreview();
-  isPreviewExpanded = false;
-
-  const backdrop = document.createElement("div");
-  backdrop.id = PREVIEW_BACKDROP_ID;
-  backdrop.dataset.polishpilot = "true";
-  backdrop.style.position = "fixed";
-  backdrop.style.inset = "0";
-  backdrop.style.zIndex = "2147483646";
-  backdrop.style.display = "none";
-  backdrop.style.background = "rgba(2, 6, 23, 0.58)";
-  backdrop.style.backdropFilter = "blur(4px)";
-  backdrop.style.pointerEvents = "auto";
-  backdrop.addEventListener("click", (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setPreviewExpanded(false);
-  });
-
-  const container = document.createElement("div");
-  container.id = PREVIEW_OVERLAY_ID;
-  container.dataset.polishpilot = "true";
-  container.setAttribute("role", "dialog");
-  container.setAttribute("aria-label", "Design Humanizer AI preview");
-  container.style.boxSizing = "border-box";
-  container.style.border = "1px solid rgba(148, 163, 184, 0.34)";
-  container.style.borderRadius = "20px";
-  container.style.background = "rgba(2, 6, 23, 0.96)";
-  container.style.color = "#F8FAFC";
-  container.style.boxShadow = "0 28px 90px rgba(0, 0, 0, 0.5)";
-  container.style.backdropFilter = "blur(14px)";
-  container.style.font = "500 13px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
-  container.style.pointerEvents = "auto";
-  container.style.transition = "top 160ms ease, left 160ms ease, right 160ms ease, width 160ms ease, max-height 160ms ease, transform 160ms ease";
-  container.addEventListener("click", (event) => {
-    event.stopPropagation();
-  });
-
-  const topBar = document.createElement("div");
-  topBar.style.display = "flex";
-  topBar.style.alignItems = "center";
-  topBar.style.justifyContent = "space-between";
-  topBar.style.gap = "12px";
-  topBar.style.padding = "12px 14px";
-  topBar.style.borderBottom = "1px solid rgba(148, 163, 184, 0.2)";
-  topBar.style.position = "sticky";
-  topBar.style.top = "0";
-  topBar.style.zIndex = "1";
-  topBar.style.background = "rgba(2, 6, 23, 0.92)";
-  topBar.style.backdropFilter = "blur(14px)";
-
-  const titleWrap = document.createElement("div");
-  titleWrap.style.minWidth = "0";
-  titleWrap.style.flex = "1 1 auto";
-
-  const label = document.createElement("div");
-  label.textContent = "AI Preview";
-  label.style.fontSize = "11px";
-  label.style.lineHeight = "14px";
-  label.style.fontWeight = "800";
-  label.style.letterSpacing = "0.08em";
-  label.style.textTransform = "uppercase";
-  label.style.color = "#67E8F9";
-
-  const patternName = document.createElement("div");
-  patternName.textContent = payload.patternName;
-  patternName.style.marginTop = "2px";
-  patternName.style.overflow = "hidden";
-  patternName.style.textOverflow = "ellipsis";
-  patternName.style.whiteSpace = "nowrap";
-  patternName.style.fontSize = "13px";
-  patternName.style.lineHeight = "18px";
-  patternName.style.fontWeight = "800";
-  patternName.style.color = "#F8FAFC";
-
-  titleWrap.append(label, patternName);
-
-  const actions = document.createElement("div");
-  actions.style.display = "flex";
-  actions.style.alignItems = "center";
-  actions.style.gap = "8px";
-  actions.style.flex = "0 0 auto";
-
-  const expandButton = createPreviewButton("⛶", "Expand AI preview");
-  expandButton.addEventListener("click", (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setPreviewExpanded(!isPreviewExpanded);
-  });
-
-  const closeButton = createPreviewButton("×", "Close AI preview");
-  closeButton.addEventListener("click", (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    removeInPagePreview();
-  });
-
-  actions.append(expandButton, closeButton);
-  topBar.append(titleWrap, actions);
-  container.appendChild(topBar);
-
-  const body = document.createElement("div");
-  body.style.padding = "14px";
-  body.style.cursor = "zoom-in";
-  body.addEventListener("click", (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (!isPreviewExpanded) {
-      setPreviewExpanded(true);
-    }
-  });
-
-  const image = document.createElement("img");
-  image.alt = `AI preview for ${payload.patternName}`;
-  image.src = payload.previewImageBase64;
-  image.style.display = "block";
-  image.style.width = "100%";
-  image.style.height = "auto";
-  image.style.maxHeight = "calc(80vh - 88px)";
-  image.style.objectFit = "contain";
-  image.style.borderRadius = "14px";
-  image.style.border = "1px solid rgba(148, 163, 184, 0.22)";
-  image.style.background = "#fff";
-  body.appendChild(image);
   container.appendChild(body);
 
   previewContainer = container;
@@ -1264,6 +1162,9 @@ function buildSourceSectionPart(
       scope: "selected-block",
       maxLength: 2400
     }),
+    inlineHtmlPreview: buildInlineComputedHtmlSnapshot(element, {
+      scope: "selected-block"
+    }),
     sectionType: detected.sectionType,
     layoutType: detected.layoutType,
     confidence: detected.confidence,
@@ -1508,6 +1409,13 @@ function captureFullPageHtmlSnapshot(): string {
   });
 }
 
+function captureFullPageInlineHtmlSnapshot(): string {
+  return buildInlineComputedHtmlSnapshot(document.documentElement, {
+    scope: "whole-page",
+    includeDoctype: true
+  });
+}
+
 function cssEscapeLite(value: string): string {
   return value.replace(/([ !"#$%&'()*+,./:;<=>?@[\\\]^`{|}~])/g, "\\$1");
 }
@@ -1552,7 +1460,8 @@ function buildCapturePreviewDebugLogs({
   usedCssRules,
   styleTokens,
   pageDesignContext,
-  fullPageHtmlPreview
+  fullPageHtmlPreview,
+  fullPageInlineHtmlPreview
 }: {
   selectedRect: SelectionRect;
   selectedRoot: HTMLElement | null;
@@ -1565,6 +1474,7 @@ function buildCapturePreviewDebugLogs({
   styleTokens?: StyleTokens;
   pageDesignContext?: PageDesignContext;
   fullPageHtmlPreview?: string;
+  fullPageInlineHtmlPreview?: string;
 }) {
   const logs = [];
 
@@ -1629,6 +1539,7 @@ function buildCapturePreviewDebugLogs({
                 confidence: selectedSourceSection.confidence,
                 score: Number(selectedSourceSection.score.toFixed(2)),
                 selectionOverlap: selectedSourceSection.selectionOverlap,
+                inlineHtmlPreviewChars: selectedSourceSection.inlineHtmlPreview?.length ?? 0,
                 reasons: selectedSourceSection.reasons
               }
             : null,
@@ -1692,6 +1603,7 @@ function buildCapturePreviewDebugLogs({
           sampledElements: pageDesignContext.sampledElements,
           totalElements: pageDesignContext.totalElements,
           fullPageHtmlPreviewChars: fullPageHtmlPreview?.length ?? 0,
+          fullPageInlineHtmlPreviewChars: fullPageInlineHtmlPreview?.length ?? 0,
           typography: pageDesignContext.typography,
           colors: pageDesignContext.colors,
           spacing: pageDesignContext.spacing,
