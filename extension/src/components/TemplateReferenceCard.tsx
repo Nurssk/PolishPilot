@@ -1,4 +1,6 @@
 import { TagList } from "./TagList";
+import { ReferencePreview } from "./ReferencePreview";
+import { buildReferenceScreenshotUrl } from "../shared/referencePreviewUrls";
 import type { TemplateReference } from "../patterns/templateReferences";
 import type { PolishPilotMode } from "../shared/types";
 
@@ -17,6 +19,9 @@ export function TemplateReferenceCard({
 }) {
   const isBroken = reference.urlStatus === "broken";
   const isUnknown = reference.urlStatus === "unknown" || !reference.urlStatus;
+  const previewImageUrl =
+    reference.previewImageUrl ??
+    buildReferenceScreenshotUrl(isBroken ? reference.fallbackUrl : reference.url);
 
   return (
     <article
@@ -26,7 +31,13 @@ export function TemplateReferenceCard({
           : "border-pilot-border bg-pilot-card hover:border-pilot-borderStrong"
       }`}
     >
-      <ReferenceWireframe active={selected} />
+      <ReferencePreview
+        active={selected}
+        imageUrl={previewImageUrl}
+        title={reference.title}
+      >
+        <ReferenceWireframe />
+      </ReferencePreview>
       {selected ? (
         <div className="pointer-events-none absolute inset-0 rounded-xl border-2 border-pilot-primary" />
       ) : null}
@@ -90,15 +101,9 @@ export function TemplateReferenceCard({
   );
 }
 
-function ReferenceWireframe({ active }: { active: boolean }) {
+function ReferenceWireframe() {
   return (
-    <div
-      className={`mb-3 grid h-24 grid-cols-[0.9fr_1.1fr] gap-2 rounded-lg border p-2 ${
-        active
-          ? "border-pilot-primary/40 bg-pilot-primary/10"
-          : "border-pilot-border bg-pilot-surface"
-      }`}
-    >
+    <div className="grid h-full grid-cols-[0.9fr_1.1fr] gap-2 p-2">
       <div className="space-y-2 rounded-md border border-pilot-border bg-pilot-card p-2">
         <div className="h-2 w-12 rounded bg-pilot-muted/35" />
         <div className="h-2 rounded bg-pilot-muted/20" />

@@ -41,6 +41,8 @@ export type AnimationReference = {
   tags: string[];
   keywords?: string[];
   description?: string;
+  previewImageUrl?: string;
+  previewPageUrl?: string;
   dependencies?: string[];
   framework?: "react" | "next" | "css" | "framer-motion" | "gsap" | "three" | "unknown";
   bestFor: string;

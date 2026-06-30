@@ -1,4 +1,6 @@
 import { TagList } from "./TagList";
+import { ReferencePreview } from "./ReferencePreview";
+import { getAnimationPreviewImageUrl } from "../shared/referencePreviewUrls";
 import type { AnimationReference } from "../patterns/animationReferences";
 
 export function AnimationReferenceCard({
@@ -10,6 +12,8 @@ export function AnimationReferenceCard({
   selected: boolean;
   onSelect: () => void;
 }) {
+  const previewImageUrl = getAnimationPreviewImageUrl(reference);
+
   return (
     <article
       className={`relative rounded-xl border p-3 shadow-pilot transition ${
@@ -18,7 +22,13 @@ export function AnimationReferenceCard({
           : "border-pilot-border bg-pilot-card hover:border-pilot-borderStrong"
       }`}
     >
-      <MotionPreview active={selected} />
+      <ReferencePreview
+        active={selected}
+        imageUrl={previewImageUrl}
+        title={reference.title}
+      >
+        <MotionPreview />
+      </ReferencePreview>
       {selected ? (
         <div className="pointer-events-none absolute inset-0 rounded-xl border-2 border-pilot-primary" />
       ) : null}
@@ -64,15 +74,9 @@ export function AnimationReferenceCard({
   );
 }
 
-function MotionPreview({ active }: { active: boolean }) {
+function MotionPreview() {
   return (
-    <div
-      className={`mb-3 h-24 overflow-hidden rounded-lg border p-3 ${
-        active
-          ? "border-pilot-primary/40 bg-pilot-primary/10"
-          : "border-pilot-border bg-pilot-surface"
-      }`}
-    >
+    <div className="h-full p-3">
       <div className="flex h-full items-center gap-3">
         <div className="grid flex-1 gap-2">
           <div className="h-3 w-2/3 rounded bg-pilot-muted/35" />

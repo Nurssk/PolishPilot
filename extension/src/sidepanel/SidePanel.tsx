@@ -841,9 +841,18 @@ export function SidePanel() {
         );
       }
     } catch (error) {
-      setPagePreviewStatus(
-        error instanceof Error ? error.message : "Could not start screenshot selection."
-      );
+      const message = screenshotStartErrorMessage(error);
+      setPagePreviewStatus(message);
+      setAIStatus("error");
+      setAnalysisStep("error");
+      setAIError(message);
+      setGeminiDebug({
+        error: {
+          code: "SCREENSHOT_START_FAILED",
+          message,
+          stage: "validation"
+        }
+      });
     }
   }
 
@@ -2212,6 +2221,31 @@ function formatBackendUnavailableMessage(url: string) {
     "Could not reach backend.",
     "Check VITE_API_BASE_URL and whether the Vercel backend is deployed."
   ].join("\n");
+}
+
+function screenshotStartErrorMessage(error: unknown) {
+  const message = error instanceof Error ? error.message : String(error);
+
+  if (/MISSING_AUTH|sign in/i.test(message)) {
+    return [
+      "Sign in before taking screenshots.",
+      "If sign-in still asks for email after you paste only the code, deploy the latest web backend first."
+    ].join("\n");
+  }
+
+  if (/USAGE_NOT_CONFIGURED|API base URL/i.test(message)) {
+    return "Screenshot usage is not configured. Build the extension with VITE_API_BASE_URL set to your backend.";
+  }
+
+  if (/USAGE_LIMIT_EXCEEDED|no screenshots left/i.test(message)) {
+    return "You have no screenshots left this period.";
+  }
+
+  if (/receiving end does not exist|cannot access|missing host permission/i.test(message)) {
+    return "This page cannot be captured. Try localhost, your app, or a Vercel preview.";
+  }
+
+  return message || "Could not start screenshot selection.";
 }
 
 function formatGeminiError(error: GeminiApiError) {
